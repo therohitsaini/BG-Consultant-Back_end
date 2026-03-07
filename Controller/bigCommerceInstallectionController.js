@@ -26,7 +26,7 @@ const installBigCommerce = async (req, res) => {
         client_id: BIGCOMMERCE_STORE_CLIENT_ID,
         client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
         redirect_uri:
-          "https://herb-genesis-any-literally.trycloudflare.com/api/auth",
+          "https://test-big-consultation.zend-apps.com/api/auth",
         grant_type: "authorization_code",
         code: code,
       },

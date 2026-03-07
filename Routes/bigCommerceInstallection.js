@@ -11,3 +11,4 @@ bigCommerceInstallationRoute.get("/load", loadBigCommerce);
 bigCommerceInstallationRoute.get("/test", test);
 
 module.exports = { bigCommerceInstallationRoute };
+  
