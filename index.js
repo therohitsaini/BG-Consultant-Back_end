@@ -105,7 +105,7 @@ app.use("/apps", shopifyRoute);
 app.use("/api", shopifyRoute);
 
 /** BigCommerce Installation Routes */
-app.use("/api", bigCommerceInstallationRoute);
+app.use("api", bigCommerceInstallationRoute);
 
 
 
