@@ -94,7 +94,18 @@ const loadBigCommerce = async (req, res) => {
     res.status(500).send("Load failed");
   }
 };
+
+const test = async (req, res) => {
+  try {
+    res.send("Test successful");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Test failed");
+  }
+};
+
 module.exports = {
   installBigCommerce,
   loadBigCommerce,
+  test,
 };
