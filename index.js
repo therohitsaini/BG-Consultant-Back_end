@@ -94,7 +94,7 @@ app.use("/apps", shopifyRoute);
 app.use("/api", shopifyRoute);
 
 /** BigCommerce Installation Routes */
-app.use("api", bigCommerceInstallationRoute);
+app.use("/api", bigCommerceInstallationRoute);
 
 app.use("/local-consultant/public/app", shopifyRoute);
 app.use("/local-consultant/public/apps", shopifyRoute);
