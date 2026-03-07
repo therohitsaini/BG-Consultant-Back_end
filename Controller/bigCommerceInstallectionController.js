@@ -4,7 +4,6 @@ const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 const crypto = require("crypto");
 dotenv.config();
 
-const BIGCOMMERCE_STORE_API_URL = process.env.BIGCOMMERCE_STORE_API_URL;
 const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
 const BIGCOMMERCE_STORE_CLIENT_SECRET =
   process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
@@ -84,9 +83,7 @@ const loadBigCommerce = async (req, res) => {
     }
 
     const data = JSON.parse(payload);
-
     console.log(data);
-
     const storeHash = data.store_hash;
 
     res.redirect(

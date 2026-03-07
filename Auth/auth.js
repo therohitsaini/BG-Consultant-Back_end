@@ -1,4 +1,3 @@
-// const { request, response } = require("express");
 const JWT = require("jsonwebtoken")
 const dotenv = require("dotenv");
 dotenv.config();

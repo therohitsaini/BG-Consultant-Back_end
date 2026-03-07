@@ -5,9 +5,9 @@ const { shopModel } = require("../Modal/shopify");
 const {
   manageShopifyUser,
 } = require("../MiddleWare/ShopifyMiddleware/handleShopifyUser");
-const {
-  renderShopifyPage,
-} = require("../MiddleWare/ShopifyMiddleware/helperTheme");
+// const {
+//   renderShopifyPage,
+// } = require("../MiddleWare/ShopifyMiddleware/helperTheme");
 const {
   registerAppUninstallWebhook,
 } = require("../MiddleWare/ShopifyMiddleware/registerWebHook");
@@ -311,27 +311,27 @@ const proxyShopifyConsultantPage = async (req, res) => {
 const proxyShopifyConsultantLoginPage = (req, res) => {
   const shop = req.query.shop;
   console.log("shop___", shop);
-  return renderShopifyPage(
-    req,
-    res,
-    `${frontendUrl}/consultant-dashboard?shop=${shop}`,
-    (chat = "chatSection"),
-    {
-      title: "Consultant App",
-    },
-  );
+  // return renderShopifyPage(
+  //   req,
+  //   res,
+  //   `${frontendUrl}/consultant-dashboard?shop=${shop}`,
+  //   (chat = "chatSection"),
+  //   {
+  //     title: "Consultant App",
+  //   },
+  // );
 };
 
 const proxySHopifyConsultantChat = (req, res) => {
   const shop = req.query.shop;
-  return renderShopifyPage(
-    req,
-    res,
-    `${frontendUrl}/consulant-chats?shop=${shop}`,
-    {
-      title: "Consultant Chat",
-    },
-  );
+  // return renderShopifyPage(
+  //   req,
+  //   res,
+  //   `${frontendUrl}/consulant-chats?shop=${shop}`,
+  //   {
+  //     title: "Consultant Chat",
+  //   },
+  // );
 };
 
 const proxyShopifyViewProfile = (req, res) => {
@@ -342,9 +342,9 @@ const proxyShopifyViewProfile = (req, res) => {
   // console.log("shopId", shopId);
   const iframeUrl = `${frontendUrl}/view-profile?consultantId=${consultantId}&shopId=${shopId}&shop=${shop}`;
 
-  return renderShopifyPage(req, res, iframeUrl, {
-    title: "Consultant Chat",
-  });
+  // return renderShopifyPage(req, res, iframeUrl, {
+  //   title: "Consultant Chat",
+  // });
 };
 
 const proxyShopifyChatSection = (req, res) => {
@@ -355,10 +355,10 @@ const proxyShopifyChatSection = (req, res) => {
     return res.redirect(`https://${shop}/account/login`);
   }
 
-  const iframeUrl = `${frontendUrl}/chats?consultantId=${consultantId}&shop=${shop}`;
-  return renderShopifyPage(req, res, iframeUrl, (chat = "chatSection"), {
-    title: "Chat Section",
-  });
+  // const iframeUrl = `${frontendUrl}/chats?consultantId=${consultantId}&shop=${shop}`;
+  // return renderShopifyPage(req, res, iframeUrl, (chat = "chatSection"), {
+  //   title: "Chat Section",
+  // });
 };
 
 const proxyProfileSection = async (req, res) => {
@@ -400,10 +400,10 @@ const proxyProfileSection = async (req, res) => {
   }
 
   console.log("shopId", shop);
-  const iframeUrl = `${frontendUrl}/profile?&shop=${shop}&logged_in_customer_Id=${customerId}&userId=${userId}&shopId=${shopDocId?._id}`;
-  return renderShopifyPage(req, res, iframeUrl, {
-    title: "Profile Section",
-  });
+  // const iframeUrl = `${frontendUrl}/profile?&shop=${shop}&logged_in_customer_Id=${customerId}&userId=${userId}&shopId=${shopDocId?._id}`;
+  // return renderShopifyPage(req, res, iframeUrl, {
+  //   title: "Profile Section",
+  // });
 };
 const proxyShopifyCallAccepted = (req, res) => {
   const shop = req.query.shop;
@@ -421,15 +421,15 @@ const proxyShopifyCallAccepted = (req, res) => {
   // console.log("receiverId", receiverId);
   // console.log("channelName", channelName);
   // console.log("callType", callType);
-  return renderShopifyPage(
-    req,
-    res,
+  // return renderShopifyPage(
+  //   req,
+  //   res,
 
-    `${frontendUrl}/video/calling/page?receiverId=${receiverId}&callType=${callType}&channelName=${channelName}&&uid=${uid}&callerId=${callerId}&token=${token}`,
-    {
-      title: "Call Accepted",
-    },
-  );
+  //   `${frontendUrl}/video/calling/page?receiverId=${receiverId}&callType=${callType}&channelName=${channelName}&&uid=${uid}&callerId=${callerId}&token=${token}`,
+  //   {
+  //     title: "Call Accepted",
+  //   },
+  // );
 };
 
 module.exports = {
