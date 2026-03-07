@@ -9,6 +9,7 @@ const BIGCOMMERCE_STORE_CLIENT_SECRET =
   process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
 
 const installBigCommerce = async (req, res) => {
+  console.log("installBigCommerce", req.query);
   try {
     const { code, context, scope } = req.query;
 
@@ -25,8 +26,7 @@ const installBigCommerce = async (req, res) => {
       {
         client_id: BIGCOMMERCE_STORE_CLIENT_ID,
         client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
-        redirect_uri:
-          "https://test-big-consultation.zend-apps.com/api/auth",
+        redirect_uri: "https://test-big-consultation.zend-apps.com/api/auth",
         grant_type: "authorization_code",
         code: code,
       },
