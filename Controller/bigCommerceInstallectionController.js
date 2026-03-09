@@ -60,7 +60,6 @@ const installBigCommerce = async (req, res) => {
   }
 };
 
-
 const loadBigCommerce = async (req, res) => {
   console.log("loadBigCommerce", req.query);
 
@@ -73,25 +72,26 @@ const loadBigCommerce = async (req, res) => {
 
     const [encodedPayload, encodedSignature] = signed_payload.split(".");
 
-    console.log("ENCODED PAYLOAD:", encodedPayload);
-    console.log("SIGNATURE:", encodedSignature);
-
     // Create HMAC
-    const expectedSignature = crypto
-      .createHmac("sha256", BIGCOMMERCE_STORE_CLIENT_SECRET)
-      .update(encodedPayload)
-      .digest("base64")
+    const hmac = crypto.createHmac(
+      "sha256",
+      process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
+    );
+
+    hmac.update(encodedPayload);
+
+    const expectedSignature = hmac.digest("base64");
+
+    const normalizedExpected = expectedSignature
       .replace(/\+/g, "-")
       .replace(/\//g, "_")
       .replace(/=+$/, "");
 
-    console.log("EXPECTED SIGNATURE:", expectedSignature);
-
-    if (encodedSignature !== expectedSignature) {
+    if (encodedSignature !== normalizedExpected) {
+      console.log("Signature mismatch");
       return res.status(401).send("Invalid signature");
     }
 
-    // Decode payload
     const payload = JSON.parse(
       Buffer.from(encodedPayload, "base64").toString("utf8"),
     );
@@ -101,15 +101,13 @@ const loadBigCommerce = async (req, res) => {
     const storeHash = payload.store_hash;
 
     res.redirect(
-      `https://sophisticated-off-rica-sheets.trycloudflare.com/video/calling/page?store=${storeHash}`,
+      `https://your-react-domain.com/video/calling/page?store=${storeHash}`,
     );
   } catch (error) {
-    console.log(error.message);
-
+    console.log(error);
     res.status(500).send("Load failed");
   }
 };
-
 const test = async (req, res) => {
   try {
     res.send("Test successful");
