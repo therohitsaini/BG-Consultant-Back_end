@@ -14,10 +14,6 @@ const installBigCommerce = async (req, res) => {
   try {
     const { code, context, scope } = req.query;
 
-    console.log("code:", code);
-    console.log("context:", context);
-    console.log("scope:", scope);
-
     if (!code || !context) {
       return res.status(400).send("Invalid request");
     }
@@ -34,11 +30,10 @@ const installBigCommerce = async (req, res) => {
     );
 
     const data = tokenResponse.data;
-    console.log("TOKEN RESPONSE:", data);
     const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
 
-    const bgStore = await bgStoreDetails.create({
+    await bgStoreDetails.create({
       store_hash: storeHash,
       access_token: accessToken,
       user: {
@@ -53,14 +48,16 @@ const installBigCommerce = async (req, res) => {
       },
       account_uuid: data.account_uuid,
     });
-    console.log("BG STORE:", bgStore);
-    res.send("BigCommerce App Installed Successfully");
+
+    // 👇 Install ke baad app ko open kar do
+    res.redirect(
+      `https://${storeHash}.mybigcommerce.com/admin/apps/64147`,
+    );
   } catch (error) {
     console.log(error.response?.data || error.message);
     res.status(500).send("Install failed");
   }
 };
-
 
 const loadBigCommerce = async (req, res) => {
   try {
