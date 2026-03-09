@@ -63,7 +63,7 @@ const installBigCommerce = async (req, res) => {
 const loadBigCommerce = async (req, res) => {
   try {
     const { signed_payload } = req.query;
-
+    console.log("signed_payload", signed_payload);
     if (!signed_payload) {
       return res.status(400).send("Missing payload");
     }
@@ -87,7 +87,7 @@ const loadBigCommerce = async (req, res) => {
     const storeHash = data.store_hash;
 
     res.redirect(
-      `https://brown-cougars-yell.loca.lt/video/calling/page?store=${storeHash}`,
+      ` https://sophisticated-off-rica-sheets.trycloudflare.com/video/calling/page?store=${storeHash}`,
     );
   } catch (error) {
     console.log(error.response?.data || error.message);

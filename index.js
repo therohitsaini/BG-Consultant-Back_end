@@ -87,29 +87,29 @@ app.use("/api/razerpay-create-order", razerPayRoute);
 app.use("/api-consultant", consultantRoute);
 app.use("/api-employee", employRoute);
 
-/** Shopify Routes */
-app.use("/app", shopifyRoute);
-app.use("/apps", shopifyRoute);
-app.use("/api", shopifyRoute);
+// /** Shopify Routes */
+// app.use("/app", shopifyRoute);
+// app.use("/apps", shopifyRoute);
+// app.use("/api", shopifyRoute);
 
 /** BigCommerce Installation Routes */
 app.use("/api", bigCommerceInstallationRoute);
 
-app.use("/local-consultant/public/app", shopifyRoute);
-app.use("/local-consultant/public/apps", shopifyRoute);
+// app.use("/local-consultant/public/app", shopifyRoute);
+// app.use("/local-consultant/public/apps", shopifyRoute);
 
 /** Chat Routes */
-app.use("/api/chat", chatRoutes);
-app.use("/api", firebaseRouter);
+// app.use("/api/chat", chatRoutes);
+// app.use("/api", firebaseRouter);
 
 /** Shopify Draft Order Routes */
-app.use("/api/draft-order", shopifyDraftOrderRoute);
+// app.use("/api/draft-order", shopifyDraftOrderRoute);
 
 /** User Routes */
-app.use("/api/users", userRouter);
-app.use("/api/admin", adminRoute);
-app.use("/api/princing", adminPrincingRoute);
-app.use("/pricing-callback", adminPrincingRoute);
+// app.use("/api/users", userRouter);
+// app.use("/api/admin", adminRoute);
+// app.use("/api/princing", adminPrincingRoute);
+// app.use("/pricing-callback", adminPrincingRoute);
 
 /** Web Hook Routes */
 
