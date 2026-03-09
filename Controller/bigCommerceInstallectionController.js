@@ -1,6 +1,7 @@
 const axios = require("axios");
 const dotenv = require("dotenv");
 const { bgStoreDetails } = require("../Modal/bgStoreDetails");
+const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 dotenv.config();
 
@@ -60,52 +61,30 @@ const installBigCommerce = async (req, res) => {
   }
 };
 
+
 const loadBigCommerce = async (req, res) => {
-  console.log("loadBigCommerce", req.query);
-
   try {
-    const { signed_payload } = req.query;
+    const { signed_payload_jwt } = req.query;
 
-    if (!signed_payload) {
+    if (!signed_payload_jwt) {
       return res.status(400).send("Missing payload");
     }
 
-    const [encodedPayload, encodedSignature] = signed_payload.split(".");
-
-    // Create HMAC
-    const hmac = crypto.createHmac(
-      "sha256",
+    const decoded = jwt.verify(
+      signed_payload_jwt,
       process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
     );
 
-    hmac.update(encodedPayload);
+    console.log("JWT PAYLOAD:", decoded);
 
-    const expectedSignature = hmac.digest("base64");
-
-    const normalizedExpected = expectedSignature
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
-
-    if (encodedSignature !== normalizedExpected) {
-      console.log("Signature mismatch");
-      return res.status(401).send("Invalid signature");
-    }
-
-    const payload = JSON.parse(
-      Buffer.from(encodedPayload, "base64").toString("utf8"),
-    );
-
-    console.log("PAYLOAD:", payload);
-
-    const storeHash = payload.store_hash;
+    const storeHash = decoded.sub.replace("stores/", "");
 
     res.redirect(
       `https://your-react-domain.com/video/calling/page?store=${storeHash}`,
     );
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Load failed");
+  } catch (err) {
+    console.log("JWT verify error:", err.message);
+    res.status(401).send("Invalid signature");
   }
 };
 const test = async (req, res) => {
