@@ -61,6 +61,7 @@ const installBigCommerce = async (req, res) => {
 };
 
 const loadBigCommerce = async (req, res) => {
+  console.log("loadBigCommerce", req.query);
   try {
     const { signed_payload } = req.query;
     console.log("signed_payload", signed_payload);
