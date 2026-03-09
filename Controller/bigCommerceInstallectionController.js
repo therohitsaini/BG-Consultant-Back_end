@@ -60,38 +60,52 @@ const installBigCommerce = async (req, res) => {
   }
 };
 
+
 const loadBigCommerce = async (req, res) => {
   console.log("loadBigCommerce", req.query);
+
   try {
     const { signed_payload } = req.query;
-    console.log("signed_payload", signed_payload);
+
     if (!signed_payload) {
       return res.status(400).send("Missing payload");
     }
-    const [encodedPayload, signature] = signed_payload.split(".");
-    const payload = Buffer.from(encodedPayload, "base64").toString("utf8");
+
+    const [encodedPayload, encodedSignature] = signed_payload.split(".");
 
     console.log("ENCODED PAYLOAD:", encodedPayload);
-    console.log("SIGNATURE:", signature);
+    console.log("SIGNATURE:", encodedSignature);
 
+    // Create HMAC
     const expectedSignature = crypto
       .createHmac("sha256", BIGCOMMERCE_STORE_CLIENT_SECRET)
       .update(encodedPayload)
-      .digest("base64");
+      .digest("base64")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+
     console.log("EXPECTED SIGNATURE:", expectedSignature);
-    if (signature !== expectedSignature) {
+
+    if (encodedSignature !== expectedSignature) {
       return res.status(401).send("Invalid signature");
     }
 
-    const data = JSON.parse(payload);
-    console.log(data);
-    const storeHash = data.store_hash;
+    // Decode payload
+    const payload = JSON.parse(
+      Buffer.from(encodedPayload, "base64").toString("utf8"),
+    );
+
+    console.log("PAYLOAD:", payload);
+
+    const storeHash = payload.store_hash;
 
     res.redirect(
-      ` https://sophisticated-off-rica-sheets.trycloudflare.com/video/calling/page?store=${storeHash}`,
+      `https://sophisticated-off-rica-sheets.trycloudflare.com/video/calling/page?store=${storeHash}`,
     );
   } catch (error) {
-    console.log(error.response?.data || error.message);
+    console.log(error.message);
+
     res.status(500).send("Load failed");
   }
 };
