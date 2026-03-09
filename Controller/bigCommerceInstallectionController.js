@@ -51,7 +51,7 @@ const installBigCommerce = async (req, res) => {
 
     // 👇 Install ke baad app ko open kar do
     res.redirect(
-      `https://${storeHash}.mybigcommerce.com/admin/apps/64147`,
+      `https://store-${storeHash}.mybigcommerce.com/admin/apps/64147`,
     );
   } catch (error) {
     console.log(error.response?.data || error.message);
