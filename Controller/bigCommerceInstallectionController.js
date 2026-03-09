@@ -77,7 +77,7 @@ const loadBigCommerce = async (req, res) => {
     const storeHash = decoded.sub.replace("stores/", "");
 
     res.redirect(
-      `https://sophisticated-off-rica-sheets.trycloudflare.com/video/calling/page?store=${storeHash}`,
+      `https://sophisticated-off-rica-sheets.trycloudflare.com/dashboard?store=${storeHash}`,
     );
   } catch (err) {
     console.log("JWT verify error:", err.message);
