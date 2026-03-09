@@ -80,7 +80,7 @@ const loadBigCommerce = async (req, res) => {
     const storeHash = decoded.sub.replace("stores/", "");
 
     res.redirect(
-      `https://your-react-domain.com/video/calling/page?store=${storeHash}`,
+      `https://sophisticated-off-rica-sheets.trycloudflare.com/video/calling/page?store=${storeHash}`,
     );
   } catch (err) {
     console.log("JWT verify error:", err.message);
