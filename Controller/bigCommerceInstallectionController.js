@@ -77,17 +77,38 @@ const loadBigCommerce = async (req, res) => {
 
 
 
-const unistalledBgCommerceApp = (req, res) => {
-  console.log("req.query", req.query, req.body)
-  console.log("unistalled rotue is working >>>>>>>>")
+const unistalledBgCommerceApp = async (req, res) => {
   try {
-    const { store_hash } = req.query;
-    console.log("store_hash", store_hash)
+    const { signed_payload } = req.query;
+
+    if (!signed_payload) {
+      return res.status(400).send("Missing signed payload");
+    }
+
+    const [encodedPayload] = signed_payload.split(".");
+
+    const decoded = JSON.parse(
+      Buffer.from(encodedPayload, "base64").toString("utf8")
+    );
+
+    console.log("decoded payload:", decoded);
+
+    const store_hash = decoded.store_hash;
+    const email = decoded?.owner?.email || decoded?.user?.email;
+
+    console.log("store_hash:", store_hash);
+    console.log("email:", email);
+
+    res.status(200).json({
+      store_hash,
+      email,
+    });
 
   } catch (error) {
-    res.status(401).send("Invalid signature");
+    console.log("error:", error);
+    res.status(500).send("Server error");
   }
-}
+};
 
 module.exports = {
   installBigCommerce,
