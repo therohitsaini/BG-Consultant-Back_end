@@ -3,12 +3,12 @@ const bigCommerceInstallationRoute = express.Router();
 const {
   installBigCommerce,
   loadBigCommerce,
-  test,
+
+  unistalledBgCommerceApp,
 } = require("../Controller/bigCommerceInstallectionController");
 
 bigCommerceInstallationRoute.get("/auth", installBigCommerce);
 bigCommerceInstallationRoute.get("/load", loadBigCommerce);
-bigCommerceInstallationRoute.get("/test", test);
+bigCommerceInstallationRoute.get("/uninstall",unistalledBgCommerceApp)
 
 module.exports = { bigCommerceInstallationRoute };
-  

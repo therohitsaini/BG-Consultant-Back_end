@@ -74,14 +74,7 @@ const loadBigCommerce = async (req, res) => {
     res.status(401).send("Invalid signature");
   }
 };
-const test = async (req, res) => {
-  try {
-    res.send("Test successful");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Test failed");
-  }
-};
+
 
 
 const unistalledBgCommerceApp = (req, res) => {
@@ -98,5 +91,5 @@ const unistalledBgCommerceApp = (req, res) => {
 module.exports = {
   installBigCommerce,
   loadBigCommerce,
-  test,
+  unistalledBgCommerceApp
 };
