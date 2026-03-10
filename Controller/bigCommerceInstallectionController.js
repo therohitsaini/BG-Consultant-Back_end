@@ -79,6 +79,7 @@ const loadBigCommerce = async (req, res) => {
 
 const unistalledBgCommerceApp = (req, res) => {
   console.log("req.query", req.query, req.body)
+  console.log("unistalled rotue is working >>>>>>>>")
   try {
     const { store_hash } = req.query;
     console.log("store_hash", store_hash)
