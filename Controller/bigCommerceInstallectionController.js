@@ -81,7 +81,7 @@ const unistalledBgCommerceApp = (req, res) => {
   console.log("req.query", req.query, req.body)
   try {
     const { store_hash } = req.query;
-    console.log("")
+    console.log("store_hash", store_hash)
 
   } catch (error) {
     res.status(401).send("Invalid signature");
