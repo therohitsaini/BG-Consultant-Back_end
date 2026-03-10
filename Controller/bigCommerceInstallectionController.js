@@ -10,7 +10,6 @@ const BIGCOMMERCE_STORE_CLIENT_SECRET =
   process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
 
 const installBigCommerce = async (req, res) => {
-  console.log("installBigCommerce", req.query);
   try {
     const { code, context, scope } = req.query;
 
@@ -23,7 +22,7 @@ const installBigCommerce = async (req, res) => {
       {
         client_id: BIGCOMMERCE_STORE_CLIENT_ID,
         client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
-        redirect_uri: "https://test-big-consultation.zend-apps.com/api/auth",
+        redirect_uri: process.env.REDIRECT_URL,
         grant_type: "authorization_code",
         code: code,
       },
@@ -49,9 +48,8 @@ const installBigCommerce = async (req, res) => {
       account_uuid: data.account_uuid,
     });
 
-    // 👇 Install ke baad app ko open kar do
     res.redirect(
-      `https://store-${storeHash}.mybigcommerce.com/admin/apps/64147`,
+      `https://store-${storeHash}.mybigcommerce.com/admin/apps/${process.env.APP_ID}`,
     );
   } catch (error) {
     console.log(error.response?.data || error.message);
@@ -62,25 +60,17 @@ const installBigCommerce = async (req, res) => {
 const loadBigCommerce = async (req, res) => {
   try {
     const { signed_payload_jwt } = req.query;
-
     if (!signed_payload_jwt) {
       return res.status(400).send("Missing payload");
     }
-
     const decoded = jwt.verify(
       signed_payload_jwt,
       process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
     );
-
-    console.log("JWT PAYLOAD:", decoded);
-
     const storeHash = decoded.sub.replace("stores/", "");
 
-    res.redirect(
-      `https://sophisticated-off-rica-sheets.trycloudflare.com/dashboard?store=${storeHash}`,
-    );
+    res.redirect(`${process.env.APP_LOAD_URL}?store=${storeHash}`);
   } catch (err) {
-    console.log("JWT verify error:", err.message);
     res.status(401).send("Invalid signature");
   }
 };
