@@ -77,38 +77,61 @@ const loadBigCommerce = async (req, res) => {
 
 
 
+
+
 const unistalledBgCommerceApp = async (req, res) => {
   try {
     const { signed_payload } = req.query;
 
-    if (!signed_payload) {
-      return res.status(400).send("Missing signed payload");
-    }
-
     const [encodedPayload] = signed_payload.split(".");
-
     const decoded = JSON.parse(
       Buffer.from(encodedPayload, "base64").toString("utf8")
     );
 
-    console.log("decoded payload:", decoded);
-
     const store_hash = decoded.store_hash;
-    const email = decoded?.owner?.email || decoded?.user?.email;
 
-    console.log("store_hash:", store_hash);
-    console.log("email:", email);
+    const store = await bgStoreDetails.findOne({ store_hash });
+
+    if (!store) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+
+    const email = store?.owner?.email || store?.user?.email;
+
+    await bgStoreDetails.updateOne(
+      { store_hash },
+      {
+        $set: {
+          access_token: null,
+          store_hash: null,
+          user: {
+            id: null,
+            username: null,
+            email: email
+          },
+          owner: {
+            id: null,
+            username: null,
+            email: email
+          },
+          account_uuid: null
+        }
+      }
+    );
 
     res.status(200).json({
-      store_hash,
+      success: true,
       email,
+      message: "Data cleared except email"
     });
 
   } catch (error) {
-    console.log("error:", error);
+    console.log("error", error);
     res.status(500).send("Server error");
   }
 };
+
+
 
 module.exports = {
   installBigCommerce,
