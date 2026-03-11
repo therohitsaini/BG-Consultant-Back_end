@@ -5,6 +5,7 @@ const {
   loadBigCommerce,
 
   unistalledBgCommerceApp,
+  verifyBigCommerceAdmin,
 } = require("../Controller/bigCommerceInstallectionController");
 
 bigCommerceInstallationRoute.get("/auth", installBigCommerce);
