@@ -75,17 +75,13 @@ const loadBigCommerce = async (req, res) => {
   }
 };
 
-
-
-
-
 const unistalledBgCommerceApp = async (req, res) => {
   try {
     const { signed_payload } = req.query;
 
     const [encodedPayload] = signed_payload.split(".");
     const decoded = JSON.parse(
-      Buffer.from(encodedPayload, "base64").toString("utf8")
+      Buffer.from(encodedPayload, "base64").toString("utf8"),
     );
 
     const store_hash = decoded.store_hash;
@@ -107,34 +103,43 @@ const unistalledBgCommerceApp = async (req, res) => {
           user: {
             id: null,
             username: null,
-            email: email
+            email: email,
           },
           owner: {
             id: null,
             username: null,
-            email: email
+            email: email,
           },
-          account_uuid: null
-        }
-      }
+          account_uuid: null,
+        },
+      },
     );
 
     res.status(200).json({
       success: true,
       email,
-      message: "Data cleared except email"
+      message: "Data cleared except email",
     });
-
   } catch (error) {
     console.log("error", error);
     res.status(500).send("Server error");
   }
 };
 
-
+const verifyBigCommerceAdmin = async (req, res) => {
+  try {
+    const { store } = req.query;
+    console.log("store", store);
+    res.status(200).json({ message: "Store verified", data: store });
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).send("Server error");
+  }
+};
 
 module.exports = {
   installBigCommerce,
   loadBigCommerce,
-  unistalledBgCommerceApp
+  unistalledBgCommerceApp,
+  verifyBigCommerceAdmin,
 };
