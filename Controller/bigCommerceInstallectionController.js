@@ -69,7 +69,7 @@ const loadBigCommerce = async (req, res) => {
     );
     const storeHash = decoded.sub.replace("stores/", "");
 
-    res.redirect(`${process.env.APP_LOAD_URL}?store=${storeHash}`);
+    res.redirect(`${process.env.APP_LOAD_URL}/admin?store=${storeHash}`);
   } catch (err) {
     res.status(401).send("Invalid signature");
   }
