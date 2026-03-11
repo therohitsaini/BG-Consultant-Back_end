@@ -130,10 +130,14 @@ const verifyBigCommerceAdmin = async (req, res) => {
   try {
     const { store } = req.query;
     console.log("store", store);
-    res.status(200).json({ message: "Store verified", data: store });
+    const storeDetails = await bgStoreDetails.findOne({ store_hash: store });
+    if (!storeDetails) {
+      return res.status(404).json({ message: "Store not found" });
+    }
+    return res.status(200).json({ message: "Store verified", data: storeDetails });
   } catch (error) {
     console.log("error", error);
-    res.status(500).send("Server error");
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
