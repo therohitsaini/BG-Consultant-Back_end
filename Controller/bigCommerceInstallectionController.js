@@ -47,7 +47,7 @@ const installBigCommerce = async (req, res) => {
       },
       account_uuid: data.account_uuid,
     });
-
+    console.log("accessToken", accessToken);
     const navResponse = await axios.get(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation`,
       {
@@ -55,7 +55,7 @@ const installBigCommerce = async (req, res) => {
           "X-Auth-Token": accessToken,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     console.log("navResponse", navResponse.data);
     const treeId = navResponse.data.data[0].id;
