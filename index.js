@@ -53,8 +53,6 @@ app.use((req, res, next) => {
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 const reactBuildPath = path.join(__dirname, "..", "consultant-app", "build");
 
-
-
 app.use((req, res, next) => {
   res.setHeader(
     "Cache-Control",
@@ -113,7 +111,24 @@ app.use("/api", bigCommerceInstallationRoute);
 
 /** Web Hook Routes */
 
+app.get("/embed.js", (req, res) => {
+  res.setHeader("Content-Type", "application/javascript");
 
+  res.send(`
+    console.log("BigCommerce embed script loaded");
+
+    const div = document.createElement("div");
+    div.innerHTML = "React Widget Loaded";
+    div.style.position = "fixed";
+    div.style.bottom = "20px";
+    div.style.right = "20px";
+    div.style.background = "black";
+    div.style.color = "white";
+    div.style.padding = "10px";
+
+    document.body.appendChild(div);
+  `);
+});
 
 ioServer(server);
 
