@@ -7,11 +7,11 @@ const injectScript = async (storeHash, accessToken) => {
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,
       {
         name: "React Storefront App",
-        html: `<script src="https://${process.env.APP_URL}/embed.js"></script>`,
+        src: `https://${process.env.APP_URL}/embed.js`,
+        auto_uninstall: true,
         location: "footer",
         kind: "src",
-        auto_uninstall: true,
-        load_method: "default",
+        load_method: "default"
       },
       {
         headers: {
