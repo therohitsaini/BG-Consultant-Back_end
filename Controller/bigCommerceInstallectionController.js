@@ -49,8 +49,25 @@ const installBigCommerce = async (req, res) => {
       account_uuid: data.account_uuid,
     });
     console.log("accessToken", accessToken);
-    await injectScript(storeHash, accessToken);
-
+    // await injectScript(storeHash, accessToken);
+    const scriptResponse = await axios.post(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,
+      {
+        name: "Consultant App",
+        src: `https://test-big-consultation.zend-apps.com/embed.js`,
+        auto_uninstall: true,
+        location: "footer",
+        kind: "src",
+      },
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    console.log("scriptResponse", scriptResponse.data);
+    console.log("script added successfully ?");
     res.redirect(
       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
     );

@@ -68,7 +68,6 @@ app.get("/embed.js", (req, res) => {
 
   res.send(`
     console.log("BigCommerce embed script loaded");
-
     const div = document.createElement("div");
     div.innerHTML = "React Widget Loaded";
     div.style.position = "fixed";
@@ -77,7 +76,6 @@ app.get("/embed.js", (req, res) => {
     div.style.background = "black";
     div.style.color = "white";
     div.style.padding = "10px";
-
     document.body.appendChild(div);
   `);
 });
