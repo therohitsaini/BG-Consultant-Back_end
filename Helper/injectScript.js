@@ -7,7 +7,7 @@ const injectScript = async (storeHash, accessToken) => {
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,
       {
         name: "React Storefront App",
-        src: `https://${process.env.APP_URL}/embed.js`,
+        src: `https://compile-respiratory-superb-makes.trycloudflare.com/embed.js`,
         auto_uninstall: true,
         location: "footer",
         kind: "src",
