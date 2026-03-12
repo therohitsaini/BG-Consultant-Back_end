@@ -48,6 +48,19 @@ const installBigCommerce = async (req, res) => {
       account_uuid: data.account_uuid,
     });
 
+    const navResponse = await axios.get(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation`,
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("navResponse", navResponse.data);
+    const treeId = navResponse.data.data[0].id;
+    console.log("treeId", treeId);
+
     res.redirect(
       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
     );
@@ -68,18 +81,7 @@ const loadBigCommerce = async (req, res) => {
       process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
     );
     const storeHash = decoded.sub.replace("stores/", "");
-    const navResponse = await axios.get(
-      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation`,
-      {
-        headers: {
-          "X-Auth-Token": accessToken,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    console.log("navResponse", navResponse.data);
-    const treeId = navResponse.data.data[0].id;
-    console.log("treeId", treeId);
+
     res.redirect(`${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}`);
   } catch (err) {
     res.status(401).send("Invalid signature");
