@@ -9,117 +9,19 @@ const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
 const BIGCOMMERCE_STORE_CLIENT_SECRET =
   process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
 
-// const installBigCommerce = async (req, res) => {
-//   try {
-//     const { code, context, scope } = req.query;
-
-//     if (!code || !context) {
-//       return res.status(400).send("Invalid request");
-//     }
-
-//     const tokenResponse = await axios.post(
-//       "https://login.bigcommerce.com/oauth2/token",
-//       {
-//         client_id: BIGCOMMERCE_STORE_CLIENT_ID,
-//         client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
-//         redirect_uri: process.env.REDIRECT_URL,
-//         grant_type: "authorization_code",
-//         code: code,
-//       },
-//     );
-
-//     const data = tokenResponse.data;
-//     const accessToken = data.access_token;
-//     const storeHash = context.split("/")[1];
-
-//     await bgStoreDetails.create({
-//       store_hash: storeHash,
-//       access_token: accessToken,
-//       user: {
-//         id: data.user.id,
-//         email: data.user.email,
-//         username: data.user.username,
-//       },
-//       owner: {
-//         id: data.owner.id,
-//         email: data.owner.email,
-//         username: data.owner.username,
-//       },
-//       account_uuid: data.account_uuid,
-//     });
-
-//     await axios.post(
-//       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,
-//       {
-//         name: "Consultant App",
-//         description: "Load consultant storefront",
-//         html: `
-//             <div id="consultant-root"></div>
-//             <link rel="stylesheet" href="https://${process.env.APP_URL}/static/css/main.css">
-//             <script src="https://${process.env.APP_URL}/static/js/main.js"></script>
-//             `,
-//         location: "footer",
-//         visibility: "storefront",
-//         kind: "script",
-//         auto_uninstall: true,
-//       },
-//       {
-//         headers: {
-//           "X-Auth-Token": accessToken,
-//           "Content-Type": "application/json",
-//           Accept: "application/json",
-//         },
-//       },
-//     );
-//     const nav = await axios.get(
-//       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation`,
-//       {
-//         headers: {
-//           "X-Auth-Token": accessToken,
-//           "Content-Type": "application/json",
-//         },
-//       },
-//     );
-
-//     const treeId = nav.data.data[0].id;
-
-//     await axios.post(
-//       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation/trees/${treeId}/items`,
-//       {
-//         title: "Consultant",
-//         url: "/consultant-automation",
-//         type: "web_page",
-//       },
-//       {
-//         headers: {
-//           "X-Auth-Token": accessToken,
-//           "Content-Type": "application/json",
-//         },
-//       },
-//     );
-
-//     res.redirect(
-//       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
-//     );
-//   } catch (error) {
-//     console.log(error.response?.data || error.message);
-//     res.status(500).send("Install failed");
-//   }
-// };
 const installBigCommerce = async (req, res) => {
   try {
-    const { code, context } = req.query;
+    const { code, context, scope } = req.query;
 
     if (!code || !context) {
-      return res.status(400).send("Invalid install request");
+      return res.status(400).send("Invalid request");
     }
 
-    // Exchange code for access token
     const tokenResponse = await axios.post(
       "https://login.bigcommerce.com/oauth2/token",
       {
-        client_id: process.env.BIGCOMMERCE_STORE_CLIENT_ID,
-        client_secret: process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
+        client_id: BIGCOMMERCE_STORE_CLIENT_ID,
+        client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
         redirect_uri: process.env.REDIRECT_URL,
         grant_type: "authorization_code",
         code: code,
@@ -130,77 +32,31 @@ const installBigCommerce = async (req, res) => {
     const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
 
-    // Save store details (optional database)
     await bgStoreDetails.create({
       store_hash: storeHash,
       access_token: accessToken,
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+        username: data.user.username,
+      },
+      owner: {
+        id: data.owner.id,
+        email: data.owner.email,
+        username: data.owner.username,
+      },
       account_uuid: data.account_uuid,
-      user: data.user,
-      owner: data.owner,
     });
 
-    // Inject React app script into storefront
-    await axios.post(
-      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,
-      {
-        name: "Consultant App Script",
-        description: "Loads Consultant React App",
-        html: `
-          <div id="consultant-root"></div>
-          <link rel="stylesheet" href="https://${process.env.APP_URL}/static/css/main.css">
-          <script src="https://${process.env.APP_URL}/static/js/main.js"></script>
-        `,
-        location: "footer",
-        visibility: "all_pages",
-        auto_uninstall: true,
-      },
-      {
-        headers: {
-          "X-Auth-Token": accessToken,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      },
-    );
-
-    // Get navigation tree
-    const navResponse = await axios.get(
-      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation`,
-      {
-        headers: {
-          "X-Auth-Token": accessToken,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-
-    const treeId = navResponse.data.data[0].id;
-
-    // Add menu item
-    await axios.post(
-      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation/trees/${treeId}/items`,
-      {
-        title: "Consultant",
-        url: "/consultant-automation",
-        type: "custom",
-      },
-      {
-        headers: {
-          "X-Auth-Token": accessToken,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-
-    // Redirect to app in BigCommerce admin
     res.redirect(
       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
     );
   } catch (error) {
-    console.error("Install Error:", error.response?.data || error.message);
-    res.status(500).send("Installation failed");
+    console.log(error.response?.data || error.message);
+    res.status(500).send("Install failed");
   }
 };
+
 const loadBigCommerce = async (req, res) => {
   try {
     const { signed_payload_jwt } = req.query;
@@ -212,7 +68,18 @@ const loadBigCommerce = async (req, res) => {
       process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
     );
     const storeHash = decoded.sub.replace("stores/", "");
-
+    const navResponse = await axios.get(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation`,
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    console.log("navResponse", navResponse.data);
+    const treeId = navResponse.data.data[0].id;
+    console.log("treeId", treeId);
     res.redirect(`${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}`);
   } catch (err) {
     res.status(401).send("Invalid signature");
