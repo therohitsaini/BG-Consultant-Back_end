@@ -1,6 +1,7 @@
 const axios = require("axios");
 const dotenv = require("dotenv");
 const { bgStoreDetails } = require("../Modal/bgStoreDetails");
+const { injectScript } = require("../Helper/injectScript");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 dotenv.config();
@@ -48,18 +49,7 @@ const installBigCommerce = async (req, res) => {
       account_uuid: data.account_uuid,
     });
     console.log("accessToken", accessToken);
-    const navResponse = await axios.get(
-      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation`,
-      {
-        headers: {
-          "X-Auth-Token": accessToken,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    console.log("navResponse", navResponse.data);
-    const treeId = navResponse.data.data[0].id;
-    console.log("treeId", treeId);
+    await injectScript(storeHash, accessToken);
 
     res.redirect(
       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
