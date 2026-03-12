@@ -48,8 +48,58 @@ const installBigCommerce = async (req, res) => {
       account_uuid: data.account_uuid,
     });
 
+    await axios.post(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,
+      {
+        name: "Consultant App",
+        description: "Load consultant storefront",
+        html: `
+            <div id="consultant-root"></div>
+            <link rel="stylesheet" href="https://${process.env.APP_URL}/static/css/main.css">
+            <script src="https://${process.env.APP_URL}/static/js/main.js"></script>
+            `,
+        location: "footer",
+        visibility: "storefront",
+        kind: "script",
+        auto_uninstall: true,
+      },
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
+    );
+    const nav = await axios.get(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation`,
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const treeId = nav.data.data[0].id;
+
+    await axios.post(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/navigation/trees/${treeId}/items`,
+      {
+        title: "Consultant",
+        url: "/consultant-automation",
+        type: "web_page",
+      },
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
     res.redirect(
-      `https://store-${storeHash}.mybigcommerce.com/admin/apps/${process.env.APP_ID}`,
+      `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
     );
   } catch (error) {
     console.log(error.response?.data || error.message);
@@ -134,7 +184,9 @@ const verifyBigCommerceAdmin = async (req, res) => {
     if (!storeDetails) {
       return res.status(404).json({ message: "Store not found" });
     }
-    return res.status(200).json({ message: "Store verified", data: storeDetails });
+    return res
+      .status(200)
+      .json({ message: "Store verified", data: storeDetails });
   } catch (error) {
     console.log("error", error);
     return res.status(500).json({ message: "Server error" });
