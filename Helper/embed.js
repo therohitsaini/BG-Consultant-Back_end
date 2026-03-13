@@ -1,6 +1,5 @@
 (function () {
   console.log("STEP 1 - embed start");
-
   function init() {
     console.log("STEP 2 - init running");
 
