@@ -54,7 +54,7 @@ const installBigCommerce = async (req, res) => {
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,
       {
         name: "Consultant App",
-        src: `https://test-big-consultation.zend-apps.com/embed.js`,
+        src: `https://test-big-consultation.zend-apps.com/embed.js?v=3`,
         auto_uninstall: true,
         location: "footer",
         kind: "src",
