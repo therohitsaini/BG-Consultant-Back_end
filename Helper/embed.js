@@ -28,7 +28,7 @@
     }
     const script = document.createElement("script");
     script.src =
-    "https://lan-hay-king-bali.trycloudflare.com/static/js/main.523b49a3.js";
+    "https://lan-hay-king-bali.trycloudflare.com/static/js/main.537a0f47.js";
     script.type = "text/javascript";
     script.crossOrigin = "anonymous";
     script.onload = function () {
