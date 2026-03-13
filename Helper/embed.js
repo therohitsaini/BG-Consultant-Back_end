@@ -33,7 +33,7 @@
     const script = document.createElement("script");
   
     script.src =
-    "https://lan-hay-king-bali.trycloudflare.com/static/js/main.73191a4f.js";
+    "https://lan-hay-king-bali.trycloudflare.com/static/js/main.523b49a3.js";
   
     script.type = "text/javascript";
     script.crossOrigin = "anonymous";
