@@ -10,7 +10,7 @@
   script.src =
     "https://lan-hay-king-bali.trycloudflare.com/static/js/main.73191a4f.js"; // BigCommerce-hosted
   script.async = true;
-
+  console.log("script", script);
   script.onload = () => {
     if (window.mountReactApp) window.mountReactApp();
   };
