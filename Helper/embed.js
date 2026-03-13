@@ -1,22 +1,27 @@
 (function () {
-  console.log("STEP 1 - embed start");
+  console.log("Embed start");
+
   function init() {
-    console.log("STEP 2 - init running");
+    console.log("Init running");
 
-    const root = document.createElement("div");
-    root.id = "root";
+    // agar root already ho to dubara create na kare
+    let root = document.getElementById("root");
 
-    document.body.appendChild(root);
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "root";
+      document.body.appendChild(root);
+    }
 
-    console.log("STEP 3 - root added");
+    console.log("Root ready");
 
     const script = document.createElement("script");
     script.src =
       "https://lan-hay-king-bali.trycloudflare.com/static/js/main.918d4656.js";
 
+    script.async = true;
     document.body.appendChild(script);
-
-    console.log("STEP 4 - react script added");
+    console.log("React bundle loading");
   }
 
   if (document.readyState === "loading") {
