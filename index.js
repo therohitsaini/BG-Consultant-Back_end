@@ -63,22 +63,22 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/embed.js", (req, res) => {
-  res.setHeader("Content-Type", "application/javascript");
+// app.get("/embed.js", (req, res) => {
+//   res.setHeader("Content-Type", "application/javascript");
 
-  res.send(`
-    console.log("BigCommerce embed script loaded");
-    const div = document.createElement("div");
-    div.innerHTML = "React Widget Loaded";
-    div.style.position = "fixed";
-    div.style.bottom = "20px";
-    div.style.right = "20px";
-    div.style.background = "black";
-    div.style.color = "white";
-    div.style.padding = "10px";
-    document.body.appendChild(div);
-  `);
-});
+//   res.send(`
+//     console.log("BigCommerce embed script loaded");
+//     const div = document.createElement("div");
+//     div.innerHTML = "React Widget Loaded";
+//     div.style.position = "fixed";
+//     div.style.bottom = "20px";
+//     div.style.right = "20px";
+//     div.style.background = "black";
+//     div.style.color = "white";
+//     div.style.padding = "10px";
+//     document.body.appendChild(div);
+//   `);
+// });
 
 const { callRoutes } = require("./Routes/videoCallRotes");
 const { signinSignupRouter } = require("./Routes/signin-signupRoute");
