@@ -108,8 +108,8 @@ app.use("/api", bigCommerceInstallationRoute);
 // app.use("/api/draft-order", shopifyDraftOrderRoute);
 
 /** User Routes */
-// app.use("/api/users", userRouter);
-// app.use("/api/admin", adminRoute);
+app.use("/api/users", userRouter);
+app.use("/api/admin", adminRoute);
 // app.use("/api/princing", adminPrincingRoute);
 // app.use("/pricing-callback", adminPrincingRoute);
 
