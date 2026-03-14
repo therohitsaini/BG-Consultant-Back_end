@@ -19,25 +19,28 @@
 // })();
 
 (function () {
-    console.log("Embed start");
-    let root = document.getElementById("root");
-    if (!root) {
-      root = document.createElement("div");
-      root.id = "root";
-      document.body.appendChild(root);
-    }
-    const script = document.createElement("script");
-    script.src =
-    "https://joins-joan-date-batch.trycloudflare.com/static/js/main.537a0f47.js";
-    script.type = "text/javascript";
-    script.crossOrigin = "anonymous";
-    script.onload = function () {
-      console.log("React bundle loaded");
-    };
-    script.onerror = function () {
-      console.log("Script load failed");
-    };
-  
-    document.body.appendChild(script);
-  
-  })();
+  console.log("React Embed Start");
+
+  // Root container create karo
+  let root = document.getElementById("consultant-root");
+
+  if (!root) {
+    root = document.createElement("div");
+    root.id = "consultant-root";
+    document.body.appendChild(root);
+  }
+
+  const script = document.createElement("script");
+  script.src = "https://joins-joan-date-batch.trycloudflare.com/static/js/main.7cf4d3b0.js";
+  script.type = "text/javascript";
+  script.defer = true;
+  script.onload = function () {
+    console.log("React bundle loaded successfully");
+  };
+
+  script.onerror = function () {
+    console.error("React bundle failed to load");
+  };
+
+  document.body.appendChild(script);
+})();
