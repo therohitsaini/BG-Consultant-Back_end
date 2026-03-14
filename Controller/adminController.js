@@ -781,7 +781,7 @@ const updateAdminPercentage = async (req, res) => {
             });
         }
 
-        const updatedShop = await shopModel.findByIdAndUpdate(
+        const updatedShop = await bgStoreDetails.findByIdAndUpdate(
             adminId,
             {
                 adminPersenTage: adminPercentage
