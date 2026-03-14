@@ -48,7 +48,6 @@ const installBigCommerce = async (req, res) => {
       },
       account_uuid: data.account_uuid,
     });
-    console.log("accessToken", accessToken);
     // await injectScript(storeHash, accessToken);
     const scriptResponse = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,

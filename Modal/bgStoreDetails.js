@@ -28,6 +28,21 @@ const bigCommerceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    adminPersenTage: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    appEnabled: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+    appBillingStatus: {
+      type: String,
+      default: "inactive",
+      required: true,
+    },
     user: userSchema,
     owner: ownerSchema,
     account_uuid: {
