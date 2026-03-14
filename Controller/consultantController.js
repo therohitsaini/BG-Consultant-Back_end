@@ -1093,7 +1093,7 @@ const getMonthlyRevenueController = async (req, res) => {
 
     transactions.forEach((tx) => {
       const txDate = new Date(tx.createdAt);
-      const amount = Number(tx.consultantAmount) || 0; // ✅ IMPORTANT
+      const amount = Number(tx.consultantAmount) || 0; 
 
       // total income (all time)
       totalIncome += amount;
