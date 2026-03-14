@@ -28,7 +28,7 @@ const { authenticateToken } = require("../Auth/signup-signin");
 const upload = multer({ storage: multer.memoryStorage() });
 
 
-consultantRoute.post("/add-consultant/:shop_id", upload.single("profileImage"), verifyShopifyToken, consultantController)
+consultantRoute.post("/add-consultant/:shop_id", upload.single("profileImage"), consultantController)
 consultantRoute.put("/update-consultant/:id", upload.single("profileImage"), verifyShopifyToken, updateConsultantData)
 consultantRoute.get("/api-find-consultant/:shop_id", getConsultant)
 consultantRoute.put("/api-consultant-update-status/:id", updateConsultantStatus)
