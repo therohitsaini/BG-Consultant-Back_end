@@ -9,6 +9,7 @@ const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 const adminController = async (req, res) => {
     try {
         const { adminId } = req.params;
+        console.log("adminId", adminId)
         if (!adminId) {
             return res.status(400).json({
                 success: false,
@@ -21,7 +22,7 @@ const adminController = async (req, res) => {
                 message: "Invalid admin ID"
             });
         }
-        const admin = await bgStoreDetails.findOne({ _id: adminId }).select("-accessToken");
+        const admin = await bgStoreDetails.findOne({ id: adminId }).select("-accessToken");
         if (!admin) {
             return res.status(404).json({
                 success: false,
