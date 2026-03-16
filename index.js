@@ -52,21 +52,12 @@ app.use((req, res, next) => {
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const reactBuildPath = path.join(
-  __dirname,
-  "..",
-  "BigCommerce-Consultant-Client",
-  "build",
-);
-
-app.use("/widget", express.static(reactBuildPath));
-
-
-
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
   res.sendFile(path.join(__dirname, "Helper/embed.js"));
 });
+
+
 const { callRoutes } = require("./Routes/videoCallRotes");
 const { signinSignupRouter } = require("./Routes/signin-signupRoute");
 const { userDetailsRouter } = require("./Routes/userDetailsRoutes");
