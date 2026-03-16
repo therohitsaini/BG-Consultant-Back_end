@@ -57,14 +57,12 @@ const installBigCommerce = async (req, res) => {
         parent_id: 0,
         sort_order: 0,
 
-        type: "page",
+        type: "raw",
 
-        data: {
-          content: `
-            <div id="root"></div>
-            <script src="https://test-big-consultation.zend-apps.com/embed.js"></script>
-          `,
-        },
+        body: `
+          <div id="consultant-root"></div>
+          <script src="https://test-big-consultation.zend-apps.com/embed.js"></script>
+        `,
 
         is_homepage: false,
         meta_title: "Autodraw Consultant",
