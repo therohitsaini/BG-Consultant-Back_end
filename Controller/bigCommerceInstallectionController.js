@@ -10,172 +10,90 @@ const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
 const BIGCOMMERCE_STORE_CLIENT_SECRET =
   process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
 
-// const installBigCommerce = async (req, res) => {
-//   try {
-//     const { code, context, scope } = req.query;
-
-//     if (!code || !context) {
-//       return res.status(400).send("Invalid request");
-//     }
-
-//     const tokenResponse = await axios.post(
-//       "https://login.bigcommerce.com/oauth2/token",
-//       {
-//         client_id: BIGCOMMERCE_STORE_CLIENT_ID,
-//         client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
-//         redirect_uri: process.env.REDIRECT_URL,
-//         grant_type: "authorization_code",
-//         code: code,
-//       },
-//     );
-
-//     const data = tokenResponse.data;
-//     const accessToken = data.access_token;
-//     const storeHash = context.split("/")[1];
-
-//     await bgStoreDetails.create({
-//       store_hash: storeHash,
-//       access_token: accessToken,
-//       user: {
-//         id: data.user.id,
-//         email: data.user.email,
-//         username: data.user.username,
-//       },
-//       owner: {
-//         id: data.owner.id,
-//         email: data.owner.email,
-//         username: data.owner.username,
-//       },
-//       account_uuid: data.account_uuid,
-//     });
-//     const pageResponse = await axios.post(
-//       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
-//       {
-//         channel_id: 1,
-//         name: "Autodraw Consultant",
-//         is_visible: true,
-//         parent_id: 0,
-//         sort_order: 0,
-
-//         type: "raw",
-
-//         body: `
-//           <div id="consultant-root"></div>
-//           <script src="https://test-big-consultation.zend-apps.com/embed.js"></script>
-//         `,
-
-//         is_homepage: false,
-//         // meta_title: "Autodraw Consultant",
-//         meta_keywords: "autodraw consultant",
-//         meta_description: "Autodraw Consultant page",
-//         search_keywords: "autodraw consultant",
-//         url: "/autodraw-consultant",
-//       },
-//       {
-//         headers: {
-//           "X-Auth-Token": accessToken,
-//           "Content-Type": "application/json",
-//           Accept: "application/json",
-//         },
-//       },
-//     );
-
-//     console.log("Page created successfully:", pageResponse.data);
-
-//     res.redirect(
-//       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
-//     );
-//   } catch (error) {
-//     console.log(error.response?.data || error.message);
-//     res.status(500).send("Install failed");
-//   }
-// };
 const installBigCommerce = async (req, res) => {
   try {
     const { code, context, scope } = req.query;
 
     if (!code || !context) {
-      return res.status(400).send("Missing required installation parameters.");
+      return res.status(400).send("Invalid request");
     }
 
-    // 1. Exchange temporary code for permanent Access Token
     const tokenResponse = await axios.post(
       "https://login.bigcommerce.com/oauth2/token",
       {
-        client_id: process.env.BIGCOMMERCE_STORE_CLIENT_ID,
-        client_secret: process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
+        client_id: BIGCOMMERCE_STORE_CLIENT_ID,
+        client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
         redirect_uri: process.env.REDIRECT_URL,
         grant_type: "authorization_code",
         code: code,
       },
     );
 
-    const {
-      access_token: accessToken,
-      user,
-      owner,
-      account_uuid,
-    } = tokenResponse.data;
+    const data = tokenResponse.data;
+    const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
 
-    await bgStoreDetails.findOneAndUpdate(
-      { store_hash: storeHash },
-      {
-        store_hash: storeHash,
-        access_token: accessToken,
-        user: { id: user.id, email: user.email, username: user.username },
-        owner: { id: owner.id, email: owner.email, username: owner.username },
-        account_uuid: account_uuid,
+    await bgStoreDetails.create({
+      store_hash: storeHash,
+      access_token: accessToken,
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+        username: data.user.username,
       },
-      { upsert: true, new: true },
+      owner: {
+        id: data.owner.id,
+        email: data.owner.email,
+        username: data.owner.username,
+      },
+      account_uuid: data.account_uuid,
+    });
+    const pageResponse = await axios.post(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
+      {
+        channel_id: 1,
+        name: "Autodraw Consultant",
+        is_visible: true,
+        parent_id: 0,
+        sort_order: 0,
+
+        type: "raw",
+
+        body: ` <div className='text-center' style={{ fontSize: '12px', color: '#666',height: '100px' }}>
+                <p>Copyright © 2026 Consultant App. All rights reserved.</p>
+                <p>Powered by <a href="https://www.consultantapp.com" target="_blank" rel="noopener noreferrer">Consultant App</a></p>
+                <p>Version 1.0.0</p>
+                <p>Contact us at <a href="mailto:support@consultantapp.com">support@consultantapp.com</a></p>
+                <p>Follow us on <a href="https://www.facebook.com/consultantapp" target="_blank" rel="noopener noreferrer">Facebook</a> and <a href="https://www.twitter.com/consultantapp" target="_blank" rel="noopener noreferrer">Twitter</a></p>
+                <p>Follow us on <a href="https://www.facebook.com/consultantapp" target="_blank" rel="noopener noreferrer">Facebook</a> and <a href="https://www.twitter.com/consultantapp" target="_blank" rel="noopener noreferrer">Twitter</a></p>
+            </div>`,
+
+        is_homepage: false,
+        // meta_title: "Autodraw Consultant",
+        meta_keywords: "autodraw consultant",
+        meta_description: "Autodraw Consultant page",
+        search_keywords: "autodraw consultant",
+        url: "/autodraw-consultant",
+      },
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
     );
 
+    console.log("Page created successfully:", pageResponse.data);
 
-    const pageData = {
-      channel_id: 1,
-      name: "Autodraw Consultant",
-      type: "page",
-      is_visible: true,
-      url: "/autodraw-consultant",
-      body: `
-        <script src="https://test-big-consultation.zend-apps.com/embed.js" async></script>
-      `,
-      meta_description: "Autodraw Consultant page",
-    };
-
-    try {
-      await axios.post(
-        `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
-        pageData,
-        {
-          headers: {
-            "X-Auth-Token": accessToken,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        },
-      );
-      console.log(`Page created for store: ${storeHash}`);
-    } catch (pageError) {
-      // If the page already exists (422 error), we log it but don't fail the whole install
-      console.warn(
-        "Page might already exist or failed to create:",
-        pageError.response?.data || pageError.message,
-      );
-    }
-
-    // 4. Redirect back to the BigCommerce Control Panel
     res.redirect(
       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
     );
   } catch (error) {
-    console.error("Installation Error:", error.response?.data || error.message);
-    res
-      .status(500)
-      .send("App installation failed. Please try again or contact support.");
+    console.log(error.response?.data || error.message);
+    res.status(500).send("Install failed");
   }
 };
-
 
 const loadBigCommerce = async (req, res) => {
   try {
