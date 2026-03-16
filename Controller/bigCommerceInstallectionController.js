@@ -68,7 +68,7 @@ const installBigCommerce = async (req, res) => {
         meta_description: "Autodraw Consultant page",
         search_keywords: "autodraw consultant",
         url: "/autodraw-consultant"
-      }
+      },
       {
         headers: {
           "X-Auth-Token": accessToken,
