@@ -45,7 +45,6 @@ app.use("/api/webhooks", webHookRoute);
 
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/widget", express.static(path.join(__dirname, "BigCommerce-Consultant-Client", "build")));
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
   res.sendFile(path.join(__dirname, "Helper/embed.js"));
