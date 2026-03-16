@@ -52,20 +52,20 @@ app.use((req, res, next) => {
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const reactBuildPath = path.join(__dirname, "..", "BigCommerce-Consultant-Client", "build");
-app.use("/widget/static", express.static(path.join(reactBuildPath, "static")));
+const reactBuildPath = path.join(
+  __dirname,
+  "..",
+  "BigCommerce-Consultant-Client",
+  "build",
+);
 
 app.use("/widget", express.static(reactBuildPath));
 
-app.use((req, res, next) => {
-  res.setHeader(
-    "Cache-Control",
-    "no-store, no-cache, must-revalidate, private",
-  );
-  res.setHeader("Pragma", "no-cache");
-  res.setHeader("Expires", "0");
-  next();
+app.get("/widget/*", (req, res) => {
+  res.sendFile(path.join(reactBuildPath, "index.html"));
 });
+
+
 
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
