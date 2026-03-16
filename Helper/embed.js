@@ -33,7 +33,7 @@
   }
 
   const script = document.createElement("script");
-  script.src = ` https://rebel-modify-jones-patches.trycloudflare.com/static/js/main.7cf4d3b0.js`;
+  script.src = `https://rebel-modify-jones-patches.trycloudflare.com/static/js/main.7cf4d3b0.js`;
   script.type = "text/javascript";
   script.defer = true;
   script.onload = function () {
