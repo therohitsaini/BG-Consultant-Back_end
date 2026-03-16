@@ -65,7 +65,7 @@ const installBigCommerce = async (req, res) => {
         `,
 
         is_homepage: false,
-        meta_title: "Autodraw Consultant",
+        // meta_title: "Autodraw Consultant",
         meta_keywords: "autodraw consultant",
         meta_description: "Autodraw Consultant page",
         search_keywords: "autodraw consultant",
