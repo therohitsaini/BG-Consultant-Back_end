@@ -18,6 +18,9 @@
 //   document.body.appendChild(script);
 // })();
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 (function () {
   console.log("React Embed Start");
 
@@ -31,7 +34,7 @@
   }
 
   const script = document.createElement("script");
-  script.src = "https://joins-joan-date-batch.trycloudflare.com/static/js/main.7cf4d3b0.js";
+  script.src = `${process.env.APP_LOAD_URL}/static/js/main.7cf4d3b0.js`;
   script.type = "text/javascript";
   script.defer = true;
   script.onload = function () {
