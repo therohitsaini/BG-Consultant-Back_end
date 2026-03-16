@@ -31,10 +31,10 @@
 
   const script = document.createElement("script");
 
-  // Load the React widget bundle from the same backend domain
-  // where this embed.js is hosted. The backend serves the React
-  // build statically under the `/widget` path.
-  script.src = "/widget/static/js/main.96fd388c.js";
+  // Load the React widget bundle directly from your backend domain
+  // (same place where you configured the Script Manager URI)
+  script.src =
+    "https://test-big-consultation.zend-apps.com/widget/static/js/main.96fd388c.js";
 
   script.onload = function () {
     console.log("React bundle loaded successfully");
