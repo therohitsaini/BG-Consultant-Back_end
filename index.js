@@ -51,7 +51,8 @@ app.use((req, res, next) => {
 });
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-const reactBuildPath = path.join(__dirname, "..", "consultant-app", "build");
+const reactBuildPath = path.join(__dirname, "..", "BigCommerce-Consultant-Client", "build");
+app.use("/widget", express.static(reactBuildPath));
 
 app.use((req, res, next) => {
   res.setHeader(

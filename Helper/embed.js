@@ -18,24 +18,21 @@
 //   document.body.appendChild(script);
 // })();
 
-
-
 (function () {
   console.log("React Embed Start");
 
-  // Root container create karo
-  let root = document.getElementById("consultant-root");
+  let root = document.getElementById("root");
 
   if (!root) {
     root = document.createElement("div");
-    root.id = "consultant-root";
+    root.id = "root";
     document.body.appendChild(root);
   }
 
   const script = document.createElement("script");
-  script.src = `https://rebel-modify-jones-patches.trycloudflare.com/widget/static/js/main.js`;
-  script.type = "text/javascript";
-  script.defer = true;
+
+  script.src = "https://rebel-modify-jones-patches.trycloudflare.com/widget/static/js/main.96fd388c.js";
+
   script.onload = function () {
     console.log("React bundle loaded successfully");
   };
