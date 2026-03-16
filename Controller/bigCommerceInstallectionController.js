@@ -56,30 +56,30 @@ const installBigCommerce = async (req, res) => {
         is_visible: true,
         parent_id: 0,
         sort_order: 0,
-    
+
         type: "page",
-    
-        html_body: `
-          <div id="consultant-root"></div>
-          <script src="https://test-big-consultation.zend-apps.com/embed.js"></script>
-        `,
-    
+
+        data: {
+          content: `
+            <div id="root"></div>
+            <script src="https://test-big-consultation.zend-apps.com/embed.js"></script>
+          `,
+        },
+
         is_homepage: false,
-    
         meta_title: "Autodraw Consultant",
         meta_keywords: "autodraw consultant",
         meta_description: "Autodraw Consultant page",
         search_keywords: "autodraw consultant",
-    
-        url: "/autodraw-consultant"
+        url: "/autodraw-consultant",
       },
       {
         headers: {
           "X-Auth-Token": accessToken,
           "Content-Type": "application/json",
-          "Accept": "application/json"
-        }
-      }
+          Accept: "application/json",
+        },
+      },
     );
     console.log("Page created successfully:", pageResponse.data);
 
