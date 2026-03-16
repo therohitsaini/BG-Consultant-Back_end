@@ -56,28 +56,24 @@ const installBigCommerce = async (req, res) => {
         is_visible: true,
         parent_id: 0,
         sort_order: 0,
-
         type: "raw",
-
-        body: ` <div className='text-center' style={{ fontSize: '12px', color: '#666',height: '100px' }}>
+        body: `<div class='text-center' style="font-size:12px;color:#666;height:100px;">
                 <p>Copyright © 2026 Consultant App. All rights reserved.</p>
                 <p>Powered by <a href="https://www.consultantapp.com" target="_blank" rel="noopener noreferrer">Consultant App</a></p>
                 <p>Version 1.0.0</p>
                 <p>Contact us at <a href="mailto:support@consultantapp.com">support@consultantapp.com</a></p>
                 <p>Follow us on <a href="https://www.facebook.com/consultantapp" target="_blank" rel="noopener noreferrer">Facebook</a> and <a href="https://www.twitter.com/consultantapp" target="_blank" rel="noopener noreferrer">Twitter</a></p>
-                <p>Follow us on <a href="https://www.facebook.com/consultantapp" target="_blank" rel="noopener noreferrer">Facebook</a> and <a href="https://www.twitter.com/consultantapp" target="_blank" rel="noopener noreferrer">Twitter</a></p>
-            </div>`,
-
+              </div>`,
         is_homepage: false,
-        // meta_title: "Autodraw Consultant",
-        // meta_keywords: "autodraw consultant",
+        meta_title: "Autodraw Consultant", // Keep this
+        // meta_keywords: "autodraw consultant", // REMOVE this field
         meta_description: "Autodraw Consultant page",
         search_keywords: "autodraw consultant",
         url: "/autodraw-consultant",
       },
       {
         headers: {
-          "X-Auth-Token": accessToken,
+          "X-Auth-Token": token,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
