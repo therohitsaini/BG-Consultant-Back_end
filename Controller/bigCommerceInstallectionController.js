@@ -65,9 +65,6 @@ const installBigCommerce = async (req, res) => {
                 <p>Follow us on <a href="https://www.facebook.com/consultantapp" target="_blank" rel="noopener noreferrer">Facebook</a> and <a href="https://www.twitter.com/consultantapp" target="_blank" rel="noopener noreferrer">Twitter</a></p>
               </div>`,
         is_homepage: false,
-        meta_title: "Autodraw Consultant", // Keep this
-        // meta_keywords: "autodraw consultant", // REMOVE this field
-        meta_description: "Autodraw Consultant page",
         search_keywords: "autodraw consultant",
         url: "/autodraw-consultant",
       },
