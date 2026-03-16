@@ -40,18 +40,12 @@ app.use(
 app.use("/api/webhooks", express.raw({ type: "application/json" }));
 app.use("/api/webhooks", webHookRoute);
 
-app.use((req, res, next) => {
-  if (req.path.startsWith("/api/webhooks")) return next();
-  express.json({ limit: "50mb" })(req, res, next);
-});
 
-app.use((req, res, next) => {
-  if (req.path.startsWith("/api/webhooks")) return next();
-  express.urlencoded({ limit: "50mb", extended: true })(req, res, next);
-});
+
+
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
+app.use("/widget", express.static(path.join(__dirname, "BigCommerce-Consultant-Client", "build")));
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
   res.sendFile(path.join(__dirname, "Helper/embed.js"));

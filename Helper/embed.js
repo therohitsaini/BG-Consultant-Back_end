@@ -15,7 +15,7 @@
   const script = document.createElement("script");
 
   script.src =
-    "https://rocket-councils-whenever-jason.trycloudflare.com/static/js/main.96fd388c.js";
+    "https://rocket-councils-whenever-jason.trycloudflare.com/widget/static/js/main.96fd388c.js";
 
   script.async = true;
 
