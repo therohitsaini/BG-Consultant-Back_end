@@ -4,10 +4,11 @@
     console.log("React Embed Initializing...");
 
     // 1. Ensure the root element exists
-    let root = document.getElementById("root");
+    let root = document.getElementById("consultant-root");
     if (!root) {
       root = document.createElement("div");
-      root.id = "root";
+      // Change this line in Helper/embed.js
+      root.id = "consultant-root";
       // Optional: Add a class for styling isolation
       root.className = "my-custom-app-container";
       document.body.appendChild(root);
