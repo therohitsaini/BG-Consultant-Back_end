@@ -61,11 +61,9 @@ const reactBuildPath = path.join(
 
 app.use("/widget", express.static(reactBuildPath));
 
-app.get("/widget/*", (req, res) => {
+app.get("/widget/:path(*)", (req, res) => {
   res.sendFile(path.join(reactBuildPath, "index.html"));
 });
-
-
 
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
