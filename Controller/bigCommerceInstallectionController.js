@@ -73,7 +73,7 @@ const installBigCommerce = async (req, res) => {
       },
       {
         headers: {
-          "X-Auth-Token": token,
+          "X-Auth-Token": accessToken,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
