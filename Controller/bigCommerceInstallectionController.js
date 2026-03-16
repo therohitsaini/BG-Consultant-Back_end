@@ -102,8 +102,8 @@ const installBigCommerce = async (req, res) => {
     const tokenResponse = await axios.post(
       "https://login.bigcommerce.com/oauth2/token",
       {
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
+        client_id: process.env.BIGCOMMERCE_STORE_CLIENT_ID,
+        client_secret: process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
         redirect_uri: process.env.REDIRECT_URL,
         grant_type: "authorization_code",
         code: code,
