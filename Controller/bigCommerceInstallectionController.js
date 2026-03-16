@@ -48,25 +48,35 @@ const installBigCommerce = async (req, res) => {
       },
       account_uuid: data.account_uuid,
     });
-    // await injectScript(storeHash, accessToken);
-    const scriptResponse = await axios.post(
-      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/scripts`,
+
+    const pageResponse = await axios.post(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
       {
-        name: "Consultant App",
-        src: `https://test-big-consultation.zend-apps.com/embed.js?v=3`,
-        auto_uninstall: true,
-        location: "footer",
-        kind: "src",
+        channel_id: 1,
+        name: "Autodraw Consultant",
+        is_visible: true,
+        parent_id: 0,
+        sort_order: 0,
+        type: "page",
+        body: "<div>Autodraw Consultant</div>",
+        is_homepage: false,
+        meta_title: "Autodraw Consultant",
+        meta_keywords: "autodraw consultant",
+        meta_description: "Autodraw Consultant page",
+        search_keywords: "autodraw consultant",
+        url: "/autodraw-consultant",
       },
       {
         headers: {
           "X-Auth-Token": accessToken,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
-      },
+      }
     );
-    console.log("scriptResponse", scriptResponse.data);
-    console.log("script added successfully ?");
+    
+    console.log("Page created successfully:", pageResponse.data);
+
     res.redirect(
       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
     );
