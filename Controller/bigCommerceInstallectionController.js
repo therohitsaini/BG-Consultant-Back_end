@@ -67,6 +67,21 @@ const installBigCommerce = async (req, res) => {
         url: "/autodraw-consultant"
       },
       {
+        channel_id: 2,
+        name: "Consultant App",
+        is_visible: true,
+        parent_id: 0,
+        sort_order: 0,
+        type: "page",
+        body:"<div>Welcome to Consultant App</div>",
+        is_homepage: false,
+        meta_title: "Consultant App",
+        meta_keywords: "consultant app",
+        meta_description: "Consultant App page",
+        search_keywords: "consultant app",
+        url: "/consultant-app"
+      },
+      {
         headers: {
           "X-Auth-Token": accessToken,
           "Content-Type": "application/json",
