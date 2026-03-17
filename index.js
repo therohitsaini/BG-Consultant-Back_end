@@ -16,10 +16,13 @@ const shopifyRoute = require("./Routes/shopifyRoute");
 const { webHookRoute } = require("./Routes/webHookRoute");
 
 app.use((req, res, next) => {
+  // ADD THIS LINE BELOW
+  res.header("ngrok-skip-browser-warning", "true");
+
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, ngrok-skip-browser-warning",
   );
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 
@@ -41,7 +44,12 @@ app.use("/api/webhooks", express.raw({ type: "application/json" }));
 app.use("/api/webhooks", webHookRoute);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/static", express.static(path.join(__dirname, "BigCommerce-Consultant-Client/build/static")));
+app.use(
+  "/static",
+  express.static(
+    path.join(__dirname, "BigCommerce-Consultant-Client/build/static"),
+  ),
+);
 
 // 2. Updated embed.js route with CORS headers
 app.get("/embed.js", (req, res) => {
