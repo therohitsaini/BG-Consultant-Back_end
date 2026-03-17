@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const { connectDB } = require("./Utils/db");
 dotenv.config();
 connectDB();
+const fs = require("fs");
 const path = require("path");
 const app = express();
 const PORT = process.env.MVC_BACKEND_PORT || 3001;
@@ -14,7 +15,6 @@ const { ioServer } = require("./server-io");
 const { razerPayRoute } = require("./Routes/razerPayRoute");
 const shopifyRoute = require("./Routes/shopifyRoute");
 const { webHookRoute } = require("./Routes/webHookRoute");
-const fs = require("fs");
 
 app.use((req, res, next) => {
   res.header("ngrok-skip-browser-warning", "true");
