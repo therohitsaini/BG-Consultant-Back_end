@@ -140,9 +140,8 @@ const installBigCommerce = async (req, res) => {
         // The body contains the mount point and your loader script
         body: `
           <div id="consultant-root"></div>
-          <script src="https://interpretation-physical-cheap-publication.trycloudflare.com/static/js/main.96fd388c.js" async></script>
+          <script src="https://test-big-consultation.zend-apps.com/embed.js" async></script>
         `,
-
         is_homepage: false,
         url: "/autodraw-consultant",
         meta_description: "Autodraw Consultant page",
