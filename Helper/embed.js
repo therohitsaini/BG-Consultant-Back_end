@@ -9,7 +9,7 @@
 
     const script = document.createElement("script");
     script.src =
-      "https://interpretation-physical-cheap-publication.trycloudflare.com/static/js/main.96fd388c.js";
+      "https://helping-highs-entered-discovery.trycloudflare.com/static/js/main.96fd388c.js";
     script.async = true;
 
     script.onload = () => {
