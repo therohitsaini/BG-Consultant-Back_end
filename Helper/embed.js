@@ -1,5 +1,6 @@
 (function () {
   const init = () => {
+    console.log("React Embed Initializing...");
     let root = document.getElementById("consultant-root");
     if (!root) {
       root = document.createElement("div");
@@ -7,11 +8,12 @@
       document.body.appendChild(root);
     }
 
+    console.log("React Bundle Loading...");
     const script = document.createElement("script");
     script.src =
       "https://helping-highs-entered-discovery.trycloudflare.com/static/js/main.96fd388c.js";
     script.async = true;
-
+console.log("React Bundle Loading...");
     script.onload = () => {
       console.log("React Bundle Loaded Successfully");
       if (window.mountReactApp) window.mountReactApp();
