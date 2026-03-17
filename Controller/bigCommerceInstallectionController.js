@@ -56,7 +56,7 @@ const installBigCommerce = async (req, res) => {
         is_visible: true,
         parent_id: 0,
         sort_order: 0,
-        type: "raw",
+        type: "page",
           body: `<div>
           <header>
             <h1>Autodraw Consultant</h1>
