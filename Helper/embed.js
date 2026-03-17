@@ -1,47 +1,49 @@
-// Helper/embed.js
+
+
 
 (function () {
-  // Create a container div if it doesn't exist
+  // Create container div
   var container = document.getElementById("my-react-root");
   if (!container) {
     container = document.createElement("div");
     container.id = "my-react-root";
-    // append it after the main menu, or wherever you want
-    document.body.insertBefore(container, document.body.firstChild);
+    // Insert after BigCommerce header/menu
+    var header = document.querySelector(".header") || document.body;
+    header.after(container);
   }
 
-  console.log("React Bundle Loading...");
+  function loadCSS(url) {
+    return new Promise(function (resolve, reject) {
+      var link = document.createElement("link");
+      link.href = url;
+      link.rel = "stylesheet";
+      link.onload = resolve;
+      link.onerror = reject;
+      document.head.appendChild(link);
+    });
+  }
 
-  // -------- Load CSS --------
-  console.log("CSS Loading...");
-  var link = document.createElement("link");
-  link.href =
-    "https://helping-highs-entered-discovery.trycloudflare.com/my-react-static/css/main.css"; // update with your path
-  link.rel = "stylesheet";
+  function loadJS(url) {
+    return new Promise(function (resolve, reject) {
+      var script = document.createElement("script");
+      script.src = url;
+      script.type = "text/javascript";
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
 
-  link.onload = function () {
-    console.log("CSS Loaded Successfully ✅");
-  };
-  link.onerror = function (e) {
-    console.error("CSS Failed to Load ❌", e);
-  };
+  // Paths to React build
+  var cssUrl = "https://helping-highs-entered-discovery.trycloudflare.com/my-react-static/css/main.css";
+  var jsUrl = "https://helping-highs-entered-discovery.trycloudflare.com/my-react-static/js/main.js";
 
-  document.head.appendChild(link);
+  loadCSS(cssUrl)
+    .then(() => console.log("CSS Loaded ✅"))
+    .catch((e) => console.error("CSS Failed ❌", e));
 
-  // -------- Load JS --------
-  console.log("JS Loading...");
-  var script = document.createElement("script");
-  script.src =
-    "https://helping-highs-entered-discovery.trycloudflare.com/my-react-static/js/main.js"; // update with your path
-  script.type = "text/javascript";
-  script.async = true;
-
-  script.onload = function () {
-    console.log("JS Loaded Successfully ✅");
-  };
-  script.onerror = function (e) {
-    console.error("JS Failed to Load ❌", e);
-  };
-
-  document.head.appendChild(script);
+  loadJS(jsUrl)
+    .then(() => console.log("JS Loaded ✅"))
+    .catch((e) => console.error("JS Failed ❌", e));
 })();
