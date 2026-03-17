@@ -1,13 +1,31 @@
-(async function () {
-  // 1. Ask your backend for the CURRENT filename
-  const response = await fetch(
-    "https://test-big-consultation.zend-apps.com/get-bundle-name",
-  );
-  const data = await response.json();
+(function () {
+  const init = () => {
+    let root = document.getElementById("consultant-root");
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "consultant-root";
+      document.body.appendChild(root);
+    }
 
-  const script = document.createElement("script");
-  // 2. Use the Cloudflare domain + the dynamic filename
-  script.src = `https://interpretation-physical-cheap-publication.trycloudflare.com/static/js/${data.fileName}`;
-  script.async = true;
-  document.body.appendChild(script);
+    const script = document.createElement("script");
+    script.src =
+      "https://interpretation-physical-cheap-publication.trycloudflare.com/static/js/main.96fd388c.js";
+    script.async = true;
+
+    script.onload = () => {
+      console.log("React Bundle Loaded Successfully");
+      if (window.mountReactApp) window.mountReactApp();
+    };
+
+    script.onerror = () => {
+      console.error(
+        "CRITICAL: Could not reach the React Bundle at Cloudflare.",
+      );
+    };
+
+    document.body.appendChild(script);
+  };
+
+  if (document.readyState === "complete") init();
+  else window.addEventListener("load", init);
 })();
