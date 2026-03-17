@@ -14,6 +14,7 @@ const { ioServer } = require("./server-io");
 const { razerPayRoute } = require("./Routes/razerPayRoute");
 const shopifyRoute = require("./Routes/shopifyRoute");
 const { webHookRoute } = require("./Routes/webHookRoute");
+const fs = require("fs");
 
 app.use((req, res, next) => {
   res.header("ngrok-skip-browser-warning", "true");
@@ -41,16 +42,18 @@ app.use("/api/webhooks", express.raw({ type: "application/json" }));
 app.use("/api/webhooks", webHookRoute);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(
-  "/static",
-  express.static(
-    path.join(__dirname, "BigCommerce-Consultant-Client/build/static"),
-  ),
-);
+app.get("/get-bundle-name", (req, res) => {
+  const jsDir = path.join(__dirname, "BigCommerce-Consultant-Client/build/static/js");
+  
+  const files = fs.readdirSync(jsDir);
+  const mainBundle = files.find(file => file.startsWith("main.") && file.endsWith(".js"));
+  
+  res.json({ fileName: mainBundle });
+});
 
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Critical for BigCommerce storefront access
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.sendFile(path.join(__dirname, "Helper/embed.js"));
 });
 
