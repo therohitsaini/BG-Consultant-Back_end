@@ -16,16 +16,13 @@ const shopifyRoute = require("./Routes/shopifyRoute");
 const { webHookRoute } = require("./Routes/webHookRoute");
 
 app.use((req, res, next) => {
-  // ADD THIS LINE BELOW
   res.header("ngrok-skip-browser-warning", "true");
-
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization, ngrok-skip-browser-warning",
   );
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
@@ -51,10 +48,9 @@ app.use(
   ),
 );
 
-// 2. Updated embed.js route with CORS headers
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Critical for BigCommerce storefront access
   res.sendFile(path.join(__dirname, "Helper/embed.js"));
 });
 
