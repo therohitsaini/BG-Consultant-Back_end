@@ -40,16 +40,15 @@ app.use(
 app.use("/api/webhooks", express.raw({ type: "application/json" }));
 app.use("/api/webhooks", webHookRoute);
 
-
-
-
-
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/static", express.static(path.join(__dirname, "BigCommerce-Consultant-Client/build/static")));
+
+// 2. Updated embed.js route with CORS headers
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.sendFile(path.join(__dirname, "Helper/embed.js"));
 });
-
 
 const { callRoutes } = require("./Routes/videoCallRotes");
 const { signinSignupRouter } = require("./Routes/signin-signupRoute");

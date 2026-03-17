@@ -1,35 +1,45 @@
-// Helper/embed.js
 (function () {
+  // Prevent double-loading
+  if (window.__AUTODRAW_INITIALIZED__) return;
+  window.__AUTODRAW_INITIALIZED__ = true;
+
   const init = () => {
     console.log("React Embed Initializing...");
 
-    // 1. Ensure the root element exists
     let root = document.getElementById("consultant-root");
     if (!root) {
       root = document.createElement("div");
       root.id = "consultant-root";
-      // Optional: Add a class for styling isolation
       root.className = "my-custom-app-container";
+      // Ensure it has some height so it's not invisible
+      root.style.minHeight = "200px";
       document.body.appendChild(root);
     }
 
-    // 2. Load the actual React Bundle
     const script = document.createElement("script");
+    // PRO TIP: Make sure this URL matches your CURRENT active tunnel
     script.src =
       "https://interpretation-physical-cheap-publication.trycloudflare.com/static/js/main.96fd388c.js";
     script.async = true;
 
     script.onload = function () {
-      console.log("React Bundle Loaded");
-      if (window.mountReactApp) {
+      console.log("React Bundle Loaded Successfully");
+      if (typeof window.mountReactApp === "function") {
         window.mountReactApp();
+      } else {
+        console.error("Mount function not found. Check your React index.js");
       }
+    };
+
+    script.onerror = function () {
+      console.error(
+        "CRITICAL: Could not reach the React Bundle. Is the tunnel down?",
+      );
     };
 
     document.body.appendChild(script);
   };
 
-  // Run immediately if DOM is already ready, otherwise wait
   if (
     document.readyState === "complete" ||
     document.readyState === "interactive"
