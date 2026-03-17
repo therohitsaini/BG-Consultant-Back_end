@@ -42,12 +42,10 @@ app.use("/api/webhooks", express.raw({ type: "application/json" }));
 app.use("/api/webhooks", webHookRoute);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(
-  "/static",
-  express.static(
-    path.join(__dirname, "BigCommerce-Consultant-Client/build/static"),
-  ),
-);
+// Serve React build files
+app.use("/my-react-static", express.static(
+  path.join(__dirname, "BigCommerce-Consultant-Client/build/static")
+));
 
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");

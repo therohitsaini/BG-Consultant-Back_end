@@ -1,40 +1,25 @@
+// Helper/embed.js
+
 (function () {
-  const root = document.getElementById("consultant-root");
-  if (!root) {
-    console.error("❌ ERROR: #consultant-root not found in BigCommerce page!");
-    return;
+  // Create a container div if it doesn't exist
+  var container = document.getElementById("my-react-root");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "my-react-root";
+    // append it after the main menu, or wherever you want
+    document.body.insertBefore(container, document.body.firstChild);
   }
 
-  console.log("🚀 React Bundle: Starting injection...");
-
-  // 1. Inject CSS
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href =
-    "https://helping-highs-entered-discovery.trycloudflare.com/static/css/main.css";
-  document.head.appendChild(link);
-  console.log("🎨 CSS: Tag added to <head>");
-
-  // 2. Inject JS
-  const script = document.createElement("script");
-  script.src =
-    "https://helping-highs-entered-discovery.trycloudflare.com/static/js/main.96fd388c.js";
+  // Load React JS dynamically
+  var script = document.createElement("script");
+  script.src = "https://helping-highs-entered-discovery.trycloudflare.com/my-react-static/js/main.js"; // update with your path
+  script.type = "text/javascript";
   script.async = true;
+  document.head.appendChild(script);
 
-  // --- DEBUGGING HANDLERS ---
-  script.onload = () => {
-    console.log(
-      "✅ SUCCESS: The JS file was successfully downloaded by the browser.",
-    );
-  };
-
-  script.onerror = () => {
-    console.error(
-      "❌ ERROR: Browser could not reach the JS file. Check CORS, Tunnel, or 404.",
-    );
-  };
-  // --------------------------
-
-  document.body.appendChild(script);
-  console.log("📦 JS: Tag added to <body>");
+  // Load React CSS dynamically
+  var link = document.createElement("link");
+  link.href = "https://helping-highs-entered-discovery.trycloudflare.com/my-react-static/css/main.css"; // update path
+  link.rel = "stylesheet";
+  document.head.appendChild(link);
 })();
