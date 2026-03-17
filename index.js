@@ -17,6 +17,7 @@ const { webHookRoute } = require("./Routes/webHookRoute");
 
 app.use((req, res, next) => {
   res.header("ngrok-skip-browser-warning", "true");
+  res.setHeader("bypass-tunnel-reminder", "true");
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
