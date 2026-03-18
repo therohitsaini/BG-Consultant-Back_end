@@ -58,7 +58,41 @@ const installBigCommerce = async (req, res) => {
         sort_order: 0,
         type: "page",
         body: `
-      <div > hello world</div>
+        <style>
+          .my-box {
+            background-color: #1e293b; /* dark blue */
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 20px;
+            font-family: Arial, sans-serif;
+          }
+        </style>
+      
+        <div class="my-box">
+        Real-world truth
+
+          👉 ngrok + Cloudflare combo:
+
+          unstable hota hai
+
+          ORB issues deta hai
+
+          production ke liye reliable nahi
+
+          🚀 My honest recommendation
+
+          👉 Agar tum serious project bana rahe ho:
+
+          Do this:
+
+          React → Vercel deploy
+
+          Backend → Render / VPS
+
+          Embed → React CDN se
+        </div>
       `,
         is_homepage: false,
         search_keywords: "autodraw consultant",
