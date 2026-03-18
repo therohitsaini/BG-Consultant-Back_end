@@ -58,8 +58,7 @@ const installBigCommerce = async (req, res) => {
         sort_order: 0,
         type: "page",
         body: `
-       <div id="consultant-root"></div>
-<script src="https://test-big-consultation.zend-apps.com/embed.js" async></script>
+      <div > hello world</div>
       `,
         is_homepage: false,
         search_keywords: "autodraw consultant",
