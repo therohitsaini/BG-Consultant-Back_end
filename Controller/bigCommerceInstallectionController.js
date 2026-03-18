@@ -33,7 +33,7 @@ const installBigCommerce = async (req, res) => {
     const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
 
-    await bgStoreDetails.create({
+   const store = await bgStoreDetails.create({
       store_hash: storeHash,
       access_token: accessToken,
       user: {
@@ -48,7 +48,7 @@ const installBigCommerce = async (req, res) => {
       },
       account_uuid: data.account_uuid,
     });
-    const userId = store?._id;
+    const userId = store?._id || "";
     const pageResponse = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
       {
