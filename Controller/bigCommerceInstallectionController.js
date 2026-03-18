@@ -58,13 +58,23 @@ const installBigCommerce = async (req, res) => {
         sort_order: 0,
         type: "page",
         body: `
-        <div id="consultant-root">
-          <p style="text-align:center; padding: 20px;">Consultant App Loading...</p>
+        <div style="width: 100%; overflow: hidden;">
+          <iframe 
+            src="https://expert-occupational-definitely-sink.trycloudflare.com" 
+            style="width: 100%; height: 800px; border: none; overflow: hidden;"
+            id="consultant-iframe"
+            title="Autodraw Consultant"
+          ></iframe>
         </div>
       
-        <link rel="stylesheet" href="https://expert-occupational-definitely-sink.trycloudflare.com/static/css/main.css">
-      
-        <script src=" https://expert-occupational-definitely-sink.trycloudflare.com/static/js/main.2b60e817.js" async></script>
+        <script>
+          // Optional: This script helps the iframe resize if you have the iframe-resizer library
+          window.addEventListener('message', function(e) {
+            if (e.data.type === 'setHeight') {
+              document.getElementById('consultant-iframe').style.height = e.data.height + 'px';
+            }
+          }, false);
+        </script>
       `,
         is_homepage: false,
         search_keywords: "autodraw consultant",

@@ -41,7 +41,6 @@ app.use(
 app.use("/api/webhooks", express.raw({ type: "application/json" }));
 app.use("/api/webhooks", webHookRoute);
 
-// Serve uploads with proper headers
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"), {
