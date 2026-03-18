@@ -41,15 +41,57 @@ app.use(
 app.use("/api/webhooks", express.raw({ type: "application/json" }));
 app.use("/api/webhooks", webHookRoute);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-// Serve React build files
-app.use("/my-react-static", express.static(
-  path.join(__dirname, "BigCommerce-Consultant-Client/build/static")
-));
+// Serve uploads with proper headers
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"), {
+    setHeaders: (res, filePath) => {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+    },
+  }),
+);
+
+// Serve React build files with proper MIME types
+app.use(
+  "/my-react-static",
+  express.static(
+    path.join(__dirname, "BigCommerce-Consultant-Client/build/static"),
+    {
+      setHeaders: (res, filePath) => {
+        // Set correct MIME types
+        if (filePath.endsWith(".js")) {
+          res.setHeader("Content-Type", "application/javascript");
+        } else if (filePath.endsWith(".js.map")) {
+          res.setHeader("Content-Type", "application/json");
+        } else if (filePath.endsWith(".css")) {
+          res.setHeader("Content-Type", "text/css");
+        } else if (filePath.endsWith(".css.map")) {
+          res.setHeader("Content-Type", "application/json");
+        } else if (filePath.endsWith(".json")) {
+          res.setHeader("Content-Type", "application/json");
+        } else if (filePath.endsWith(".svg")) {
+          res.setHeader("Content-Type", "image/svg+xml");
+        } else if (filePath.endsWith(".woff")) {
+          res.setHeader("Content-Type", "font/woff");
+        } else if (filePath.endsWith(".woff2")) {
+          res.setHeader("Content-Type", "font/woff2");
+        } else if (filePath.endsWith(".ttf")) {
+          res.setHeader("Content-Type", "font/ttf");
+        }
+
+        // Add CORS headers for all static files
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+        res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+      },
+    },
+  ),
+);
 
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Critical for BigCommerce storefront access
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   res.sendFile(path.join(__dirname, "Helper/embed.js"));
 });
 
