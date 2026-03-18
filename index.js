@@ -50,18 +50,10 @@ app.use(
     },
   }),
 );
-
-// const buildPath = path.join(__dirname, "BigCommerce-Consultant-Client/build");
-
-// app.use("/my-react", express.static(buildPath));
-
-// // FIX: only fallback for non-file routes
-// app.get(/^\/my-react\/.*/, (req, res, next) => {
-//   if (req.path.includes(".")) {
-//     return next();
-//   }
-//   res.sendFile(path.join(buildPath, "index.html"));
-// });
+app.use((req, res, next) => {
+  res.setHeader("bypass-tunnel-reminder", "true");
+  next();
+});
 
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");
