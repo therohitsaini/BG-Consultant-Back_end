@@ -58,27 +58,51 @@ const installBigCommerce = async (req, res) => {
         sort_order: 0,
         type: "page",
         body: `
-       <div style="width: 100%;">
+        <style>
+          /* 1. Hide the BigCommerce sidebar (Web Pages menu) */
+          .page-sidebar {
+            display: none !important;
+          }
+      
+          /* 2. Make the main content area full width */
+          .page-content {
+            width: 100% !important;
+            float: none !important;
+            padding: 0 !important;
+          }
+      
+          /* 3. Remove container limits if your theme has them */
+          .container {
+            max-width: 100% !important;
+            padding: 0 !important;
+          }
+      
+          /* 4. Ensure the iframe itself is responsive */
+          #consultant-iframe {
+            width: 1px;
+            min-width: 100%;
+          }
+        </style>
+      
+        <div style="width: 100%;">
           <iframe 
-            src="https://expert-occupational-definitely-sink.trycloudflare.com" 
+            src="https://expert-occupational-definitely-sink.trycloudflare.com?store=${storeHash}&userId=${userId}" 
             id="consultant-iframe"
             style="width: 100%; border: none; overflow: hidden;" 
             scrolling="no"
           ></iframe>
         </div>
-
-      <script>
-        window.addEventListener('message', function(event) {
-          // 1. Check if the message is from your React App
-          if (event.data && event.data.type === 'AGORA_IFRAME_HEIGHT') {
-            const iframe = document.getElementById('consultant-iframe');
-            if (iframe) {
-              // 2. Set the iframe height to exactly match the React content
-              iframe.style.height = event.data.height + 'px';
+      
+        <script>
+          window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'AGORA_IFRAME_HEIGHT') {
+              const iframe = document.getElementById('consultant-iframe');
+              if (iframe) {
+                iframe.style.height = event.data.height + 'px';
+              }
             }
-          }
-        }, false);
-      </script>
+          }, false);
+        </script>
       `,
         is_homepage: false,
         search_keywords: "online consultation",
