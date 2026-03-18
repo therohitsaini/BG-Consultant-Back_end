@@ -36,8 +36,8 @@
   }
 
   // Paths to React build
-  var cssUrl = "https://helping-highs-entered-discovery.trycloudflare.com/my-react-static/css/main.css";
-  var jsUrl = "https://helping-highs-entered-discovery.trycloudflare.com/my-react-static/js/main.js";
+  var cssUrl = "https://expert-occupational-definitely-sink.trycloudflare.com/my-react-static/css/main.css";
+  var jsUrl = "https://expert-occupational-definitely-sink.trycloudflare.com/my-react-static/js/main.2b60e817.js";
 
   loadCSS(cssUrl)
     .then(() => console.log("CSS Loaded ✅"))
