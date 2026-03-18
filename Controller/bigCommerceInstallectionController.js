@@ -48,6 +48,7 @@ const installBigCommerce = async (req, res) => {
       },
       account_uuid: data.account_uuid,
     });
+    const userId = store?._id;
     const pageResponse = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
       {
@@ -60,7 +61,7 @@ const installBigCommerce = async (req, res) => {
         body: `
        <div style="width: 100%;">
         <iframe 
-          src="https://expert-occupational-definitely-sink.trycloudflare.com" 
+          src="https://expert-occupational-definitely-sink.trycloudflare.com?storeHash=${storeHash}&userId=${userId}" 
           id="consultant-iframe"
           style="width: 100%; border: none; overflow: hidden;" 
           scrolling="no"
