@@ -51,42 +51,17 @@ app.use(
   }),
 );
 
-// Serve React build files with proper MIME types
-app.use(
-  "/my-react-static",
-  express.static(
-    path.join(__dirname, "BigCommerce-Consultant-Client/build/static"),
-    {
-      setHeaders: (res, filePath) => {
-        // Set correct MIME types
-        if (filePath.endsWith(".js")) {
-          res.setHeader("Content-Type", "application/javascript");
-        } else if (filePath.endsWith(".js.map")) {
-          res.setHeader("Content-Type", "application/json");
-        } else if (filePath.endsWith(".css")) {
-          res.setHeader("Content-Type", "text/css");
-        } else if (filePath.endsWith(".css.map")) {
-          res.setHeader("Content-Type", "application/json");
-        } else if (filePath.endsWith(".json")) {
-          res.setHeader("Content-Type", "application/json");
-        } else if (filePath.endsWith(".svg")) {
-          res.setHeader("Content-Type", "image/svg+xml");
-        } else if (filePath.endsWith(".woff")) {
-          res.setHeader("Content-Type", "font/woff");
-        } else if (filePath.endsWith(".woff2")) {
-          res.setHeader("Content-Type", "font/woff2");
-        } else if (filePath.endsWith(".ttf")) {
-          res.setHeader("Content-Type", "font/ttf");
-        }
+const buildPath = path.join(__dirname, "BigCommerce-Consultant-Client/build");
 
-        // Add CORS headers for all static files
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-        res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-      },
-    },
-  ),
-);
+app.use("/my-react", express.static(buildPath));
+
+// FIX: only fallback for non-file routes
+app.get(/^\/my-react\/.*/, (req, res, next) => {
+  if (req.path.includes(".")) {
+    return next();
+  }
+  res.sendFile(path.join(buildPath, "index.html"));
+});
 
 app.get("/embed.js", (req, res) => {
   res.setHeader("Content-Type", "application/javascript");

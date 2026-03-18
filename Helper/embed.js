@@ -34,10 +34,10 @@
 
   // Paths to React build - UPDATED CSS FILENAME
   var cssUrl =
-    "https://expert-occupational-definitely-sink.trycloudflare.com/my-react-static/css/main.8c0ca15b.css";
-  var jsUrl =
-    "https://expert-occupational-definitely-sink.trycloudflare.com/my-react-static/js/main.2b60e817.js";
+  "https://expert-occupational-definitely-sink.trycloudflare.com/my-react/static/css/main.5ac44ddc.css";
 
+var jsUrl =
+  "https://expert-occupational-definitely-sink.trycloudflare.com/my-react/static/js/main.2b60e817.js";
   loadCSS(cssUrl)
     .then(() => console.log("CSS Loaded ✅"))
     .catch((e) => console.error("CSS Failed ❌", e));
