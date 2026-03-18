@@ -33,7 +33,7 @@ const installBigCommerce = async (req, res) => {
     const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
 
-    await bgStoreDetails.create({
+   const store = await bgStoreDetails.create({
       store_hash: storeHash,
       access_token: accessToken,
       user: {
@@ -59,13 +59,13 @@ const installBigCommerce = async (req, res) => {
         type: "page",
         body: `
        <div style="width: 100%;">
-        <iframe 
-          src="https://expert-occupational-definitely-sink.trycloudflare.com" 
-          id="consultant-iframe"
-          style="width: 100%; border: none; overflow: hidden;" 
-          scrolling="no"
-        ></iframe>
-      </div>
+          <iframe 
+            src="https://expert-occupational-definitely-sink.trycloudflare.com?store=${storeHash}&userId=${store?._id}" 
+            id="consultant-iframe"
+            style="width: 100%; border: none; overflow: hidden;" 
+            scrolling="no"
+          ></iframe>
+        </div>
 
       <script>
         window.addEventListener('message', function(event) {
