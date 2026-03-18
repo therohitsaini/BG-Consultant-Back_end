@@ -52,7 +52,7 @@ const installBigCommerce = async (req, res) => {
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
       {
         channel_id: 1,
-        name: "Autodraw Consultant",
+        name: "Online Consultation",
         is_visible: true,
         parent_id: 0,
         sort_order: 0,
@@ -60,7 +60,7 @@ const installBigCommerce = async (req, res) => {
         body: `
        <div style="width: 100%;">
           <iframe 
-            src="https://expert-occupational-definitely-sink.trycloudflare.com?store=${storeHash}&userId=${store?._id}" 
+            src="https://expert-occupational-definitely-sink.trycloudflare.com" 
             id="consultant-iframe"
             style="width: 100%; border: none; overflow: hidden;" 
             scrolling="no"
@@ -81,8 +81,8 @@ const installBigCommerce = async (req, res) => {
       </script>
       `,
         is_homepage: false,
-        search_keywords: "autodraw consultant",
-        url: "/autodraw-consultant",
+        search_keywords: "online consultation",
+        url: "/online-consultation",
       },
       {
         headers: {
