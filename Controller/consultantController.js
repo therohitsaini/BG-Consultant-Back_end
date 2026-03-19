@@ -441,6 +441,7 @@ const getConsultant = async (req, res) => {
       userType: "consultant",
       shop_id: shop_id,
     }).select("-password");
+    console.log("consultants", consultants);
     consultants = consultants.map((item) => {
       return {
         ...item._doc,
