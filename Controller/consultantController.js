@@ -173,7 +173,7 @@ const consultantController = async (req, res) => {
       dateOfBirth: new Date(body.dateOfBirth),
       pan_cardNumber: body.pancardNumber,
       profileImage: imageURL,
-      isActive: true,
+      isActive: false,
       agoraUid: randomAgoraUid,
       userType: "consultant",
       consultantStatus: false,
