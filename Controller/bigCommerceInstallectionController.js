@@ -33,7 +33,7 @@ const installBigCommerce = async (req, res) => {
     const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
 
-   const store = await bgStoreDetails.create({
+    const store = await bgStoreDetails.create({
       store_hash: storeHash,
       access_token: accessToken,
       user: {
@@ -69,9 +69,9 @@ const installBigCommerce = async (req, res) => {
       </div>
 
       <script>
-      window.addEventListener("message", function (event) {
-          if (event.data.type === "SET_IFRAME_HEIGHT") {
-            const iframe = document.querySelector("iframe"); // adjust selector
+            window.addEventListener("message", function (event) {
+          if (event.data.type === "IFRAME_HEIGHT") {
+            const iframe = document.querySelector("iframe"); // 👈 adjust selector
 
             if (iframe) {
               iframe.style.height = event.data.height + "px";
