@@ -69,16 +69,15 @@ const installBigCommerce = async (req, res) => {
       </div>
 
       <script>
-        window.addEventListener('message', function(event) {
-          // 1. Check if the message is from your React App
-          if (event.data && event.data.type === 'AGORA_IFRAME_HEIGHT') {
-            const iframe = document.getElementById('consultant-iframe');
+      window.addEventListener("message", function (event) {
+          if (event.data.type === "SET_IFRAME_HEIGHT") {
+            const iframe = document.querySelector("iframe"); // adjust selector
+
             if (iframe) {
-              // 2. Set the iframe height to exactly match the React content
-              iframe.style.height = event.data.height + 'px';
+              iframe.style.height = event.data.height + "px";
             }
           }
-        }, false);
+        });
       </script>
       `,
         is_homepage: false,
