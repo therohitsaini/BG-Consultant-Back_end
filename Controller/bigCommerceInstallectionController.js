@@ -68,16 +68,16 @@ const installBigCommerce = async (req, res) => {
         ></iframe>
       </div>
 
-      <script>
-            window.addEventListener("message", function (event) {
-          if (event.data.type === "IFRAME_HEIGHT") {
-            const iframe = document.querySelector("iframe"); // 👈 adjust selector
+            <script>
+        window.addEventListener("message", (event) => {
+        if (event.data.type === "IFRAME_HEIGHT") {
+          const iframe = document.querySelector("iframe");
 
-            if (iframe) {
-              iframe.style.height = event.data.height + "px";
-            }
+          if (iframe) {
+            iframe.style.height = event.data.height + "px";
           }
-        });
+        }
+      });
       </script>
       `,
         is_homepage: false,
