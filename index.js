@@ -8,28 +8,12 @@ dotenv.config();
 connectDB();
 const path = require("path");
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.MVC_BACKEND_PORT || 3001;
 const server = http.createServer(app);
 const { ioServer } = require("./server-io");
 const { razerPayRoute } = require("./Routes/razerPayRoute");
-const shopifyRoute = require("./Routes/shopifyRoute");
 const { webHookRoute } = require("./Routes/webHookRoute");
-
-app.use((req, res, next) => {
-  res.header("ngrok-skip-browser-warning", "true");
-  res.setHeader("bypass-tunnel-reminder", "true");
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, ngrok-skip-browser-warning",
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
 
 app.use(
   cors({
@@ -38,8 +22,7 @@ app.use(
   }),
 );
 
-app.use("/api/webhooks", express.raw({ type: "application/json" }));
-app.use("/api/webhooks", webHookRoute);
+
 
 app.use(
   "/uploads",
@@ -54,12 +37,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/embed.js", (req, res) => {
-  res.setHeader("Content-Type", "application/javascript");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-  res.sendFile(path.join(__dirname, "Helper/embed.js"));
-});
 
 const { callRoutes } = require("./Routes/videoCallRotes");
 const { signinSignupRouter } = require("./Routes/signin-signupRoute");
@@ -72,10 +49,11 @@ const { shopifyDraftOrderRoute } = require("./Routes/shopifyDraftOrderRoute");
 const { userRouter } = require("./Routes/userRoutes");
 const { adminRoute } = require("./Routes/adminRoute");
 const { adminPrincingRoute } = require("./Routes/adminPrincingRoutes");
-const {
-  bigCommerceInstallationRoute,
-} = require("./Routes/bigCommerceInstallection");
+const {bigCommerceInstallationRoute,} = require("./Routes/bigCommerceInstallection");
+const bigCommerceRoute = require("./Routes/bigCommerceRoute");
 
+
+app.use("/api", bigCommerceRoute)
 app.use("/api/call", callRoutes);
 app.use("/api/auth", signinSignupRouter);
 app.use("/api/users", userDetailsRouter);
@@ -87,9 +65,7 @@ app.use("/api-employee", employRoute);
 // app.use("/app", shopifyRoute);
 // app.use("/apps", shopifyRoute);
 // app.use("/api", shopifyRoute);
-
 /** BigCommerce Installation Routes */
-app.use("/api", bigCommerceInstallationRoute);
 
 // app.use("/local-consultant/public/app", shopifyRoute);
 // app.use("/local-consultant/public/apps", shopifyRoute);
