@@ -61,7 +61,7 @@ const installBigCommerce = async (req, res) => {
         body: `
        <div style="width: 100%;">
         <iframe 
-          src=" https://clarity-paradise-prizes-films.trycloudflare.com?storeHash=${storeHash}&userId=${userId}" 
+          src="https://antibodies-oils-rebound-specializing.trycloudflare.com?storeHash=${storeHash}&userId=${userId}" 
           id="consultant-iframe"
           style="width: 100%; border: none; overflow: hidden;" 
           scrolling="no"
