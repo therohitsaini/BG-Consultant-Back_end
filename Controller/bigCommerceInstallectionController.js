@@ -32,22 +32,31 @@ const installBigCommerce = async (req, res) => {
     const data = tokenResponse.data;
     const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
-
-    const store = await bgStoreDetails.create({
+    const existingStore = await bgStoreDetails.findOne({
       store_hash: storeHash,
-      access_token: accessToken,
-      user: {
-        id: data.user.id,
-        email: data.user.email,
-        username: data.user.username,
-      },
-      owner: {
-        id: data.owner.id,
-        email: data.owner.email,
-        username: data.owner.username,
-      },
-      account_uuid: data.account_uuid,
     });
+
+    let store;
+
+    if (existingStore) {
+      store = existingStore;
+    } else {
+      store = await bgStoreDetails.create({
+        store_hash: storeHash,
+        access_token: accessToken,
+        user: {
+          id: data.user.id,
+          email: data.user.email,
+          username: data.user.username,
+        },
+        owner: {
+          id: data.owner.id,
+          email: data.owner.email,
+          username: data.owner.username,
+        },
+        account_uuid: data.account_uuid,
+      });
+    }
     const userId = store?._id || "";
     const pageResponse = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
@@ -176,7 +185,6 @@ const unistalledBgCommerceApp = async (req, res) => {
 const verifyBigCommerceAdmin = async (req, res) => {
   try {
     const { store } = req.query;
-    console.log("store", store);
     const storeDetails = await bgStoreDetails.findOne({ store_hash: store });
     if (!storeDetails) {
       return res.status(404).json({ message: "Store not found" });
