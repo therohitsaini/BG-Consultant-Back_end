@@ -14,7 +14,7 @@ const PORT = process.env.MVC_BACKEND_PORT || 3001;
 const server = http.createServer(app);
 const { ioServer } = require("./server-io");
 const { razerPayRoute } = require("./Routes/razerPayRoute");
-const { webHookRoute } = require("./Routes/webHookRoute");
+
 
 app.use(
   cors({
@@ -22,8 +22,6 @@ app.use(
     credentials: true,
   }),
 );
-
-
 
 app.use(
   "/uploads",
