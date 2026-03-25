@@ -14,12 +14,9 @@ const bgCommerceUserController = async (req, res) => {
         message: "Token missing",
       });
     }
-
-    // ✅ VERIFY token (IMPORTANT)
-    const decoded = jwt.decode(token); // (use verify in production)
-
+    const decoded = jwt.decode(token); 
     const customer = decoded?.customer;
-
+console.log("customer", decoded);
     if (!customer) {
       return res.status(401).json({
         success: false,
@@ -27,22 +24,18 @@ const bgCommerceUserController = async (req, res) => {
       });
     }
 
-    // ✅ Find existing user
     let user = await User.findOne({
       bigcommerceCustomerId: customer.id,
       email: customer.email,
     });
 
-    // ✅ If user exists → LOGIN
     if (user) {
       return res.status(200).json({
         success: true,
         message: "User already exists",
         user,
       });
-    }
-
-    // ✅ Else → CREATE user
+    }else{{
     const newUser = new User({
       bigcommerceCustomerId: customer.id,
       email: customer.email,
@@ -55,8 +48,10 @@ const bgCommerceUserController = async (req, res) => {
       numberOfOrders: customer.orders_count || 0,
       chatLock: true,
     });
-
     await newUser.save();
+    }
+
+ 
 
     return res.status(201).json({
       success: true,
