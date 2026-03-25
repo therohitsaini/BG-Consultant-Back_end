@@ -29,6 +29,7 @@ const bgCommerceUserController = async (req, res) => {
     });
 
     if (user) {
+      console.log("user alredy exists");
       return res.status(200).json({
         success: true,
         message: "User already exists",
@@ -49,7 +50,7 @@ const bgCommerceUserController = async (req, res) => {
       });
 
       await newUser.save();
-
+      console.log("created new user");
       return res.status(201).json({
         success: true,
         message: "User created successfully",
