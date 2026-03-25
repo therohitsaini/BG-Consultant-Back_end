@@ -54,6 +54,7 @@ const bigCommerceRoute = require("./Routes/bigCommerceRoute");
 
 
 app.use("/api", bigCommerceRoute)
+app.use("/api", bigCommerceInstallationRoute)
 app.use("/api/call", callRoutes);
 app.use("/api/auth", signinSignupRouter);
 app.use("/api/users", userDetailsRouter);
