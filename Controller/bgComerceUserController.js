@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { User } = require("../Modal/userSchema");
 
 const bgCommerceUserController = async (req, res) => {
   console.log("bgCommerceUserController");
@@ -12,7 +13,7 @@ const bgCommerceUserController = async (req, res) => {
       });
     }
     const decoded = jwt.decode(token);
-    const customer = decoded
+    const customer = decoded;
 
     if (!customer) {
       return res.status(401).json({
@@ -20,14 +21,35 @@ const bgCommerceUserController = async (req, res) => {
         message: "Customer not found in token",
       });
     }
-
-    console.log("User:", customer);
-
-    return res.json({
-      success: true,
-      user: customer,
+    const user = await User.findOne({
+      shopifyCustomerId: decoded?.customer?.id,
+      email: decoded?.customer?.email,
     });
-
+    if (user) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists",
+      });
+    } else {
+      const newUser = new User({
+        shopifyCustomerId: decoded?.customer?.id,
+        email: decoded?.customer?.email,
+        fullname:"Shopify Customer",
+        userType: "customer",
+        walletBalance: 0,
+        isActive: false,
+        isChatAccepted: "request",
+        createdAt: decoded?.customer?.createdAt,
+        numberOfOrders: decoded?.customer?.numberOfOrders,
+        chatLock: true,
+      });
+      await newUser.save();
+      return res.status(200).json({
+        success: true,
+        message: "User created successfully",
+        user: newUser,
+      });
+    }
   } catch (error) {
     console.error("JWT Error:", error.message);
 

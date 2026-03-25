@@ -87,7 +87,7 @@ const registerUserSchema = new mongoose.Schema(
         agoraUid: {
             type: Number,
             unique: true,
-            sparse: true, // null values ko ignore karega - duplicate error se bachayega
+            sparse: true, 
         },
         walletBalance: {
             type: Number,
