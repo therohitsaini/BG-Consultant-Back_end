@@ -14,9 +14,9 @@ const bgCommerceUserController = async (req, res) => {
         message: "Token missing",
       });
     }
-    const decoded = jwt.decode(token); 
+    const decoded = jwt.decode(token);
     const customer = decoded?.customer;
-console.log("customer", decoded);
+    console.log("customer", decoded);
     if (!customer) {
       return res.status(401).json({
         success: false,
@@ -35,29 +35,28 @@ console.log("customer", decoded);
         message: "User already exists",
         user,
       });
-    }else{{
-    const newUser = new User({
-      bigcommerceCustomerId: customer.id,
-      email: customer.email,
-      fullname:  "BigCommerce Customer",
-      userType: "customer",
-      walletBalance: 0,
-      isActive: true,
-      isChatAccepted: "request",
-      createdAt: customer.date_created,
-      numberOfOrders: customer.orders_count || 0,
-      chatLock: true,
-    });
-    await newUser.save();
+    } else {
+      {
+        const newUser = new User({
+          bigcommerceCustomerId: customer.id,
+          email: customer.email,
+          fullname: "BigCommerce Customer",
+          userType: "customer",
+          walletBalance: 0,
+          isActive: true,
+          isChatAccepted: "request",
+          createdAt: customer.date_created,
+          numberOfOrders: customer.orders_count || 0,
+          chatLock: true,
+        });
+        await newUser.save();
+      }
+      return res.status(201).json({
+        success: true,
+        message: "User created successfully",
+        user: newUser,
+      });
     }
-
- 
-
-    return res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      user: newUser,
-    });
   } catch (error) {
     console.error("JWT Error:", error.message);
 
