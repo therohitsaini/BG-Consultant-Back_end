@@ -117,7 +117,7 @@ const registerUserSchema = new mongoose.Schema(
         },
 
         // Shopify
-        shopifyCustomerId: {
+        bigcommerceCustomerId: {
             type: String,
             sparse: true,
             trim: true,
