@@ -25,8 +25,7 @@ const bgCommerceUserController = async (req, res) => {
     }
 
     let user = await User.findOne({
-      bigcommerceCustomerId: customer.id,
-      email: customer.email,
+      $or: [{ email: customer.email }, { bigcommerceCustomerId: customer.id }],
     });
 
     if (user) {
@@ -36,21 +35,21 @@ const bgCommerceUserController = async (req, res) => {
         user,
       });
     } else {
-      {
-        const newUser = new User({
-          bigcommerceCustomerId: customer.id,
-          email: customer.email,
-          fullname: "BigCommerce Customer",
-          userType: "customer",
-          walletBalance: 0,
-          isActive: true,
-          isChatAccepted: "request",
-          createdAt: customer.date_created,
-          numberOfOrders: customer.orders_count || 0,
-          chatLock: true,
-        });
-        await newUser.save();
-      }
+      const newUser = new User({
+        bigcommerceCustomerId: customer.id,
+        email: customer.email,
+        fullname: "BigCommerce Customer",
+        userType: "customer",
+        walletBalance: 0,
+        isActive: true,
+        isChatAccepted: "request",
+        createdAt: customer.date_created,
+        numberOfOrders: customer.orders_count || 0,
+        chatLock: true,
+      });
+
+      await newUser.save();
+
       return res.status(201).json({
         success: true,
         message: "User created successfully",
