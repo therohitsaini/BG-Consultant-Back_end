@@ -192,13 +192,13 @@ const installBigCommerce = async (req, res) => {
               <iframe 
                 src="${page.iframeSrc}" 
                 id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
-                style="width: 100%; border: none; overflow: hidden; min-height: 800px;" 
+                style="width: 100%; border: none; overflow: hidden; min-height: 600px;" 
                 scrolling="no"
               ></iframe>
             </div>
             <script>
               window.addEventListener("message", (event) => {
-                if (event.data.type === "AGORA_IFRAME_HEIGHT") {
+                if (event.data.type === "IFRAME_HEIGHT") {
                   const iframe = document.getElementById("consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}");
                   if (iframe) {
                     iframe.style.height = event.data.height + "px";
