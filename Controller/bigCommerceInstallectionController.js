@@ -10,9 +10,112 @@ const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
 const BIGCOMMERCE_STORE_CLIENT_SECRET =
   process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
 
+// const installBigCommerce = async (req, res) => {
+//   try {
+//     const { code, context, scope } = req.query;
+
+//     if (!code || !context) {
+//       return res.status(400).send("Invalid request");
+//     }
+
+//     const tokenResponse = await axios.post(
+//       "https://login.bigcommerce.com/oauth2/token",
+//       {
+//         client_id: BIGCOMMERCE_STORE_CLIENT_ID,
+//         client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
+//         redirect_uri: process.env.REDIRECT_URL,
+//         grant_type: "authorization_code",
+//         code: code,
+//       },
+//     );
+
+//     const data = tokenResponse.data;
+//     const accessToken = data.access_token;
+//     const storeHash = context.split("/")[1];
+//     const existingStore = await bgStoreDetails.findOne({
+//       store_hash: storeHash,
+//     });
+
+//     let store;
+
+//     if (existingStore) {
+//       store = existingStore;
+//     } else {
+//       store = await bgStoreDetails.create({
+//         store_hash: storeHash,
+//         access_token: accessToken,
+//         user: {
+//           id: data.user.id,
+//           email: data.user.email,
+//           username: data.user.username,
+//         },
+//         owner: {
+//           id: data.owner.id,
+//           email: data.owner.email,
+//           username: data.owner.username,
+//         },
+//         account_uuid: data.account_uuid,
+//       });
+//     }
+//     const userId = store?._id || "";
+//     const pageResponse = await axios.post(
+//       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
+//       {
+//         channel_id: 1,
+//         name: "Autodraw Consultant",
+//         is_visible: true,
+//         parent_id: 0,
+//         sort_order: 0,
+//         type: "page",
+//         body: `
+//        <div style="width: 100%;">
+//         <iframe
+//           src="https://carlos-voip-turner-mechanism.trycloudflare.com?storeHash=${storeHash}&userId=${userId}"
+//           id="consultant-iframe"
+//           style="width: 100%; border: none; overflow: hidden;"
+//           scrolling="no"
+//         ></iframe>
+//       </div>
+
+//             <script>
+//         window.addEventListener("message", (event) => {
+//         if (event.data.type === "IFRAME_HEIGHT") {
+//           const iframe = document.querySelector("iframe");
+
+//           if (iframe) {
+//             iframe.style.height = event.data.height + "px";
+//           }
+//         }
+//       });
+//       </script>
+//       `,
+//         is_homepage: false,
+//         search_keywords: "autodraw consultant",
+//         url: "/autodraw-consultant",
+//       },
+//       {
+//         headers: {
+//           "X-Auth-Token": accessToken,
+//           "Content-Type": "application/json",
+//           Accept: "application/json",
+//         },
+//       },
+//     );
+
+//     console.log("Page created successfully:", pageResponse.data);
+
+//     res.redirect(
+//       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
+//     );
+//   } catch (error) {
+//     console.log(error.response?.data || error.message);
+//     res.status(500).send("Install failed");
+//   }
+// };
+
 const installBigCommerce = async (req, res) => {
   try {
-    const { code, context, scope } = req.query;
+    const { code, context } = req.query;
 
     if (!code || !context) {
       return res.status(400).send("Invalid request");
@@ -32,83 +135,108 @@ const installBigCommerce = async (req, res) => {
     const data = tokenResponse.data;
     const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
-    const existingStore = await bgStoreDetails.findOne({
-      store_hash: storeHash,
-    });
 
-    let store;
+    // Database check and store creation
+    let store = await bgStoreDetails.findOne({ store_hash: storeHash });
 
-    if (existingStore) {
-      store = existingStore;
-    } else {
+    if (!store) {
       store = await bgStoreDetails.create({
         store_hash: storeHash,
         access_token: accessToken,
-        user: {
-          id: data.user.id,
-          email: data.user.email,
-          username: data.user.username,
-        },
-        owner: {
-          id: data.owner.id,
-          email: data.owner.email,
-          username: data.owner.username,
-        },
+        user: data.user,
+        owner: data.owner,
         account_uuid: data.account_uuid,
       });
+    } else {
+      // Token update kar dena chahiye agar user re-install kare
+      store.access_token = accessToken;
+      await store.save();
     }
-    const userId = store?._id || "";
-    const pageResponse = await axios.post(
-      `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
-      {
-        channel_id: 1,
-        name: "Autodraw Consultant",
-        is_visible: true,
-        parent_id: 0,
-        sort_order: 0,
-        type: "page",
-        body: `
-       <div style="width: 100%;">
-        <iframe 
-          src="https://carlos-voip-turner-mechanism.trycloudflare.com?storeHash=${storeHash}&userId=${userId}" 
-          id="consultant-iframe"
-          style="width: 100%; border: none; overflow: hidden;" 
-          scrolling="no"
-        ></iframe>
-      </div>
 
+    const userId = store._id || "";
+    const baseUrl = "https://carlos-voip-turner-mechanism.trycloudflare.com";
+
+    // --- TEEN PAGES KI LIST ---
+    const pagesToCreate = [
+      {
+        name: "Our Consultant",
+        url: "/our-consultant",
+        iframeSrc: `${baseUrl}?storeHash=${storeHash}&userId=${userId}`,
+      },
+      {
+        name: "Our Profile",
+        url: "/profile",
+        iframeSrc: `${baseUrl}/profile?storeHash=${storeHash}&userId=${userId}`,
+      },
+      {
+        name: "Consultant Login",
+        url: "/consultant-login",
+        iframeSrc: `${baseUrl}/login?storeHash=${storeHash}&userId=${userId}`,
+      },
+    ];
+
+    const createdPageIds = [];
+
+    // Loop chalakar teeno pages create karenge
+    for (const page of pagesToCreate) {
+      const pageResponse = await axios.post(
+        `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
+        {
+          channel_id: 1,
+          name: page.name,
+          is_visible: true,
+          parent_id: 0,
+          type: "page",
+          body: `
+            <div style="width: 100%;">
+              <iframe 
+                src="${page.iframeSrc}" 
+                id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
+                style="width: 100%; border: none; overflow: hidden; min-height: 800px;" 
+                scrolling="no"
+              ></iframe>
+            </div>
             <script>
-        window.addEventListener("message", (event) => {
-        if (event.data.type === "IFRAME_HEIGHT") {
-          const iframe = document.querySelector("iframe");
-
-          if (iframe) {
-            iframe.style.height = event.data.height + "px";
-          }
-        }
-      });
-      </script>
-      `,
-        is_homepage: false,
-        search_keywords: "autodraw consultant",
-        url: "/autodraw-consultant",
-      },
-      {
-        headers: {
-          "X-Auth-Token": accessToken,
-          "Content-Type": "application/json",
-          Accept: "application/json",
+              window.addEventListener("message", (event) => {
+                if (event.data.type === "AGORA_IFRAME_HEIGHT") {
+                  const iframe = document.getElementById("consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}");
+                  if (iframe) {
+                    iframe.style.height = event.data.height + "px";
+                  }
+                }
+              });
+            </script>
+          `,
+          url: page.url,
         },
-      },
-    );
+        {
+          headers: {
+            "X-Auth-Token": accessToken,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        },
+      );
 
-    console.log("Page created successfully:", pageResponse.data);
+      // Har page ki ID array mein daalein
+      createdPageIds.push(pageResponse.data.data.id);
+      console.log(
+        `${page.name} created successfully with ID: ${pageResponse.data.data.id}`,
+      );
+    }
+
+    // --- DB MEIN IDs SAVE KAREIN ---
+    // Make sure aapka Schema 'created_page_ids' array support karta ho
+    await bgStoreDetails.findOneAndUpdate(
+      { store_hash: storeHash },
+      { created_page_ids: createdPageIds },
+    );
 
     res.redirect(
       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
     );
   } catch (error) {
-    console.log(error.response?.data || error.message);
+    console.log("Install Error:", error.response?.data || error.message);
     res.status(500).send("Install failed");
   }
 };

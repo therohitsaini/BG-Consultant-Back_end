@@ -48,6 +48,10 @@ const bigCommerceSchema = new mongoose.Schema(
     account_uuid: {
       type: String,
     },
+    created_page_ids: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,
