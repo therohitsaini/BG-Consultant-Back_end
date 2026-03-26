@@ -155,7 +155,7 @@ const installBigCommerce = async (req, res) => {
 
     const userId = store._id || "";
     // 1. Base URL ko array se pehle define karein
-    const baseUrl = "https://carlos-voip-turner-mechanism.trycloudflare.com";
+    const baseUrl = "https://mortgages-colored-dealing-brings.trycloudflare.com";
 
     const pagesToCreate = [
       {
