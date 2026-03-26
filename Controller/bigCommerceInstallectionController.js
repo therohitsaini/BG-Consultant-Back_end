@@ -298,6 +298,21 @@ const unistalledBgCommerceApp = async (req, res) => {
         },
       },
     );
+    if (store && store.created_page_ids) {
+      // 3. Delete ONLY the page you created
+      for (const pageId of store.created_page_ids) {
+        await axios.delete(
+          `https://api.bigcommerce.com/stores/${store_hash}/v3/content/pages/${pageId}`,
+          {
+            headers: {
+              "X-Auth-Token": store.access_token,
+              Accept: "application/json",
+            },
+          },
+        );
+        console.log(`Page ${pageId} deleted successfully.`);
+      }
+    }
 
     res.status(200).json({
       success: true,
