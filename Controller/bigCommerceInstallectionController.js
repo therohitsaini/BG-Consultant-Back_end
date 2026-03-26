@@ -157,22 +157,24 @@ const installBigCommerce = async (req, res) => {
     // 1. Base URL ko array se pehle define karein
     const baseUrl = "https://carlos-voip-turner-mechanism.trycloudflare.com";
 
-    // 2. Teen pages ki list
     const pagesToCreate = [
       {
         name: "Our Consultant",
         url: "/our-consultant",
+        // Home page
         iframeSrc: `${baseUrl}/?storeHash=${storeHash}&userId=${userId}`,
       },
       {
         name: "Our Profile",
         url: "/profile",
-        iframeSrc: `${baseUrl}/profile?storeHash=${storeHash}&userId=${userId}`,
+        // Query param view=profile
+        iframeSrc: `${baseUrl}/?view=profile&storeHash=${storeHash}&userId=${userId}`,
       },
       {
         name: "Consultant Login",
         url: "/consultant-login",
-        iframeSrc: `${baseUrl}/login?storeHash=${storeHash}&userId=${userId}`,
+        // Query param view=login
+        iframeSrc: `${baseUrl}/?view=login&storeHash=${storeHash}&userId=${userId}`,
       },
     ];
 
