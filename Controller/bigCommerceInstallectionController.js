@@ -193,7 +193,7 @@ const installBigCommerce = async (req, res) => {
               <iframe 
                 src="${page.iframeSrc}" 
                 id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
-                style="width: 100%; border: none; overflow: hidden; min-height: 600px;" 
+                style="width: 100%; border: none; overflow: hidden; min-height: 400px;" 
                 scrolling="no"
               ></iframe>
             </div>
