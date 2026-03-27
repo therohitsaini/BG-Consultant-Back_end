@@ -161,12 +161,12 @@ const installBigCommerce = async (req, res) => {
       {
         name: "Our Profile",
         url: "/profile",
-        iframeSrc: `${baseUrl}profile?view=profile&storeHash=${storeHash}&userId=${userId}`,
+        iframeSrc: `${baseUrl}/profile?view=profile&storeHash=${storeHash}&userId=${userId}`,
       },
       {
         name: "Consultant Login",
         url: "/consultant-login",
-        iframeSrc: `${baseUrl}login?view=login&storeHash=${storeHash}&userId=${userId}`,
+        iframeSrc: `${baseUrl}/login?view=login&storeHash=${storeHash}&userId=${userId}`,
       },
     ];
 
