@@ -150,7 +150,7 @@ const installBigCommerce = async (req, res) => {
     }
 
     const userId = store._id || "";
-    const baseUrl = "https://european-placement--corrections.trycloudflare.com";
+    const baseUrl = process.env.BIGCOMMERCE_STORE_BASE_URL;
 
     const pagesToCreate = [
       {
