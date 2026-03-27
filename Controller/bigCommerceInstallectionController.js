@@ -1,9 +1,7 @@
 const axios = require("axios");
 const dotenv = require("dotenv");
 const { bgStoreDetails } = require("../Modal/bgStoreDetails");
-const { injectScript } = require("../Helper/injectScript");
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
 dotenv.config();
 
 const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
@@ -136,7 +134,6 @@ const installBigCommerce = async (req, res) => {
     const accessToken = data.access_token;
     const storeHash = context.split("/")[1];
 
-    // Database check and store creation
     let store = await bgStoreDetails.findOne({ store_hash: storeHash });
 
     if (!store) {
@@ -148,39 +145,33 @@ const installBigCommerce = async (req, res) => {
         account_uuid: data.account_uuid,
       });
     } else {
-      // Token update kar dena chahiye agar user re-install kare
       store.access_token = accessToken;
       await store.save();
     }
 
     const userId = store._id || "";
-    // 1. Base URL ko array se pehle define karein
-    const baseUrl = "https://mortgages-colored-dealing-brings.trycloudflare.com";
+    const baseUrl = "https://european-placement--corrections.trycloudflare.com";
 
     const pagesToCreate = [
       {
         name: "Our Consultant",
         url: "/our-consultant",
-        // Home page
         iframeSrc: `${baseUrl}/?storeHash=${storeHash}&userId=${userId}`,
       },
       {
         name: "Our Profile",
         url: "/profile",
-        // Query param view=profile
         iframeSrc: `${baseUrl}profile?view=profile&storeHash=${storeHash}&userId=${userId}`,
       },
       {
         name: "Consultant Login",
         url: "/consultant-login",
-        // Query param view=login
         iframeSrc: `${baseUrl}login?view=login&storeHash=${storeHash}&userId=${userId}`,
       },
     ];
 
     const createdPageIds = [];
 
-    // Loop chalakar teeno pages create karenge
     for (const page of pagesToCreate) {
       const pageResponse = await axios.post(
         `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
@@ -221,15 +212,12 @@ const installBigCommerce = async (req, res) => {
         },
       );
 
-      // Har page ki ID array mein daalein
       createdPageIds.push(pageResponse.data.data.id);
       console.log(
         `${page.name} created successfully with ID: ${pageResponse.data.data.id}`,
       );
     }
 
-    // --- DB MEIN IDs SAVE KAREIN ---
-    // Make sure aapka Schema 'created_page_ids' array support karta ho
     await bgStoreDetails.findOneAndUpdate(
       { store_hash: storeHash },
       { created_page_ids: createdPageIds },
@@ -302,7 +290,6 @@ const unistalledBgCommerceApp = async (req, res) => {
       },
     );
     if (store && store.created_page_ids) {
-      // 3. Delete ONLY the page you created
       for (const pageId of store.created_page_ids) {
         await axios.delete(
           `https://api.bigcommerce.com/stores/${store_hash}/v3/content/pages/${pageId}`,
