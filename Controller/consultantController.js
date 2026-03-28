@@ -461,6 +461,7 @@ const getConsultant = async (req, res) => {
 const updateConsultantStatus = async (request, response) => {
   try {
     const { id } = request.params;
+    console.log("_____id", id);
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return response.status(400).json({ message: "Invalid consultant ID" });
