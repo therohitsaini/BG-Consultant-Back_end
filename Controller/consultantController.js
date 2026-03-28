@@ -472,13 +472,17 @@ const updateConsultantStatus = async (request, response) => {
         .json({ message: "Consultant ID is required" });
     }
     const consultant = await User.findById(id);
+    console.log("_____consultant", consultant);
     if (!consultant) {
       return res.status(404).json({ message: "Consultant not found" });
     }
-
+    console.log("_____consultant.consultantStatus", consultant.consultantStatus);
     // Toggle ONLY consultantStatus
     consultant.consultantStatus = !consultant.consultantStatus;
     await consultant.save();
+    console.log("_____consultant.consultantStatus", consultant.consultantStatus);
+    console.log("_____message:Status updated successfully");
+
     return response.status(200).send({
       success: true,
       message: "Status updated successfully",
