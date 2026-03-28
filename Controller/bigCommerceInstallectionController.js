@@ -172,7 +172,7 @@ const installBigCommerce = async (req, res) => {
         name: "Consultant Dashboard", // must required
         url: "/consultant-dashboard",
         iframeSrc: `${baseUrl}/?view=consultant-dashboard&storeHash=${storeHash}&userId=${userId}`,
-      },
+      }
     ];
 
     const createdPageIds = [];
@@ -187,71 +187,25 @@ const installBigCommerce = async (req, res) => {
           parent_id: 0,
           type: "page",
           body: `
-          ${
-            page.url === "/consultant-dashboard"
-              ? `
-              <style>
-                /* Hide everything only for dashboard */
-                .page-heading,
-                header, footer, .header, .footer, .navPages {
-                  display: none !important;
+            <div style="width: 100%;">
+              <iframe 
+                src="${page.iframeSrc}" 
+                id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
+                style="width: 100%; border: none; overflow: hidden; min-height: 400px;" 
+                scrolling="no"
+              ></iframe>
+            </div>
+            <script>
+              window.addEventListener("message", (event) => {
+                if (event.data.type === "IFRAME_HEIGHT") {
+                  const iframe = document.getElementById("consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}");
+                  if (iframe) {
+                    iframe.style.height = event.data.height + "px";
+                  }
                 }
-        
-                body {
-                  margin: 0 !important;
-                  padding: 0 !important;
-                }
-              </style>
-            `
-              : ""
-          }
-        
-          <div style="width: 100%;">
-            <iframe 
-              src="${page.iframeSrc}" 
-              id="consultant-iframe-${(page.name || "dashboard")
-                .replace(/\s+/g, "-")
-                .toLowerCase()}"
-              style="width: 100%; border: none; overflow: hidden; min-height: 100vh;" 
-              scrolling="no"
-            ></iframe>
-          </div>
-        
-          <script>
-            window.addEventListener("message", (event) => {
-              if (event.data.type === "IFRAME_HEIGHT") {
-                const iframe = document.getElementById("consultant-iframe-${(
-                  page.name || "dashboard"
-                )
-                  .replace(/\s+/g, "-")
-                  .toLowerCase()}");
-                if (iframe) {
-                  iframe.style.height = event.data.height + "px";
-                }
-              }
-            });
-          </script>
-        `,
-          // body: `
-          //   <div style="width: 100%;">
-          //     <iframe
-          //       src="${page.iframeSrc}"
-          //       id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
-          //       style="width: 100%; border: none; overflow: hidden; min-height: 400px;"
-          //       scrolling="no"
-          //     ></iframe>
-          //   </div>
-          //   <script>
-          //     window.addEventListener("message", (event) => {
-          //       if (event.data.type === "IFRAME_HEIGHT") {
-          //         const iframe = document.getElementById("consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}");
-          //         if (iframe) {
-          //           iframe.style.height = event.data.height + "px";
-          //         }
-          //       }
-          //     });
-          //   </script>
-          // `,
+              });
+            </script>
+          `,
           url: page.url,
         },
         {
