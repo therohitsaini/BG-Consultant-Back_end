@@ -172,7 +172,7 @@ const installBigCommerce = async (req, res) => {
         name: "Consultant Dashboard", // must required
         url: "/consultant-dashboard",
         iframeSrc: `${baseUrl}/?view=consultant-dashboard&storeHash=${storeHash}&userId=${userId}`,
-      }
+      },
     ];
 
     const createdPageIds = [];
@@ -187,25 +187,81 @@ const installBigCommerce = async (req, res) => {
           parent_id: 0,
           type: "page",
           body: `
-            <div style="width: 100%;">
-              <iframe 
-                src="${page.iframeSrc}" 
-                id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
-                style="width: 100%; border: none; overflow: hidden; min-height: 500px;" 
-                scrolling="no"
-              ></iframe>
-            </div>
-            <script>
-              window.addEventListener("message", (event) => {
-                if (event.data.type === "IFRAME_HEIGHT") {
-                  const iframe = document.getElementById("consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}");
-                  if (iframe) {
-                    iframe.style.height = event.data.height + "px";
-                  }
-                }
-              });
-            </script>
-          `,
+  ${
+    page.url === "/consultant-dashboard"
+      ? `
+      <style>
+        header, footer, .header, .footer, .navPages, .page-heading, .breadcrumbs {
+          display: none !important;
+        }
+
+        body {
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        .full-dashboard {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .full-dashboard iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+      </style>
+
+      <div class="full-dashboard">
+        <iframe src="${page.iframeSrc}"></iframe>
+      </div>
+      `
+      : `
+      <div style="width: 100%;">
+        <iframe 
+          src="${page.iframeSrc}" 
+          id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
+          style="width: 100%; border: none; overflow: hidden; min-height: 500px;" 
+          scrolling="no"
+        ></iframe>
+      </div>
+
+      <script>
+        window.addEventListener("message", (event) => {
+          if (event.data.type === "IFRAME_HEIGHT") {
+            const iframe = document.getElementById("consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}");
+            if (iframe) {
+              iframe.style.height = event.data.height + "px";
+            }
+          }
+        });
+      </script>
+      `
+  }
+`,
+          // body: `
+          //   <div style="width: 100%;">
+          //     <iframe
+          //       src="${page.iframeSrc}"
+          //       id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
+          //       style="width: 100%; border: none; overflow: hidden; min-height: 500px;"
+          //       scrolling="no"
+          //     ></iframe>
+          //   </div>
+          //   <script>
+          //     window.addEventListener("message", (event) => {
+          //       if (event.data.type === "IFRAME_HEIGHT") {
+          //         const iframe = document.getElementById("consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}");
+          //         if (iframe) {
+          //           iframe.style.height = event.data.height + "px";
+          //         }
+          //       }
+          //     });
+          //   </script>
+          // `,
           url: page.url,
         },
         {
