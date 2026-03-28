@@ -183,7 +183,7 @@ const installBigCommerce = async (req, res) => {
         {
           channel_id: 1,
           name: page.name,
-          is_visible: true,
+          is_visible: page.url === "/consultant-dashboard" ? false : true,
           parent_id: 0,
           type: "page",
           body: `
