@@ -54,10 +54,7 @@ const bigCommerceSchema = new mongoose.Schema(
     secure_url: {
       type: String,
     },
-    appStatus: {
-      type: Boolean,
-      default: false,
-    },
+
     created_page_ids: {
       type: Array,
       default: [],
