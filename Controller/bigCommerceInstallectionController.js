@@ -2,119 +2,15 @@ const axios = require("axios");
 const dotenv = require("dotenv");
 const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 const jwt = require("jsonwebtoken");
+const { getStoreDetailsFromAPI } = require("../Helper/helper");
 dotenv.config();
 
-const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
-const BIGCOMMERCE_STORE_CLIENT_SECRET =
-  process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
-
-// const installBigCommerce = async (req, res) => {
-//   try {
-//     const { code, context, scope } = req.query;
-
-//     if (!code || !context) {
-//       return res.status(400).send("Invalid request");
-//     }
-
-//     const tokenResponse = await axios.post(
-//       "https://login.bigcommerce.com/oauth2/token",
-//       {
-//         client_id: BIGCOMMERCE_STORE_CLIENT_ID,
-//         client_secret: BIGCOMMERCE_STORE_CLIENT_SECRET,
-//         redirect_uri: process.env.REDIRECT_URL,
-//         grant_type: "authorization_code",
-//         code: code,
-//       },
-//     );
-
-//     const data = tokenResponse.data;
-//     const accessToken = data.access_token;
-//     const storeHash = context.split("/")[1];
-//     const existingStore = await bgStoreDetails.findOne({
-//       store_hash: storeHash,
-//     });
-
-//     let store;
-
-//     if (existingStore) {
-//       store = existingStore;
-//     } else {
-//       store = await bgStoreDetails.create({
-//         store_hash: storeHash,
-//         access_token: accessToken,
-//         user: {
-//           id: data.user.id,
-//           email: data.user.email,
-//           username: data.user.username,
-//         },
-//         owner: {
-//           id: data.owner.id,
-//           email: data.owner.email,
-//           username: data.owner.username,
-//         },
-//         account_uuid: data.account_uuid,
-//       });
-//     }
-//     const userId = store?._id || "";
-//     const pageResponse = await axios.post(
-//       `https://api.bigcommerce.com/stores/${storeHash}/v3/content/pages`,
-//       {
-//         channel_id: 1,
-//         name: "Autodraw Consultant",
-//         is_visible: true,
-//         parent_id: 0,
-//         sort_order: 0,
-//         type: "page",
-//         body: `
-//        <div style="width: 100%;">
-//         <iframe
-//           src="https://carlos-voip-turner-mechanism.trycloudflare.com?storeHash=${storeHash}&userId=${userId}"
-//           id="consultant-iframe"
-//           style="width: 100%; border: none; overflow: hidden;"
-//           scrolling="no"
-//         ></iframe>
-//       </div>
-
-//             <script>
-//         window.addEventListener("message", (event) => {
-//         if (event.data.type === "IFRAME_HEIGHT") {
-//           const iframe = document.querySelector("iframe");
-
-//           if (iframe) {
-//             iframe.style.height = event.data.height + "px";
-//           }
-//         }
-//       });
-//       </script>
-//       `,
-//         is_homepage: false,
-//         search_keywords: "autodraw consultant",
-//         url: "/autodraw-consultant",
-//       },
-//       {
-//         headers: {
-//           "X-Auth-Token": accessToken,
-//           "Content-Type": "application/json",
-//           Accept: "application/json",
-//         },
-//       },
-//     );
-
-//     console.log("Page created successfully:", pageResponse.data);
-
-//     res.redirect(
-//       `https://store-${storeHash}.mybigcommerce.com/manage/apps/${process.env.APP_ID}`,
-//     );
-//   } catch (error) {
-//     console.log(error.response?.data || error.message);
-//     res.status(500).send("Install failed");
-//   }
-// };
+const BIGCOMMERCE_STORE_CLIENT_ID=process.env.BIGCOMMERCE_STORE_CLIENT_ID;
+const BIGCOMMERCE_STORE_CLIENT_SECRET=process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
 
 const installBigCommerce = async (req, res) => {
   try {
     const { code, context } = req.query;
-
     if (!code || !context) {
       return res.status(400).send("Invalid request");
     }
@@ -135,7 +31,8 @@ const installBigCommerce = async (req, res) => {
     const storeHash = context.split("/")[1];
 
     let store = await bgStoreDetails.findOne({ store_hash: storeHash });
-
+    const storeDetails = await getStoreDetailsFromAPI(storeHash, accessToken);
+    console.log("storeDetails", storeDetails);
     if (!store) {
       store = await bgStoreDetails.create({
         store_hash: storeHash,

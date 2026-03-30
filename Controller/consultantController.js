@@ -378,8 +378,6 @@ const loginConsultant = async (request, response) => {
   try {
     const { email, password } = request.body;
 
-    console.log("email", email);
-    console.log("password", password);
     const find_User = await User.findOne({ email });
     if (!find_User) {
       return response.status(400).send({
@@ -397,10 +395,8 @@ const loginConsultant = async (request, response) => {
       });
     }
 
-    // 3. Compare password
     const isMatch = await bcrypt.compare(password, find_User.password);
     if (!isMatch) {
-      console.log("Password does not match");
       return response.status(400).send({
         success: false,
         message: "Incorrect email or password",
@@ -476,11 +472,17 @@ const updateConsultantStatus = async (request, response) => {
     if (!consultant) {
       return res.status(404).json({ message: "Consultant not found" });
     }
-    console.log("_____consultant.consultantStatus", consultant.consultantStatus);
+    console.log(
+      "_____consultant.consultantStatus",
+      consultant.consultantStatus,
+    );
     // Toggle ONLY consultantStatus
     consultant.consultantStatus = !consultant.consultantStatus;
     await consultant.save();
-    console.log("_____consultant.consultantStatus", consultant.consultantStatus);
+    console.log(
+      "_____consultant.consultantStatus",
+      consultant.consultantStatus,
+    );
     console.log("_____message:Status updated successfully");
 
     return response.status(200).send({
@@ -712,13 +714,11 @@ const getChatListByShopIdAndConsultantId = async (request, response) => {
       };
     });
 
-    return response
-      .status(200)
-      .send({
-        success: true,
-        message: "Chat list fetched successfully",
-        payload,
-      });
+    return response.status(200).send({
+      success: true,
+      message: "Chat list fetched successfully",
+      payload,
+    });
   } catch (error) {
     console.error(error);
     return response.status(500).json({ message: "Server error" });
@@ -1099,7 +1099,7 @@ const getMonthlyRevenueController = async (req, res) => {
 
     transactions.forEach((tx) => {
       const txDate = new Date(tx.createdAt);
-      const amount = Number(tx.consultantAmount) || 0; 
+      const amount = Number(tx.consultantAmount) || 0;
 
       // total income (all time)
       totalIncome += amount;
