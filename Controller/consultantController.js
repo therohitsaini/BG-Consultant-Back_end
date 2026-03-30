@@ -401,7 +401,7 @@ const loginConsultant = async (request, response) => {
         message: "Incorrect email or password",
       });
     }
-    const store = await bgStoreDetails.findOne({ shop_id: find_User.shop_id });
+    const store = await bgStoreDetails.findById(find_User.shop_id);
     // if (!store) {
     //   return response.status(400).send({
     //     success: false,
