@@ -386,7 +386,6 @@ const loginConsultant = async (request, response) => {
       });
     }
 
-    // 2. Check block status
     if (find_User.consultantStatus === false) {
       console.log("Your account is blocked. Please contact administrator");
       return response.status(403).send({
@@ -402,6 +401,13 @@ const loginConsultant = async (request, response) => {
         message: "Incorrect email or password",
       });
     }
+    const store = await bgStoreDetails.findOne({ shop_id: find_User.shop_id });
+    if (!store) {
+      return response.status(400).send({
+        success: false,
+        message: "Store not found",
+      });
+    }
 
     const token = jwt.sign(
       { id: find_User._id, role: "consultant" },
@@ -414,6 +420,7 @@ const loginConsultant = async (request, response) => {
       message: "Login successful",
       token,
       userData: find_User,
+      secure_url: store.secure_url,
     });
   } catch (err) {
     return response.status(500).send({
