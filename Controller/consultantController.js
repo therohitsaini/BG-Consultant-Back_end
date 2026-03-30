@@ -13,6 +13,7 @@ const { WalletHistory } = require("../Modal/walletHistory");
 const { WithdrawalRequestSchema } = require("../Modal/withdrawalSchema");
 const { ConsultantClient } = require("../Modal/consultantClient");
 const dotenv = require("dotenv");
+const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 dotenv.config();
 
 /**
@@ -377,7 +378,6 @@ const updateConsultantData = async (req, res) => {
 const loginConsultant = async (request, response) => {
   try {
     const { email, password } = request.body;
-
     const find_User = await User.findOne({ email });
     if (!find_User) {
       return response.status(400).send({
@@ -408,7 +408,7 @@ const loginConsultant = async (request, response) => {
     //     message: "Store not found",
     //   });
     // }
-
+    console.log("store", store);
     const token = jwt.sign(
       { id: find_User._id, role: "consultant" },
       process.env.JWT_SECRET_KEY,
