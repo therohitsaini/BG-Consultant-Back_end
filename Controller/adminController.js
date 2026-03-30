@@ -464,7 +464,7 @@ const appEnableAndDisableController = async (req, res) => {
             });
         }
 
-        const admin = await shopModel.findById(adminId);
+        const admin = await bigCommerceSchema.findById(adminId);
         if (!admin) {
             return res.status(404).json({
                 success: false,
