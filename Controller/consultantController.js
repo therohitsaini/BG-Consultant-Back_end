@@ -402,13 +402,12 @@ const loginConsultant = async (request, response) => {
       });
     }
     const store = await bgStoreDetails.findById(find_User.shop_id);
-    // if (!store) {
-    //   return response.status(400).send({
-    //     success: false,
-    //     message: "Store not found",
-    //   });
-    // }
-    console.log("store", store);
+    if (!store) {
+      return response.status(400).send({
+        success: false,
+        message: "Store not found",
+      });
+    }
     const token = jwt.sign(
       { id: find_User._id, role: "consultant" },
       process.env.JWT_SECRET_KEY,

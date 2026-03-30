@@ -103,7 +103,9 @@ const tokenVerify = async (request, response) => {
 const authenticateToken = async (request, response, next) => {
    try {
       const verify = await verify_Token(request)
+      console.log("verify", verify);
       if (!verify) {
+         console.log("verify", verify);
          return response.status(401).send({ message: "Access denied. Token is not verified" })
       }
       request.user = verify
