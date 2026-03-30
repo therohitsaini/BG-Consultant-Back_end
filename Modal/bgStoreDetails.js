@@ -48,6 +48,13 @@ const bigCommerceSchema = new mongoose.Schema(
     account_uuid: {
       type: String,
     },
+    domain: {
+      type: String,
+    },
+    secure_url: {
+      type: String,
+    },
+    
     created_page_ids: {
       type: Array,
       default: [],

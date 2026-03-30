@@ -40,6 +40,8 @@ const installBigCommerce = async (req, res) => {
         user: data.user,
         owner: data.owner,
         account_uuid: data.account_uuid,
+        domain: storeDetails.domain,
+        secure_url: storeDetails.secure_url,
       });
     } else {
       store.access_token = accessToken;
