@@ -68,7 +68,7 @@ app.use("/api-employee", employRoute);
 // app.use("/local-consultant/public/apps", shopifyRoute);
 
 /** Chat Routes */
-// app.use("/api/chat", chatRoutes);
+app.use("/api/chat", chatRoutes);
 // app.use("/api", firebaseRouter);
 
 /** Shopify Draft Order Routes */

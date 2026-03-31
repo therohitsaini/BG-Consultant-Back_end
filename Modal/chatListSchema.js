@@ -14,7 +14,7 @@ const ChatListSchema = new mongoose.Schema(
         },
         shop_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "shopifyShop",
+            ref: "BigCommerceStore",
             required: true
         },
         lastMessage: {

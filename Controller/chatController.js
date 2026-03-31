@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { MessageModal } = require("../Modal/messageSchema");
 const { ChatList } = require("../Modal/chatListSchema");
+const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 
 const getChatHistory = async (request, response) => {
   try {
@@ -55,6 +56,9 @@ const getUserInRecentChat = async (request, response) => {
       senderId: userId,
       receiverId: consultantId,
     });
+    const store = await bgStoreDetails.findById(shopId);
+    console.log("store", store);
+    console.log("userInRecentChat", userInRecentChat);
     if (!userInRecentChat) {
       return response
         .status(400)
@@ -62,7 +66,9 @@ const getUserInRecentChat = async (request, response) => {
     }
     userInRecentChat.isRequest = true;
     await userInRecentChat.save();
-    return response.status(200).json({ success: true, message: "User found in recent chat" });
+    return response
+      .status(200)
+      .json({ success: true, message: "User found in recent chat" });
   } catch (error) {
     console.error(error);
     return response.status(500).json({ message: "Server error" });
