@@ -41,9 +41,7 @@ const getChatHistory = async (request, response) => {
 const getUserInRecentChat = async (request, response) => {
   try {
     const { shopId, userId, consultantId } = request.params;
-    console.log("shopId", shopId);
-    console.log("userId", userId);
-    console.log("consultantId", consultantId);
+
     if (
       !mongoose.Types.ObjectId.isValid(shopId) ||
       !mongoose.Types.ObjectId.isValid(userId) ||

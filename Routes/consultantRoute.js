@@ -39,7 +39,7 @@ consultantRoute.get("/consultant-all-user-history", getConsultantAllUserHistory)
 consultantRoute.delete('/delete-consultant/:id', deleteConsultant);
 consultantRoute.get("/consultant-by-shop-id-and-consultant-id/:shop_id/:consultant_id", getConsultantByShopIdAndConsultantId);
 consultantRoute.post("/login-consultant", loginConsultant);
-consultantRoute.get("/get/chat-list/:shop_id/:consultant_id", authenticateToken, getChatListByShopIdAndConsultantId);
+consultantRoute.get("/get/chat-list/:shop_id/:consultant_id", getChatListByShopIdAndConsultantId);
 consultantRoute.delete("/remove/user/chat-list/:id/:senderId", removeChatListAndConsultantIdFromChatList);
 consultantRoute.get("/get/consultant/:id", authenticateToken, getConsultantAllUsers);
 consultantRoute.put("/update-profile", upload.single("profileImage"),authenticateToken, updateConsultantProfileStoreFront);
