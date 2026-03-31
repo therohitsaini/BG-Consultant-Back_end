@@ -1,4 +1,3 @@
-const { shopModel } = require("../Modal/shopify");
 const mongoose = require("mongoose");
 const { TransactionHistroy } = require("../Modal/transactionHistroy");
 const { User } = require("../Modal/userSchema");
@@ -63,7 +62,7 @@ const voucherController = async (req, res) => {
             });
         }
 
-        const admin = await shopModel.findOne({ _id: adminId }).select("-accessToken");
+        const admin = await bgStoreDetails.findOne({ _id: adminId }).select("-accessToken");
         if (!admin) {
             return res.status(404).json({
                 success: false,
@@ -97,7 +96,7 @@ const deleteAdminController = async (req, res) => {
     try {
         const shop = req.headers["x-shopify-shop-domain"];
 
-        const admin = await shopModel.findOneAndUpdate(
+        const admin = await bgStoreDetails.findOneAndUpdate(
             { shop },
             {
                 accessToken: null,
@@ -502,7 +501,7 @@ const checkAppBillingController = async (req, res) => {
                 message: "Invalid admin ID",
             });
         }
-        const shop = await shopModel.findById(adminId).select("-accessToken")
+        const shop = await bgStoreDetails.findById(adminId).select("-accessToken")
         if (!shop) return
         return res.status(200).json({
             success: true,
@@ -534,7 +533,7 @@ const voucherHandlerController = async (req, res) => {
             });
         }
 
-        const shop = await shopModel.findById(shopId);
+        const shop = await bgStoreDetails.findById(shopId);
         if (!shop) {
             return res.status(404).json({ success: false, message: "Shop not found" });
         }
@@ -574,7 +573,7 @@ const updatesVoucherController = async (req, res) => {
             });
         }
 
-        const shop = await shopModel.findById(shopId);
+        const shop = await bgStoreDetails.findById(shopId);
 
         if (!shop) {
             return res.status(404).json({
