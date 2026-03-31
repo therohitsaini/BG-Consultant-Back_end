@@ -890,7 +890,7 @@ const ioServer = (server) => {
 
     socket.on("sendMessage", async (data) => {
       const { senderId, receiverId, shop_id, text, timestamp } = data;
-
+      console.log("sendMessage", data);
       if (!senderId || !receiverId || !shop_id) {
         console.log(" Missing required IDs");
         return;
