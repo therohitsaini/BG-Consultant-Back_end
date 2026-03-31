@@ -56,9 +56,7 @@ const getUserInRecentChat = async (request, response) => {
       senderId: userId,
       receiverId: consultantId,
     });
-    const store = await bgStoreDetails.findById(shopId);
-    console.log("store", store);
-    console.log("userInRecentChat", userInRecentChat);
+   
     if (!userInRecentChat) {
       return response
         .status(400)
