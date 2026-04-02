@@ -37,7 +37,6 @@ const checkedUserBlance = async (req, res) => {
         const { userId, consultantId } = req.params;
         const { callType = "voice" } = req.query;
 
-        console.log("callType", callType);
 
         const user = await User.findById(userId).select("walletBalance");
         const consultant = await User.findById(consultantId)
@@ -50,8 +49,6 @@ const checkedUserBlance = async (req, res) => {
                 message: "User or consultant not found"
             });
         }
-
-        console.log("user.walletBalance", user.walletBalance);
 
         let callCost = 0;
 
