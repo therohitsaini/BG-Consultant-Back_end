@@ -285,6 +285,7 @@ const ioServer = (server) => {
           const receiverSocketId = onlineUsers.get(receiverId);
 
           if (callerSocketId) {
+            console.log("callerSocketId___CallAccepted", callerSocketId);
             io.to(callerSocketId).emit("call-accepted-started", {
               callerId,
               receiverId,
@@ -295,6 +296,7 @@ const ioServer = (server) => {
             });
           }
           if (receiverSocketId) {
+            console.log("receiverSocketId___CallAccepted", receiverSocketId);
             io.to(receiverSocketId).emit("call-accepted-started", {
               callerId,
               receiverId,
