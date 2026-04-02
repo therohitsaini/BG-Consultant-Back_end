@@ -689,7 +689,6 @@ const getChatListByShopIdAndConsultantId = async (request, response) => {
     if (!chatList) {
       return response.status(400).json({ message: "Chat list not found" });
     }
-    console.log("chatList", chatList);
 
     const payload = chatList.map((item) => {
       return {

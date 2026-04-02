@@ -1123,6 +1123,7 @@ const ioServer = (server) => {
 
     socket.on("endChat", async (data) => {
       const { transactionId, userId, consultantId, shopId } = data;
+      console.log("endChat______✅", data);
       const session = await mongoose.startSession();
       session.startTransaction();
       try {
