@@ -5,7 +5,7 @@ const { ChatList } = require("./Modal/chatListSchema");
 const { MessageModal } = require("./Modal/messageSchema");
 const sendFCM = require("./firebase/sendNotification");
 const { TransactionHistroy } = require("./Modal/transactionHistroy");
-const { bgStoreDetails } = require("./Modal/shopify");
+const { bgStoreDetails } = require("./Modal/bgStoreDetails");
 const { missCalled } = require("./Modal/miscallasHistroy");
 const { WalletHistory } = require("./Modal/walletHistory");
 const { CallSession } = require("./Modal/callSessions");
@@ -1141,6 +1141,7 @@ const ioServer = (server) => {
         if (!consultantCost) throw new Error("Consultant not found");
 
         const shop = await bgStoreDetails.findById(shopId).session(session);
+        console.log("shop_____________", shop);
         if (!shop) throw new Error("Shop not found");
         const user_ = await User.findById(userId).session(session);
         if (!user_) throw new Error("User not found");
