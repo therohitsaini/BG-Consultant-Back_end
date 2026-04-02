@@ -986,7 +986,7 @@ const getConsultantWalletHistroy = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data: wallet,
+      data: safeWallet,
     });
   } catch (error) {
     console.error(error);

@@ -5,7 +5,7 @@ const { ChatList } = require("./Modal/chatListSchema");
 const { MessageModal } = require("./Modal/messageSchema");
 const sendFCM = require("./firebase/sendNotification");
 const { TransactionHistroy } = require("./Modal/transactionHistroy");
-const { shopModel } = require("./Modal/shopify");
+const { bgStoreDetails } = require("./Modal/shopify");
 const { missCalled } = require("./Modal/miscallasHistroy");
 const { WalletHistory } = require("./Modal/walletHistory");
 const { CallSession } = require("./Modal/callSessions");
@@ -89,7 +89,7 @@ const ioServer = (server) => {
             });
           }
           const consultant = await User.findById(receiverId);
-          const shopId = await shopModel.findOne({ shop: shop });
+          const shopId = await bgStoreDetails.findOne({ shop: shop });
           if (!shopId) return;
           // if (!receiverSocketId && consultant.firebaseToken?.token) {
           await sendCallFCM({
@@ -472,7 +472,7 @@ const ioServer = (server) => {
     //         const receiver = await User.findById(receiverId).session(session);
     //         if (!receiver) throw new Error("Receiver not found");
 
-    //         const shop = await shopModel.findById(shopId).session(session);
+    //         const shop = await bgStoreDetails.findById(shopId).session(session);
     //         if (!shop) throw new Error("Shop not found");
     //         const endTime = new Date();
     //         const totalSeconds_ = Math.floor(
@@ -514,7 +514,7 @@ const ioServer = (server) => {
     //             { session }
     //         );
 
-    //         await shopModel.findByIdAndUpdate(
+    //         await bgStoreDetails.findByIdAndUpdate(
     //             shopId,
     //             { $inc: { adminWalletBalance: shopShare } },
     //             { session }
@@ -753,7 +753,7 @@ const ioServer = (server) => {
         const receiver = await User.findById(receiverId).session(session);
         if (!receiver) throw new Error("Receiver not found");
         // shopId = '699852a7c1284f43e86923f9'
-        const shop = await shopModel.findById(shopId).session(session);
+        const shop = await bgStoreDetails.findById(shopId).session(session);
         if (!shop) throw new Error("Shop not found");
         console.log("shop_____________", shop);
         console.log("shop_____________adminPersenTage", shop.adminPersenTage);
@@ -801,7 +801,7 @@ const ioServer = (server) => {
           { session },
         );
 
-        await shopModel.findByIdAndUpdate(
+        await bgStoreDetails.findByIdAndUpdate(
           shopId,
           { $inc: { adminWalletBalance: shopShare } },
           { session },
@@ -1003,7 +1003,7 @@ const ioServer = (server) => {
             "receiver.firebaseToken.token",
             receiver.firebaseToken.token,
           );
-          const shop_Domain = await shopModel.findById(shop_id);
+          const shop_Domain = await bgStoreDetails.findById(shop_id);
           await sendFCM(
             receiver.firebaseToken.token,
             senderInfo.fullname,
@@ -1140,7 +1140,7 @@ const ioServer = (server) => {
           await User.findById(consultantId).session(session);
         if (!consultantCost) throw new Error("Consultant not found");
 
-        const shop = await shopModel.findById(shopId).session(session);
+        const shop = await bgStoreDetails.findById(shopId).session(session);
         if (!shop) throw new Error("Shop not found");
         const user_ = await User.findById(userId).session(session);
         if (!user_) throw new Error("User not found");
@@ -1169,7 +1169,7 @@ const ioServer = (server) => {
           { $inc: { walletBalance: consultantShare } },
           { session },
         );
-        await shopModel.findByIdAndUpdate(
+        await bgStoreDetails.findByIdAndUpdate(
           shopId,
           { $inc: { adminWalletBalance: shopShare } },
           { session },

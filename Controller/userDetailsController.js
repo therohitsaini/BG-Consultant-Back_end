@@ -173,9 +173,14 @@ const getUserWalletHistroy = async (req, res) => {
             .sort({ createdAt: -1 })
             .lean();
 
+        // `populate()` can return `userId: null` if the referenced user was deleted.
+        const safeWallet = (wallet || []).filter(
+            (w) => w.userId && w.userId.fullname
+        );
+
         return res.status(200).json({
             success: true,
-            data: wallet
+            data: safeWallet
         });
 
     } catch (error) {
