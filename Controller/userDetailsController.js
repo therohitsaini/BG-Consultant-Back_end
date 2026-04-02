@@ -220,8 +220,7 @@ const getcallSessionsController = async (req, res) => {
 const getUserConversationController = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log("ddd", id)
-        if (!mongoose.Types.ObjectId.isValid(id)) return console.log("Id is not valid")
+        if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({ success: false, message: "Id is not valid" })
         const conversations = await TransactionHistroy.find({
             $or: [
                 { senderId: id },
