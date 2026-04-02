@@ -5,7 +5,9 @@ const { ChatList } = require("./Modal/chatListSchema");
 const { MessageModal } = require("./Modal/messageSchema");
 const sendFCM = require("./firebase/sendNotification");
 const { TransactionHistroy } = require("./Modal/transactionHistroy");
-const { bgStoreDetails } = require("./Modal/bgStoreDetails");
+const bgStoreDetailsModule = require("./Modal/bgStoreDetails");
+const bgStoreDetails =
+  bgStoreDetailsModule?.bgStoreDetails || bgStoreDetailsModule;
 const { missCalled } = require("./Modal/miscallasHistroy");
 const { WalletHistory } = require("./Modal/walletHistory");
 const { CallSession } = require("./Modal/callSessions");
@@ -443,147 +445,7 @@ const ioServer = (server) => {
       },
     );
 
-    //---------------- end call logics ----------------
-
-    // socket.on("call-ended", async (data) => {
-    //     const { transactionId, callerId, receiverId, shopId, callType, channelName, } = data;
-    //     console.log("data_______________________✅", "transactionId", transactionId, "callerId", callerId, "receiverId", receiverId, "shopId", shopId, "callType", callType, "dtn_", dtn_, "channelName", channelName)
-    //                     const tsId = await CallSession.findOne({
-    //                         sessionId: channelName,
-    //                         callerId,
-    //                         receiverId
-    //                     });
-
-    //     // if (!tsId) throw new Error("session id not found");
-    //     const session = await mongoose.startSession();
-    //     session.startTransaction();
-    //     if (!mongoose.Types.ObjectId.isValid(transactionId)) return console.log("not found")
-    //     try {
-
-    //         let trnaID = tsId.transtionId || transactionId
-    //         console.log("trnaID_____________________✅", trnaID)
-    //         // console.log("deleteSession_______________________", deleteSession)
-    //         const transaction = await TransactionHistroy.findById(trnaID).session(session);
-    //         if (!transaction) throw new Error("Transaction not found");
-
-    //         const caller = await User.findById(callerId).session(session);
-    //         if (!caller) throw new Error("Caller not found");
-
-    //         const receiver = await User.findById(receiverId).session(session);
-    //         if (!receiver) throw new Error("Receiver not found");
-
-    //         const shop = await bgStoreDetails.findById(shopId).session(session);
-    //         if (!shop) throw new Error("Shop not found");
-    //         const endTime = new Date();
-    //         const totalSeconds_ = Math.floor(
-    //             (endTime - new Date(transaction.startTime)) / 1000
-    //         );
-    //         console.log("totalSeconds_", totalSeconds_)
-    //         let totalSeconds = totalSeconds_ - 5
-    //         console.log("totalSeconds_", totalSeconds_)
-
-    //         const callCostPerMinute =
-    //             callType === "voice"
-    //                 ? Number(receiver.voicePerMinute)
-    //                 : Number(receiver.videoPerMinute);
-    //         const perSecondCost = callCostPerMinute / 60;
-    //         const totalAmount = Number((totalSeconds * perSecondCost).toFixed(2));
-    //         const adminCommission =
-    //             (totalAmount * Number(shop.adminPersenTage)) / 100;
-
-    //         const receiverShare = totalAmount - adminCommission;
-    //         const shopShare = adminCommission;
-
-    //         transaction.endTime = endTime;
-    //         transaction.duration = totalSeconds;
-    //         transaction.totalAmount = totalAmount;
-    //         transaction.status = "completed";
-    //         transaction.type = callType;
-
-    //         await transaction.save({ session });
-
-    //         await User.findByIdAndUpdate(
-    //             callerId,
-    //             { $inc: { walletBalance: -totalAmount } },
-    //             { session }
-    //         );
-
-    //         await User.findByIdAndUpdate(
-    //             receiverId,
-    //             { $inc: { walletBalance: receiverShare } },
-    //             { session }
-    //         );
-
-    //         await bgStoreDetails.findByIdAndUpdate(
-    //             shopId,
-    //             { $inc: { adminWalletBalance: shopShare } },
-    //             { session }
-    //         );
-
-    //         const con = await TransactionHistroy.findByIdAndUpdate(
-    //             trnaID,
-    //             {
-    //                 $inc: {
-    //                     adminAmount: adminCommission,
-    //                     consultantAmount: receiverShare,
-    //                     amount: totalAmount
-    //                 }
-    //             },
-    //             { session }
-    //         );
-    //         console.log("con_____________TUpdaeted value", con)
-    //         await User.findByIdAndUpdate(
-    //             callerId,
-    //             { $set: { isCallAccepted: false } },
-    //             { session }
-    //         );
-
-    //         await WalletHistory.create({
-    //             userId: callerId,
-    //             shop_id: shopId,
-    //             amount: totalAmount,
-    //             referenceType: callType,
-    //             transactionType: "usage",
-    //             direction: "debit",
-    //             description: `Call ended for ${formatTime(totalSeconds)} seconds`,
-    //             status: "success",
-    //         });
-    //         await WalletHistory.create({
-    //             userId: receiverId,
-    //             shop_id: shopId,
-    //             amount: receiverShare,
-    //             referenceType: callType,
-    //             transactionType: "usage",
-    //             direction: "credit",
-    //             description: `Call ended for ${formatTime(totalSeconds)} seconds`,
-    //             status: "success",
-    //         });
-
-    //         await session.commitTransaction();
-
-    //         io.to(callerId).emit("callEnded", {
-    //             trnaID,
-    //             totalSeconds,
-    //             totalAmount,
-    //             reason: "ended"
-    //         });
-
-    //         io.to(receiverId).emit("callEnded", {
-    //             trnaID,
-    //             totalSeconds,
-    //             totalAmount,
-    //             reason: "ended"
-    //         });
-
-    //         console.log("✅ Call ended successfully:", trnaID);
-
-    //     } catch (error) {
-    //         console.error("❌ Call transaction error:", error);
-    //         await session.abortTransaction();
-    //     } finally {
-    //         session.endSession();
-    //     }
-    // });
+   
 
     socket.on("call-ended", async (data) => {
       const {
