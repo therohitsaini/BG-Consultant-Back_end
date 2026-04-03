@@ -91,23 +91,24 @@ const ioServer = (server) => {
             });
           }
           const consultant = await User.findById(receiverId);
-          const shopId = await bgStoreDetails.findOne({ shop: shop });
-          if (!shopId) return;
-          // if (!receiverSocketId && consultant.firebaseToken?.token) {
-          await sendCallFCM({
-            token: consultant.firebaseToken.token,
-            callerId,
-            callerName: callerInfo.fullname,
-            channelName,
-            callType,
-            receiverId,
-            shop,
-            shopId: shopId._id.toString(),
-            avatar: callerInfo.profileImage,
-          });
+          const storeDoc = await bgStoreDetails.findOne({ shop: shop });
+          if (!storeDoc) return;
 
-          console.log("📲 Call FCM sent to receiver");
-          // }
+          const fcmToken = consultant?.firebaseToken?.token;
+          if (fcmToken) {
+            await sendCallFCM({
+              token: fcmToken,
+              callerId,
+              callerName: callerInfo.fullname,
+              channelName,
+              callType,
+              receiverId,
+              shop,
+              shopId: storeDoc._id.toString(),
+              avatar: callerInfo.profileImage,
+            });
+            console.log("📲 Call FCM sent to receiver");
+          }
 
           const call = {
             callId,

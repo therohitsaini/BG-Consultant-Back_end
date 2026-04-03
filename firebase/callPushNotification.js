@@ -11,19 +11,30 @@ async function sendCallFCM({
     shopId,
     avatar
 }) {
+    const t = typeof token === "string" ? token.trim() : "";
+    if (!t) {
+        console.warn(
+            "sendCallFCM skipped: missing or empty FCM token (receiver has no device token)",
+        );
+        return;
+    }
+
+    // FCM data payload values must be strings
+    const data = {
+        type: "CALL",
+        callerId: String(callerId ?? ""),
+        callerName: String(callerName ?? ""),
+        channelName: String(channelName ?? ""),
+        callType: String(callType ?? ""),
+        receiverId: String(receiverId ?? ""),
+        shop: String(shop ?? ""),
+        shopId: String(shopId ?? ""),
+        avatar: String(avatar ?? ""),
+    };
+
     const message = {
-        token,
-        data: {
-            type: "CALL",
-            callerId,
-            callerName,
-            channelName,
-            callType,
-            receiverId,
-            shop,
-            shopId,
-            avatar: avatar || "",
-        },
+        token: t,
+        data,
         android: {
             priority: "high",
         },
@@ -35,7 +46,7 @@ async function sendCallFCM({
             },
         },
     };
-    console.log("message____________call", message)
+    console.log("message____________call", message);
 
     await admin.messaging().send(message);
 }
