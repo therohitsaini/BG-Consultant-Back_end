@@ -433,7 +433,6 @@ const loginConsultant = async (request, response) => {
 const getConsultant = async (req, res) => {
   try {
     const { shop_id } = req.params;
-    console.log("shop_id", shop_id);
     if (!mongoose.Types.ObjectId.isValid(shop_id)) {
       return res
         .status(400)
@@ -443,7 +442,6 @@ const getConsultant = async (req, res) => {
       userType: "consultant",
       shop_id: shop_id,
     }).select("-password");
-    console.log("consultants", consultants);
     consultants = consultants.map((item) => {
       return {
         ...item._doc,
@@ -463,7 +461,6 @@ const getConsultant = async (req, res) => {
 const updateConsultantStatus = async (request, response) => {
   try {
     const { id } = request.params;
-    console.log("_____id", id);
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return response.status(400).json({ message: "Invalid consultant ID" });
@@ -474,14 +471,9 @@ const updateConsultantStatus = async (request, response) => {
         .json({ message: "Consultant ID is required" });
     }
     const consultant = await User.findById(id);
-    console.log("_____consultant", consultant);
     if (!consultant) {
       return res.status(404).json({ message: "Consultant not found" });
     }
-    console.log(
-      "_____consultant.consultantStatus",
-      consultant.consultantStatus,
-    );
     // Toggle ONLY consultantStatus
     consultant.consultantStatus = !consultant.consultantStatus;
     await consultant.save();
@@ -489,7 +481,6 @@ const updateConsultantStatus = async (request, response) => {
       "_____consultant.consultantStatus",
       consultant.consultantStatus,
     );
-    console.log("_____message:Status updated successfully");
 
     return response.status(200).send({
       success: true,

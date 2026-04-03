@@ -46,6 +46,8 @@ const voucherController = async (req, res) => {
   try {
     const { adminId } = req.params;
     const { totalCoin, extraCoin, voucherCode } = req.body;
+    console.log("voucherController", req.body);
+    console.log("adminId", adminId);
 
     if (!adminId) {
       return res.status(400).json({

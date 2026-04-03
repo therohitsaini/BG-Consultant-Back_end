@@ -29,7 +29,6 @@ const ioServer = (server) => {
 
     socket.on("register", async (user_Id) => {
       if (!mongoose.Types.ObjectId.isValid(user_Id)) return;
-      console.log("user_Id", user_Id);
       const uid = user_Id.toString();
       socket.join(uid);
 
@@ -64,7 +63,6 @@ const ioServer = (server) => {
               .select(isCallTypeCost)
               .lean();
             if (!receiverInfo) throw new Error("Receiver not found");
-            console.log("receiverInfo", receiverInfo);
             const callCost = Number(receiverInfo[isCallTypeCost]);
             if (Number(callerInfo.walletBalance) < callCost) {
               io.to(callerId.toString()).emit("balanceError", {
@@ -107,7 +105,6 @@ const ioServer = (server) => {
               shopId: storeDoc._id.toString(),
               avatar: callerInfo.profileImage,
             });
-            console.log("📲 Call FCM sent to receiver");
           }
 
           const call = {
@@ -134,8 +131,6 @@ const ioServer = (server) => {
               activeCall.status = "missed";
               const callerSocketId = onlineUsers.get(callerId);
               const receiverSocketId = onlineUsers.get(receiverId);
-              console.log("callerSokect_Caller", callerSocketId);
-              console.log("callerSokect_Receiver", receiverSocketId);
 
               if (callerSocketId) {
                 io.to(callerSocketId).emit("call-missed", { callId });
