@@ -55,6 +55,17 @@ const bigCommerceSchema = new mongoose.Schema(
       type: String,
     },
 
+    // Vouchers for this BigCommerce store (mirrors Shopify vouchers structure)
+    vouchers: [
+      {
+        voucherCode: String,
+        totalCoin: Number,
+        extraCoin: Number,
+        createdAt: { type: Date, default: Date.now },
+        updatedAt: { type: Date, default: Date.now },
+      },
+    ],
+
     created_page_ids: {
       type: Array,
       default: [],
