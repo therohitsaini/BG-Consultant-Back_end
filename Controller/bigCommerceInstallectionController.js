@@ -184,14 +184,14 @@ const loadBigCommerce = async (req, res) => {
       process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
     );
     const storeHash = decoded.sub.replace("stores/", "");
-    const appToken = jwt.sign(
-      { store_hash: storeHash },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" },
-    );
-    console.log("appToken", appToken);
+    // const appToken = jwt.sign(
+    //   { store_hash: storeHash },
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: "1d" },
+    // );
+    // console.log("appToken", appToken);
     res.redirect(
-      `${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}&appToken=${appToken}`,
+      `${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}`,
     );
   } catch (err) {
     res.status(401).send("Invalid signature");
