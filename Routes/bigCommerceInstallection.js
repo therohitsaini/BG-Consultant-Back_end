@@ -7,9 +7,16 @@ const {
   unistalledBgCommerceApp,
   verifyBigCommerceAdmin,
 } = require("../Controller/bigCommerceInstallectionController");
+const {
+  bgVerifyToken,
+} = require("../MiddleWare/ShopifyMiddleware/bgVerifyToken");
 
 bigCommerceInstallationRoute.get("/auth", installBigCommerce);
 bigCommerceInstallationRoute.get("/load", loadBigCommerce);
-bigCommerceInstallationRoute.get("/uninstall",unistalledBgCommerceApp)
-bigCommerceInstallationRoute.get("/verify-admin/store", verifyBigCommerceAdmin);
+bigCommerceInstallationRoute.get("/uninstall", unistalledBgCommerceApp);
+bigCommerceInstallationRoute.get(
+  "/verify-admin/store",
+  bgVerifyToken,
+  verifyBigCommerceAdmin,
+);
 module.exports = { bigCommerceInstallationRoute };
