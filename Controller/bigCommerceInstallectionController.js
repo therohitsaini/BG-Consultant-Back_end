@@ -186,7 +186,7 @@ const loadBigCommerce = async (req, res) => {
     const storeHash = decoded.sub.replace("stores/", "");
     const appToken = jwt.sign(
       { store_hash: storeHash },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET_KEY,
       { expiresIn: "1d" },
     );
     console.log("appToken", appToken);
