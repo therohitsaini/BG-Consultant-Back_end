@@ -43,9 +43,12 @@ const installBigCommerce = async (req, res) => {
         account_uuid: data.account_uuid,
         domain: storeDetails.domain,
         secure_url: storeDetails.secure_url,
+        planStatus: "INACTIVE",
+        appEnabled: false,
       });
     } else {
       store.access_token = accessToken;
+      store.appEnabled = false;
       await store.save();
     }
 
@@ -268,6 +271,9 @@ const verifyBigCommerceAdmin = async (req, res) => {
     const storeDetails = await bgStoreDetails.findOne({ store_hash: store });
     if (!storeDetails) {
       return res.status(404).json({ message: "Store not found" });
+    }
+    if (storeDetails.planStatus === "INACTIVE") {
+      return res.status(401).json({ message: "Plan is not active" });
     }
     return res
       .status(200)
