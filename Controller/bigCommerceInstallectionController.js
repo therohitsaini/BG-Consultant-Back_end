@@ -5,8 +5,9 @@ const jwt = require("jsonwebtoken");
 const { getStoreDetailsFromAPI } = require("../Helper/helper");
 dotenv.config();
 
-const BIGCOMMERCE_STORE_CLIENT_ID=process.env.BIGCOMMERCE_STORE_CLIENT_ID;
-const BIGCOMMERCE_STORE_CLIENT_SECRET=process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
+const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
+const BIGCOMMERCE_STORE_CLIENT_SECRET =
+  process.env.BIGCOMMERCE_STORE_CLIENT_SECRET;
 
 const installBigCommerce = async (req, res) => {
   try {
@@ -203,8 +204,12 @@ const loadBigCommerce = async (req, res) => {
       process.env.BIGCOMMERCE_STORE_CLIENT_SECRET,
     );
     const storeHash = decoded.sub.replace("stores/", "");
-
-    res.redirect(`${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}`);
+    const appToken = jwt.sign(
+      { store_hash: storeHash },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" },
+    );
+    res.redirect(`${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}&appToken=${appToken}`);
   } catch (err) {
     res.status(401).send("Invalid signature");
   }

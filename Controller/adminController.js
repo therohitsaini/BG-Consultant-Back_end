@@ -21,7 +21,7 @@ const adminController = async (req, res) => {
         message: "Invalid admin ID",
       });
     }
-    const admin = await bgStoreDetails.findById(adminId).select("-accessToken")
+    const admin = await bgStoreDetails.findById(adminId).select("-access_token")
     console.log("admin__________", admin);
     if (!admin) {
       return res.status(404).json({
