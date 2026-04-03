@@ -8,7 +8,6 @@ const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 const adminController = async (req, res) => {
   try {
     const { adminId } = req.params;
-    console.log("adminId", adminId);
     if (!adminId) {
       return res.status(400).json({
         success: false,
@@ -22,14 +21,12 @@ const adminController = async (req, res) => {
       });
     }
     const admin = await bgStoreDetails.findById(adminId).select("-access_token")
-    console.log("admin__________", admin);
     if (!admin) {
       return res.status(404).json({
         success: false,
         message: "Admin not found"
       });
     }
-    console.log("admin__________", admin);
     res.status(200).json({
       success: true,
       message: "Admin retrieved successfully",
@@ -49,7 +46,6 @@ const voucherController = async (req, res) => {
   try {
     const { adminId } = req.params;
     const { totalCoin, extraCoin, voucherCode } = req.body;
-    console.log(totalCoin, extraCoin, voucherCode);
 
     if (!adminId) {
       return res.status(400).json({
@@ -66,7 +62,7 @@ const voucherController = async (req, res) => {
 
     const admin = await bgStoreDetails
       .findOne({ _id: adminId })
-      .select("-accessToken");
+      .select("-access_token");
     if (!admin) {
       return res.status(404).json({
         success: false,
@@ -99,7 +95,7 @@ const deleteAdminController = async (req, res) => {
     const admin = await bgStoreDetails.findOneAndUpdate(
       { shop },
       {
-        accessToken: null,
+        access_token: null,
         uninstalledAt: new Date(),
       },
     );

@@ -142,26 +142,6 @@ const installBigCommerce = async (req, res) => {
       `
   }
 `,
-          // body: `
-          //   <div style="width: 100%;">
-          //     <iframe
-          //       src="${page.iframeSrc}"
-          //       id="consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}"
-          //       style="width: 100%; border: none; overflow: hidden; min-height: 500px;"
-          //       scrolling="no"
-          //     ></iframe>
-          //   </div>
-          //   <script>
-          //     window.addEventListener("message", (event) => {
-          //       if (event.data.type === "IFRAME_HEIGHT") {
-          //         const iframe = document.getElementById("consultant-iframe-${page.name.replace(/\s+/g, "-").toLowerCase()}");
-          //         if (iframe) {
-          //           iframe.style.height = event.data.height + "px";
-          //         }
-          //       }
-          //     });
-          //   </script>
-          // `,
           url: page.url,
         },
         {
@@ -209,7 +189,10 @@ const loadBigCommerce = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1d" },
     );
-    res.redirect(`${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}&appToken=${appToken}`);
+    console.log("appToken", appToken);
+    res.redirect(
+      `${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}&appToken=${appToken}`,
+    );
   } catch (err) {
     res.status(401).send("Invalid signature");
   }
