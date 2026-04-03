@@ -189,7 +189,6 @@ const loadBigCommerce = async (req, res) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1d" },
     );
-    console.log("appToken", appToken);
     res.redirect(
       `${process.env.APP_LOAD_URL}/#/admin?store=${storeHash}&appToken=${appToken}`,
     );
