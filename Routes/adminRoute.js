@@ -1,11 +1,10 @@
 const express = require("express");
 const { adminController, voucherController, getTransactionController, getUserConsultantController, getShopAllUserController, getShopAllConsultantController, updateUserConsultantController, appEnableAndDisableController, checkAppBillingController, voucherHandlerController, updatesVoucherController, getWithdrawalRequest, updateConsultantWidthrawalRequest, declineWithdrawalRequest, updateAdminPercentage } = require("../Controller/adminController");
-const { verifyShopifyToken } = require("../MiddleWare/ShopifyMiddleware/verifyShopifyToken");
-
+const { bgVerifyToken } = require("../MiddleWare/ShopifyMiddleware/bgVerifyToken");
 const adminRoute = express.Router();
 
 
-adminRoute.get("/admin/:adminId", adminController);
+adminRoute.get("/admin/:adminId", bgVerifyToken, adminController);
 adminRoute.post("/admin/voucher/:adminId", voucherController);
 adminRoute.get("/activity/transactions/:adminId" ,getTransactionController);
 adminRoute.get("/user/consultant/:adminId", getUserConsultantController);
