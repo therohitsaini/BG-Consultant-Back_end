@@ -869,13 +869,13 @@ const ioServer = (server) => {
             receiver.firebaseToken.token,
           );
           const shop_Domain = await bgStoreDetails.findById(shop_id);
-          await sendFCM(
-            receiver.firebaseToken.token,
-            senderInfo.fullname,
-            text,
-            "https://www.svgrepo.com/show/335455/profile-default.svg",
-            shop_Domain.shop,
-          );
+          // await sendFCM(
+          //   receiver.firebaseToken.token,
+          //   senderInfo.fullname,
+          //   text,
+          //   "https://www.svgrepo.com/show/335455/profile-default.svg",
+          //   shop_Domain.shop,
+          // );
         }
       } catch (error) {
         console.error("❌ Transaction failed:", error);
