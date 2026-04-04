@@ -23,7 +23,7 @@ const handleStripeWebhook = async (req, res) => {
     const store = session.metadata?.store;
     const plan = session.metadata?.plan;
 
-    console.log("Payment Success:", store, plan);
+    console.log("Payment Success_______:", store, plan);
 
     try {
       await activateStorePlan(store, plan);
