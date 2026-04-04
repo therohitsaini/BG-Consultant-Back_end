@@ -1,7 +1,7 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const { activateStorePlan } = require("../services/stripe.service");
 
-exports.handleStripeWebhook = async (req, res) => {
+const handleStripeWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
 
   let event;
@@ -35,3 +35,5 @@ exports.handleStripeWebhook = async (req, res) => {
 
   return res.status(200).json({ received: true });
 };
+
+module.exports = { handleStripeWebhook };
