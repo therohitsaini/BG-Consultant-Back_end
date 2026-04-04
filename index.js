@@ -8,13 +8,6 @@ dotenv.config();
 connectDB();
 const path = require("path");
 const app = express();
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true }));
-const PORT = process.env.MVC_BACKEND_PORT || 3001;
-const server = http.createServer(app);
-const { ioServer } = require("./server-io");
-const { razerPayRoute } = require("./Routes/razerPayRoute");
-
 
 app.use(
   cors({
@@ -22,6 +15,21 @@ app.use(
     credentials: true,
   }),
 );
+
+/** Stripe webhook: raw body required. Registered URL: /api/confirm/payment/webhook */
+const paymentWebhookRoute = require("./Routes/paymentWebhookRoute");
+app.use("/api/confirm/payment", paymentWebhookRoute);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const { createCheckoutSession } = require("./Controller/stripeController");
+app.post("/create-session", createCheckoutSession);
+
+const PORT = process.env.MVC_BACKEND_PORT || 3001;
+const server = http.createServer(app);
+const { ioServer } = require("./server-io");
+const { razerPayRoute } = require("./Routes/razerPayRoute");
 
 app.use(
   "/uploads",
