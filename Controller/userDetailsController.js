@@ -4,6 +4,7 @@ const { User } = require("../Modal/userSchema");
 const { WalletHistory } = require("../Modal/walletHistory");
 const { CallSession } = require("../Modal/callSessions");
 const { TransactionHistroy } = require("../Modal/transactionHistroy");
+const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 
 const getAllUsers = async (req, res) => {
     try {
@@ -94,7 +95,7 @@ const getVouchersController = async (req, res) => {
                 message: "Invalid admin ID"
             });
         }
-        const admin = await shopModel.findOne({ _id: adminId }).select("-accessToken").select("vouchers").select("_id");
+        const admin = await bgStoreDetails.findById(adminId).select("-access_token").select("vouchers").select("_id");
         if (!admin) {
             return res.status(404).json({
                 success: false,
