@@ -16,9 +16,12 @@ app.use(
   }),
 );
 
-/** Stripe webhook: raw body required. Registered URL: /api/confirm/payment/webhook */
-const stripeWebhookRoute = require("./Routes/paymentWebhookRoute");
-
+const { handleStripeWebhook } = require("./Controller/webhookController");
+app.post(
+  "/api/confirm/payment/webhook",
+  express.raw({ type: "application/json" }),
+  handleStripeWebhook
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -83,7 +86,6 @@ app.use("/api/chat", chatRoutes);
 /** User Routes */
 app.use("/api/users", userRouter);
 app.use("/api/admin", adminRoute);
-app.use("/api/confirm/payment", stripeWebhookRoute);
 // app.use("/api/princing", adminPrincingRoute);
 // app.use("/pricing-callback", adminPrincingRoute);
 
