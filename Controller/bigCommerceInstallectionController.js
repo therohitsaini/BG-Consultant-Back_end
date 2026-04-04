@@ -236,6 +236,7 @@ const unistalledBgCommerceApp = async (req, res) => {
             email: email,
           },
           account_uuid: null,
+          planName: null,
         },
       },
     );
