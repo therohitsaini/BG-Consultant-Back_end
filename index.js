@@ -78,8 +78,7 @@ app.use("/api-employee", employRoute);
 app.use("/api/chat", chatRoutes);
 // app.use("/api", firebaseRouter);
 
-/** Shopify Draft Order Routes */
-// app.use("/api/draft-order", shopifyDraftOrderRoute);
+
 
 /** User Routes */
 app.use("/api/users", userRouter);

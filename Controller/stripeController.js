@@ -27,8 +27,10 @@ function getPriceIdForPlan(plan) {
  * Body: { plan: "basic" | "pro", store: string } — store is typically BigCommerce store_hash.
  */
 const createCheckoutSession = async (req, res) => {
+  console.log("createCheckoutSession_______:", req.body);
   try {
     const { plan, store } = req.body || {};
+    console.log("createCheckoutSession_______:", req.body);
 
     if (store === undefined || store === null || String(store).trim() === "") {
       return res.status(400).json({
