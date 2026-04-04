@@ -23,7 +23,8 @@ async function activateStorePlan(store, plan) {
       $set: {
         appStatus: "ACTIVE",
         appBillingStatus: "active",
-        appEnabled: true,
+        planName: plan,
+     
       },
     },
     { new: true },

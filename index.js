@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const http = require("http");
-const bodyParser = require("body-parser");
 const { connectDB } = require("./Utils/db");
 dotenv.config();
 connectDB();
@@ -31,7 +30,6 @@ app.post("/create-session", createCheckoutSession);
 const PORT = process.env.MVC_BACKEND_PORT || 3001;
 const server = http.createServer(app);
 const { ioServer } = require("./server-io");
-const { razerPayRoute } = require("./Routes/razerPayRoute");
 
 app.use(
   "/uploads",
@@ -51,7 +49,6 @@ const { consultantRoute } = require("./Routes/consultantRoute");
 const { employRoute } = require("./Routes/employRutes");
 const chatRoutes = require("./Routes/chatRoutes");
 const firebaseRouter = require("./Routes/firebaseRoutes");
-const { shopifyDraftOrderRoute } = require("./Routes/shopifyDraftOrderRoute");
 const { userRouter } = require("./Routes/userRoutes");
 const { adminRoute } = require("./Routes/adminRoute");
 const { adminPrincingRoute } = require("./Routes/adminPrincingRoutes");
@@ -64,7 +61,6 @@ app.use("/api", bigCommerceInstallationRoute)
 app.use("/api/call", callRoutes);
 app.use("/api/auth", signinSignupRouter);
 app.use("/api/users", userDetailsRouter);
-app.use("/api/razerpay-create-order", razerPayRoute);
 app.use("/api-consultant", consultantRoute);
 app.use("/api-employee", employRoute);
 

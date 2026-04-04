@@ -32,7 +32,7 @@ const HistroyMW = async (toUid, fromUid, type) => {
                email: user.email,
                contactNumber: user.contactNumber || null
             },
-            type: conversationType, // "audio", "video", ya "chat"
+            type: conversationType,
             startTime: new Date()
          });
          
