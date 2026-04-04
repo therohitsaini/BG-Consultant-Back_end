@@ -46,7 +46,7 @@ const bigCommerceSchema = new mongoose.Schema(
     planName: {
       type: String,
       default: "",
-      required: true,
+   
     },
     /** Set to ACTIVE when Stripe subscription checkout completes (webhook). */
     appStatus: {
