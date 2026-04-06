@@ -54,10 +54,12 @@ const { adminRoute } = require("./Routes/adminRoute");
 const { adminPrincingRoute } = require("./Routes/adminPrincingRoutes");
 const {bigCommerceInstallationRoute,} = require("./Routes/bigCommerceInstallection");
 const bigCommerceRoute = require("./Routes/bigCommerceRoute");
+const createCartRoute = require("./Routes/createCartRoute");
 
 
 app.use("/api", bigCommerceRoute)
 app.use("/api", bigCommerceInstallationRoute)
+app.use("/api", createCartRoute);
 app.use("/api/call", callRoutes);
 app.use("/api/auth", signinSignupRouter);
 app.use("/api/users", userDetailsRouter);
