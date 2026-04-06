@@ -71,6 +71,7 @@ const bigCommerceSchema = new mongoose.Schema(
         voucherCode: String,
         totalCoin: Number,
         extraCoin: Number,
+        productId: String,
         createdAt: { type: Date, default: Date.now },
         updatedAt: { type: Date, default: Date.now },
       },
