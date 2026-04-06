@@ -28,9 +28,6 @@ const consultantController = async (req, res) => {
     const body = req.body;
     const file = req.file;
 
-    console.log("body", body);
-    console.log("file", file);
-    console.log("shop_id", shop_id);
     if (!shop_id || !mongoose.Types.ObjectId.isValid(shop_id)) {
       return res.status(400).json({
         success: false,
@@ -111,7 +108,6 @@ const consultantController = async (req, res) => {
       const filePath = path.join(uploadFolder, fileName);
 
       fs.writeFileSync(filePath, file.buffer);
-
       imageURL = `uploads/consultants/${fileName}`;
     }
 
