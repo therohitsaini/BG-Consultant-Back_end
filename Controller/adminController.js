@@ -20,11 +20,13 @@ const adminController = async (req, res) => {
         message: "Invalid admin ID",
       });
     }
-    const admin = await bgStoreDetails.findById(adminId).select("-access_token")
+    const admin = await bgStoreDetails
+      .findById(adminId)
+      .select("-access_token");
     if (!admin) {
       return res.status(404).json({
         success: false,
-        message: "Admin not found"
+        message: "Admin not found",
       });
     }
     res.status(200).json({
@@ -42,12 +44,58 @@ const adminController = async (req, res) => {
   }
 };
 
+// const voucherController = async (req, res) => {
+//   try {
+//     const { adminId } = req.params;
+//     const { totalCoin, extraCoin, voucherCode } = req.body;
+//     console.log("voucherController", req.body);
+//     console.log("adminId", adminId);
+
+//     if (!adminId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Admin ID is required",
+//       });
+//     }
+//     if (!mongoose.Types.ObjectId.isValid(adminId)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Invalid admin ID",
+//       });
+//     }
+
+//     const admin = await bgStoreDetails
+//       .findOne({ _id: adminId })
+//       .select("-access_token");
+//     if (!admin) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Admin not found",
+//       });
+//     }
+//     const voucher = {
+//       voucherCode: voucherCode || "",
+//       totalCoin: totalCoin,
+//       extraCoin: extraCoin,
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//     };
+//     admin.vouchers.push(voucher);
+//     await admin.save();
+//     res.status(200).json({
+//       success: true,
+//       message: "Voucher created successfully",
+//       data: admin,
+//     });
+//   } catch (error) {
+//     console.error("Error in voucherController:", error);
+//   }
+// };
+
 const voucherController = async (req, res) => {
   try {
     const { adminId } = req.params;
     const { totalCoin, extraCoin, voucherCode } = req.body;
-    console.log("voucherController", req.body);
-    console.log("adminId", adminId);
 
     if (!adminId) {
       return res.status(400).json({
@@ -55,38 +103,74 @@ const voucherController = async (req, res) => {
         message: "Admin ID is required",
       });
     }
+
     if (!mongoose.Types.ObjectId.isValid(adminId)) {
       return res.status(400).json({
         success: false,
         message: "Invalid admin ID",
       });
     }
+    const admin = await bgStoreDetails.findOne({ _id: adminId });
 
-    const admin = await bgStoreDetails
-      .findOne({ _id: adminId })
-      .select("-access_token");
     if (!admin) {
       return res.status(404).json({
         success: false,
         message: "Admin not found",
       });
     }
+
+    const storeHash = admin.store_hash;
+    const accessToken = admin.access_token;
+
+   
+    const productResponse = await axios.post(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/catalog/products`,
+      {
+        name: `Voucher ${totalCoin} Coins`,
+        type: "physical",
+        price: totalCoin,
+        weight: 1,
+        is_visible: false,
+        description: `Voucher for ${totalCoin} coins`,
+      },
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const productId = productResponse.data.data.id;
+
+   
     const voucher = {
       voucherCode: voucherCode || "",
-      totalCoin: totalCoin,
-      extraCoin: extraCoin,
+      totalCoin,
+      extraCoin,
+      productId, 
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+
     admin.vouchers.push(voucher);
     await admin.save();
+
     res.status(200).json({
       success: true,
-      message: "Voucher created successfully",
-      data: admin,
+      message: "Voucher + Product created successfully",
+      data: voucher,
     });
   } catch (error) {
-    console.error("Error in voucherController:", error);
+    console.error(
+      "Error in voucherController:",
+      error.response?.data || error.message,
+    );
+
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
   }
 };
 
