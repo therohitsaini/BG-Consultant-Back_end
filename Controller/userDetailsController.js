@@ -103,11 +103,10 @@ const getVouchersController = async (req, res) => {
             });
         }
         const vouchers = {
-            voucherCode: admin.vouchers,
+            vouchers: admin.vouchers,
             shopCurrency: admin.currency,
             id: admin._id
-
-        }
+        };
         res.status(200).json({
             success: true,
             message: "Vouchers retrieved successfully",
@@ -115,6 +114,10 @@ const getVouchersController = async (req, res) => {
         });
     } catch (error) {
         console.error("Error in getVouchersController:", error);
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Server error"
+        });
     }
 }
 
