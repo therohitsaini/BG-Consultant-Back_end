@@ -12,7 +12,8 @@ const createBigCommerceCartController = async (req, res) => {
   try {
     const { productId, storeHash } = req.body || {};
 
-    // Validate input
+    console.log("productId", productId);
+    console.log("storeHash", storeHash);
     if (productId === undefined || productId === null) {
       return res.status(400).json({
         success: false,
@@ -78,7 +79,8 @@ const createBigCommerceCartController = async (req, res) => {
       },
     });
 
-    const payload = bigCommerceResponse?.data?.data ?? bigCommerceResponse?.data;
+    const payload =
+      bigCommerceResponse?.data?.data ?? bigCommerceResponse?.data;
     const checkoutUrl =
       payload?.channel?.cart_url ||
       payload?.cart_url ||
@@ -91,7 +93,8 @@ const createBigCommerceCartController = async (req, res) => {
     if (!checkoutUrl) {
       return res.status(502).json({
         success: false,
-        message: "Cart created, but checkoutUrl was not found in BigCommerce response",
+        message:
+          "Cart created, but checkoutUrl was not found in BigCommerce response",
       });
     }
 
@@ -119,4 +122,3 @@ const createBigCommerceCartController = async (req, res) => {
 };
 
 module.exports = { createBigCommerceCartController };
-
