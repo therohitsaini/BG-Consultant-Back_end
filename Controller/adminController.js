@@ -71,45 +71,10 @@ const voucherController = async (req, res) => {
         message: "Admin not found",
       });
     }
-
-    const cleanedVoucherCode =
-      typeof voucherCode === "string" ? voucherCode.trim() : "";
-    if (!cleanedVoucherCode) {
-      return res.status(400).json({
-        success: false,
-        message: "voucherCode must exist",
-      });
-    }
-
-    const parsedTotalCoin = Number(totalCoin);
-    const parsedExtraCoin = Number(extraCoin);
-    if (!Number.isFinite(parsedTotalCoin) || parsedTotalCoin <= 0) {
-      return res.status(400).json({
-        success: false,
-        message: "totalCoin must be a valid positive number",
-      });
-    }
-    if (!Number.isFinite(parsedExtraCoin) || parsedExtraCoin < 0) {
-      return res.status(400).json({
-        success: false,
-        message: "extraCoin must be a valid non-negative number",
-      });
-    }
-
-    const duplicate = (admin.vouchers || []).some(
-      (v) => String(v.voucherCode || "").trim() === cleanedVoucherCode,
-    );
-    if (duplicate) {
-      return res.status(409).json({
-        success: false,
-        message: "voucherCode already exists",
-      });
-    }
-
     const voucher = {
-      voucherCode: cleanedVoucherCode,
-      totalCoin: parsedTotalCoin,
-      extraCoin: parsedExtraCoin,
+      voucherCode: voucherCode || "",
+      totalCoin: totalCoin,
+      extraCoin: extraCoin,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -122,10 +87,6 @@ const voucherController = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in voucherController:", error);
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Server error",
-    });
   }
 };
 
