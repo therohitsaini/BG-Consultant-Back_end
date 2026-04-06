@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
     credentials: true,
   }),
 );
@@ -54,12 +54,12 @@ const { adminRoute } = require("./Routes/adminRoute");
 const { adminPrincingRoute } = require("./Routes/adminPrincingRoutes");
 const {bigCommerceInstallationRoute,} = require("./Routes/bigCommerceInstallection");
 const bigCommerceRoute = require("./Routes/bigCommerceRoute");
-const createCartRoute = require("./Routes/createCartRoute");
+const cartRoute = require("./Routes/cartRoute");
 
 
 app.use("/api", bigCommerceRoute)
 app.use("/api", bigCommerceInstallationRoute)
-app.use("/api", createCartRoute);
+app.use("/api", cartRoute);
 app.use("/api/call", callRoutes);
 app.use("/api/auth", signinSignupRouter);
 app.use("/api/users", userDetailsRouter);

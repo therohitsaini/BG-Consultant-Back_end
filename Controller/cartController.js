@@ -1,0 +1,109 @@
+const axios = require("axios");
+const { bgStoreDetails } = require("../Modal/bgStoreDetails");
+
+const createCartController = async (req, res) => {
+  try {
+    const { productId, shopId } = req.body || {};
+
+    if (productId === undefined || productId === null) {
+      return res.status(400).json({
+        success: false,
+        message: "productId must exist",
+      });
+    }
+
+    const parsedProductId = Number(productId);
+    if (!Number.isInteger(parsedProductId) || parsedProductId <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "productId must be a valid positive integer",
+      });
+    }
+
+    if (!shopId || typeof shopId !== "string" || !shopId.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "shopId must exist",
+      });
+    }
+
+    const trimmedShopId = shopId.trim();
+
+    const storeData = await bgStoreDetails
+      .findOne({ _id: trimmedShopId })
+      .lean();
+
+    if (!storeData) {
+      return res.status(404).json({
+        success: false,
+        message: "Store not found for provided shopId",
+      });
+    }
+
+    const accessToken = storeData.access_token;
+    const storeHash = storeData.store_hash;
+    if (!accessToken) {
+      return res.status(400).json({
+        success: false,
+        message: "BigCommerce access token missing for this store",
+      });
+    }
+
+    const response = await axios.post(
+      `https://api.bigcommerce.com/stores/${encodeURIComponent(
+        storeHash,
+      )}/v3/carts`,
+      {
+        line_items: [
+          {
+            product_id: parsedProductId,
+            quantity: 1,
+          },
+        ],
+      },
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const checkoutUrl = response?.data?.data?.redirect_urls?.checkout_url;
+    if (!checkoutUrl) {
+      return res.status(502).json({
+        success: false,
+        message:
+          "Cart created, but checkoutUrl was not found in BigCommerce response",
+        details: response?.data,
+      });
+    }
+
+    res.json({
+      success: true,
+      checkoutUrl,
+    });
+  } catch (err) {
+    const statusCode = err.response?.status || 500;
+    const contentType = err.response?.headers?.["content-type"] || "";
+
+    // BigCommerce normally returns JSON, but on some edge cases you may get HTML (openresty).
+    const rawData = err.response?.data;
+    const details =
+      typeof rawData === "string" && contentType.includes("text/html")
+        ? rawData.slice(0, 500)
+        : rawData;
+
+    console.error(details || err.message);
+    res.status(statusCode).json({
+      success: false,
+      message:
+        err.response?.data?.title ||
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to create BigCommerce cart",
+      details,
+    });
+  }
+};
+module.exports = { createCartController };
