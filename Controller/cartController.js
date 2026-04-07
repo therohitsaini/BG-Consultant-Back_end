@@ -143,7 +143,7 @@ const createCartController = async (req, res) => {
     const checkoutUrl = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=add&product_id=${productId}`;
     console.log("checkoutUrl", checkoutUrl);
 
-    const response = await axios.post(
+    const cartResponse = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/carts`,
       {
         line_items: [
@@ -161,8 +161,10 @@ const createCartController = async (req, res) => {
       },
     );
 
-    const checkoutUrl_ = response;
-    console.log("checkoutUrl_", checkoutUrl_);
+    const cartId = cartResponse.data.data.id;
+    console.log("checkoutUrl_", cartId);
+    const redirectUrl = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=loadInCheckout&id=${cartId}`;
+    console.log("redirectUrl", redirectUrl);
     return res.json({
       success: true,
       checkoutUrl,
