@@ -140,7 +140,7 @@ const createCartController = async (req, res) => {
     }
 
     const storeHash = storeData.store_hash;
-    const checkoutUrl = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=buy&product_id=${productId}`;
+    const checkoutUrl = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=add&product_id=${productId}`;
     console.log("checkoutUrl", checkoutUrl);
 
     return res.json({
