@@ -129,7 +129,6 @@ const voucherController = async (req, res) => {
         name: `Voucher ${totalCoin} Coins`,
         type: "digital",
         price: totalCoin,
-        weight: 1,
         is_visible: true,
         inventory_tracking: "none",
         description: `Voucher for ${totalCoin} coins`,
