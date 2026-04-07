@@ -127,10 +127,11 @@ const voucherController = async (req, res) => {
       `https://api.bigcommerce.com/stores/${storeHash}/v3/catalog/products`,
       {
         name: `Voucher ${totalCoin} Coins`,
-        type: "physical",
+        type: "digital",
         price: totalCoin,
         weight: 1,
         is_visible: true,
+        inventory_tracking: "none",
         description: `Voucher for ${totalCoin} coins`,
       },
       {
