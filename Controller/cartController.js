@@ -148,7 +148,7 @@ const createCartController = async (req, res) => {
       {
         line_items: [
           {
-            product_id: parsedProductId,
+            product_id: productId,
             quantity: 1,
           },
         ],
