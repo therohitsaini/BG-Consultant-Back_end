@@ -163,11 +163,9 @@ const createCartController = async (req, res) => {
 
     const cartId = cartResponse.data.data.id;
     console.log("checkoutUrl_", cartId);
-    const redirectUrl_ = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=loadInCheckout&id=${cartId}`;
-    console.log("redirectUrl", redirectUrl_);
     return res.json({
       success: true,
-      redirectUrl: redirectUrl_,
+      checkoutUrl,
     });
   } catch (err) {
     console.error(err.message);
