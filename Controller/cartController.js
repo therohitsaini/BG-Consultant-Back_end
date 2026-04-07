@@ -70,6 +70,7 @@ const createCartController = async (req, res) => {
     );
     console.log("response", response);
     const cartId = response?.data?.data?.id;
+    console.log("cartId", cartId);
     const checkoutResponse = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/checkouts`,
       {
