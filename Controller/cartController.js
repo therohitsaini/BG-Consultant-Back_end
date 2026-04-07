@@ -69,19 +69,22 @@ const createCartController = async (req, res) => {
       },
     );
     console.log("response", response);
-    const checkoutUrl = response?.data?.data?.redirect_urls?.checkout_url;
-    if (!checkoutUrl) {
-      return res.status(502).json({
-        success: false,
-        message:
-          "Cart created, but checkoutUrl was not found in BigCommerce response",
-        details: response?.data,
-      });
-    }
-
+    const cartId = response?.data?.data?.id;
+    const checkoutResponse = await axios.post(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/checkouts`,
+      {
+        cart_id: cartId,
+      },
+      {
+        headers: {
+          "X-Auth-Token": accessToken,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    console.log("checkoutResponse", checkoutResponse);
     res.json({
       success: true,
-      checkoutUrl,
     });
   } catch (err) {
     const statusCode = err.response?.status || 500;
