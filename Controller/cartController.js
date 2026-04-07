@@ -155,7 +155,7 @@ const createCartController = async (req, res) => {
       },
       {
         headers: {
-          "X-Auth-Token": accessToken,
+          "X-Auth-Token": storeData.access_token,
           "Content-Type": "application/json",
         },
       },
