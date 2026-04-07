@@ -78,9 +78,12 @@ const createCartController = async (req, res) => {
           "X-Auth-Token": accessToken,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     console.log("checkoutResponse", checkoutResponse);
+    const checkoutUrl = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=loadInCheckout&id=${cartId}`;
+    console.log("checkoutUrl", checkoutUrl);
+
     res.json({
       success: true,
     });
