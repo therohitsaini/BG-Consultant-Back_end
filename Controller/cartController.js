@@ -68,7 +68,7 @@ const createCartController = async (req, res) => {
         },
       },
     );
-
+    console.log("response", response);
     const checkoutUrl = response?.data?.data?.redirect_urls?.checkout_url;
     if (!checkoutUrl) {
       return res.status(502).json({
