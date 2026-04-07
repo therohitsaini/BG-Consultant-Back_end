@@ -144,7 +144,7 @@ const createCartController = async (req, res) => {
 
     // ✅ IMPORTANT: Direct storefront checkout URL
     const checkoutUrl = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=buy&product_id=${productId}`;
-
+    console.log("checkoutUrl", checkoutUrl);
     return res.json({
       success: true,
       checkoutUrl,
