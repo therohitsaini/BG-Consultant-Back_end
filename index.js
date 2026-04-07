@@ -51,6 +51,8 @@ const chatRoutes = require("./Routes/chatRoutes");
 const firebaseRouter = require("./Routes/firebaseRoutes");
 const { userRouter } = require("./Routes/userRoutes");
 const { adminRoute } = require("./Routes/adminRoute");
+const { adminPrincingRoute } = require("./Routes/adminPrincingRoutes");
+const {bigCommerceInstallationRoute,} = require("./Routes/bigCommerceInstallection");
 const bigCommerceRoute = require("./Routes/bigCommerceRoute");
 const cartRoute = require("./Routes/cartRoute");
 
