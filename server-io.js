@@ -79,6 +79,7 @@ const ioServer = (server) => {
           );
           const receiverSocketId = onlineUsers.get(receiverId);
           if (receiverSocketId) {
+            console.log("reciver is wating ____")
             io.to(receiverSocketId).emit("incoming-call", {
               callerId,
               callerName: user_?.fullname || "Unknown",
