@@ -2,9 +2,6 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../Modal/userSchema");
 
 const bgCommerceUserController = async (req, res) => {
-  console.log("bgCommerceUserController");
-  console.log("req.body", req.body);
-
   try {
     const token = req.body?.token;
 
