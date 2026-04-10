@@ -302,12 +302,7 @@ const createCartController = async (req, res) => {
     if (!cartData || !cartData.id) {
       throw new Error("Cart creation failed");
     }
-
     const cartId = cartData.id;
-
-    // ================================
-    // ✅ STEP 2: GET REDIRECT URL (IMPORTANT)
-    // ================================
     const redirectRes = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/carts/${cartId}/redirect_urls`,
       {},
@@ -326,9 +321,6 @@ const createCartController = async (req, res) => {
       throw new Error("Checkout URL not generated");
     }
 
-    // ================================
-    // ✅ SUCCESS RESPONSE
-    // ================================
     return res.status(200).json({
       success: true,
       cartId,
