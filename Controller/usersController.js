@@ -110,6 +110,8 @@ const recivedBalanceUpdateWebhook = async (req, res) => {
     );
 
     const order = orderRes.data;
+    const findUser = await User.findOne({ cartId: order.cart_id });
+    console.log("findUser", findUser);
     console.log("Full Order:", order);
 
     res.status(200).send("OK");
