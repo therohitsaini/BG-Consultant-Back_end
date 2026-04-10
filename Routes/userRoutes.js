@@ -1,9 +1,10 @@
 const express = require("express");
 const userRouter = express.Router();
-const { usersController, checkedUserBlance } = require("../Controller/usersController");
+const { usersController, checkedUserBlance, recivedBalanceUpdateWebhook } = require("../Controller/usersController");
 const { getVouchersController } = require("../Controller/userDetailsController");
 
 userRouter.get("/shopify/users/:userId", usersController);
 userRouter.get("/shopify/users/checked-balance/:userId/:consultantId", checkedUserBlance);
 userRouter.get("/get/vouchers/:adminId", getVouchersController)
+userRouter.post("/order-created",recivedBalanceUpdateWebhook)
 module.exports = { userRouter };

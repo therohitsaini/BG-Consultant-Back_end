@@ -19,7 +19,7 @@ const { handleStripeWebhook } = require("./Controller/webhookController");
 app.post(
   "/api/confirm/payment/webhook",
   express.raw({ type: "application/json" }),
-  handleStripeWebhook
+  handleStripeWebhook,
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,8 +40,6 @@ app.use(
   }),
 );
 
-
-
 const { callRoutes } = require("./Routes/videoCallRotes");
 const { signinSignupRouter } = require("./Routes/signin-signupRoute");
 const { userDetailsRouter } = require("./Routes/userDetailsRoutes");
@@ -52,13 +50,14 @@ const firebaseRouter = require("./Routes/firebaseRoutes");
 const { userRouter } = require("./Routes/userRoutes");
 const { adminRoute } = require("./Routes/adminRoute");
 const { adminPrincingRoute } = require("./Routes/adminPrincingRoutes");
-const {bigCommerceInstallationRoute,} = require("./Routes/bigCommerceInstallection");
+const {
+  bigCommerceInstallationRoute,
+} = require("./Routes/bigCommerceInstallection");
 const bigCommerceRoute = require("./Routes/bigCommerceRoute");
 const cartRoute = require("./Routes/cartRoute");
 
-
-app.use("/api", bigCommerceRoute)
-app.use("/api", bigCommerceInstallationRoute)
+app.use("/api", bigCommerceRoute);
+app.use("/api", bigCommerceInstallationRoute);
 app.use("/api", cartRoute);
 
 app.use("/api/call", callRoutes);
@@ -80,16 +79,14 @@ app.use("/api-employee", employRoute);
 app.use("/api/chat", chatRoutes);
 // app.use("/api", firebaseRouter);
 
-
-
 /** User Routes */
 app.use("/api/users", userRouter);
+app.use("/webhook", userRouter);
 app.use("/api/admin", adminRoute);
 // app.use("/api/princing", adminPrincingRoute);
 // app.use("/pricing-callback", adminPrincingRoute);
 
 /** Web Hook Routes */
-
 
 ioServer(server);
 
