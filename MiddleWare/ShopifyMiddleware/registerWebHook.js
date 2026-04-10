@@ -20,7 +20,7 @@ const registerWebhook = async (storeHash, accessToken) => {
       (hook) =>
         hook.scope === "store/order/created" &&
         hook.destination ===
-          `${BIG_COMERCE_BACEKND_DOMAIN}/webhook/order-created`,
+          `${process.env.BIG_COMERCE_BACEKND_DOMAIN}/webhook/order-created`,
     );
 
     if (alreadyExists) {
@@ -32,7 +32,7 @@ const registerWebhook = async (storeHash, accessToken) => {
       `https://api.bigcommerce.com/stores/${storeHash}/v3/hooks`,
       {
         scope: "store/order/created",
-        destination: `${BIG_COMERCE_BACEKND_DOMAIN}/webhook/order-created`,
+        destination: `${process.env.BIG_COMERCE_BACEKND_DOMAIN}/webhook/order-created`,
         is_active: true,
       },
       { headers },
