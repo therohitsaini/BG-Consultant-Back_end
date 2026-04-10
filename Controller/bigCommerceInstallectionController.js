@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { getStoreDetailsFromAPI } = require("../Helper/helper");
 dotenv.config();
 const crypto = require("crypto");
+const registerWebhook = require("../MiddleWare/ShopifyMiddleware/registerWebHook");
 
 const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
 const BIGCOMMERCE_STORE_CLIENT_SECRET =
@@ -52,6 +53,7 @@ const installBigCommerce = async (req, res) => {
       store.appEnabled = false;
       await store.save();
     }
+    await registerWebhook(storeHash, accessToken);
 
     const userId = store._id || "";
     const baseUrl = process.env.BIGCOMMERCE_STORE_BASE_URL;

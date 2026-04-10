@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const registerWebhook = async (storeHash, accessToken) => {
+  console.log("web hook is registered .....");
   try {
     const headers = {
       "X-Auth-Token": accessToken,
@@ -27,7 +28,6 @@ const registerWebhook = async (storeHash, accessToken) => {
       return alreadyExists;
     }
 
-   
     const response = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/hooks`,
       {
