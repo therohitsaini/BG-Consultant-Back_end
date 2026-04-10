@@ -263,7 +263,7 @@ const createCartController = async (req, res) => {
     }
 
     const storeData = await bgStoreDetails.findOne({ _id: shopId }).lean();
-    const userInfo = await User.findByid(userId);
+    const userInfo = await User.findById(userId);
     console.log("userInfo", userInfo);
 
     if (!storeData) {
