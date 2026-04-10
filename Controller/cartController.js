@@ -1,5 +1,6 @@
 const axios = require("axios");
 const { bgStoreDetails } = require("../Modal/bgStoreDetails");
+const { User } = require("../Modal/userSchema");
 
 // const createCartController = async (req, res) => {
 //   try {
@@ -252,9 +253,8 @@ const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 // };
 const createCartController = async (req, res) => {
   try {
-    const { productId, shopId, quantity = 1 } = req.body;
+    const { productId, shopId, quantity = 1, userId } = req.body;
 
-    // ✅ Validation
     if (!productId || !shopId) {
       return res.status(400).json({
         success: false,
@@ -262,8 +262,9 @@ const createCartController = async (req, res) => {
       });
     }
 
-    // ✅ Get store
     const storeData = await bgStoreDetails.findOne({ _id: shopId }).lean();
+    const userInfo = await User.findByid(userId);
+    console.log("userInfo", userInfo);
 
     if (!storeData) {
       return res.status(404).json({
@@ -275,9 +276,6 @@ const createCartController = async (req, res) => {
     const storeHash = storeData.store_hash;
     const token = storeData.access_token;
 
-    // ================================
-    // ✅ STEP 1: CREATE CART
-    // ================================
     const cartRes = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/carts`,
       {

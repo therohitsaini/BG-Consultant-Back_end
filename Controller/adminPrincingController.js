@@ -30,8 +30,7 @@ function getPlanType(trialEndsOn, billingOn) {
 const pricingCallback = async (req, res) => {
     try {
         const { shop, charge_id } = req.query;
-        console.log("req____", req.query)
-        console.log("-------------", req.path)
+     
 
         if (!shop) return res.status(400).send("not found");
         const match = shop?.match(/^([a-z0-9-]+)\.myshopify\.com$/);
@@ -39,7 +38,6 @@ const pricingCallback = async (req, res) => {
             return res.status(400).send("Invalid shop domain");
         }
         const shopHandle = match[1];
-        console.log("shopHandle", shopHandle)
         const shop_ = await shopModel.findOne({ shop });
         if (!shop_) return res.status(404).send("Shop not found");
         const charge = await getChargeDetails(

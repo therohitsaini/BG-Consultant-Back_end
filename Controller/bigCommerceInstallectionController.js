@@ -35,7 +35,6 @@ const installBigCommerce = async (req, res) => {
 
     let store = await bgStoreDetails.findOne({ store_hash: storeHash });
     const storeDetails = await getStoreDetailsFromAPI(storeHash, accessToken);
-    console.log("storeDetails", storeDetails);
     if (!store) {
       store = await bgStoreDetails.create({
         store_hash: storeHash,
@@ -203,71 +202,6 @@ const loadBigCommerce = async (req, res) => {
   }
 };
 
-// const unistalledBgCommerceApp = async (req, res) => {
-//   try {
-//     const { signed_payload } = req.query;
-
-//     const [encodedPayload] = signed_payload.split(".");
-//     const decoded = JSON.parse(
-//       Buffer.from(encodedPayload, "base64").toString("utf8"),
-//     );
-
-//     const store_hash = decoded.store_hash;
-
-//     const store = await bgStoreDetails.findOne({ store_hash });
-
-//     if (!store) {
-//       return res.status(404).json({ message: "Store not found" });
-//     }
-
-//     const email = store?.owner?.email || store?.user?.email;
-
-//     await bgStoreDetails.updateOne(
-//       { store_hash },
-//       {
-//         $set: {
-//           access_token: null,
-//           store_hash: null,
-//           user: {
-//             id: null,
-//             username: null,
-//             email: email,
-//           },
-//           owner: {
-//             id: null,
-//             username: null,
-//             email: email,
-//           },
-//           account_uuid: null,
-//           planName: null,
-//         },
-//       },
-//     );
-//     if (store && store.created_page_ids) {
-//       for (const pageId of store.created_page_ids) {
-//         // await axios.delete(
-//         //   `https://api.bigcommerce.com/stores/${store_hash}/v3/content/pages/${pageId}`,
-//         //   {
-//         //     headers: {
-//         //       "X-Auth-Token": store.access_token,
-//         //       Accept: "application/json",
-//         //     },
-//         //   },
-//         // );
-//         console.log(`Page ${pageId} deleted successfully.`);
-//       }
-//     }
-
-//     res.status(200).json({
-//       success: true,
-//       email,
-//       message: "Data cleared except email",
-//     });
-//   } catch (error) {
-//     console.log("error", error);
-//     res.status(500).send("Server error");
-//   }
-// };
 
 const unistalledBgCommerceApp = async (req, res) => {
   try {
