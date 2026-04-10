@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { User } = require("../Modal/userSchema");
 const { bgStoreDetails } = require("../Modal/bgStoreDetails");
-
+const axios = require("axios");
 const usersController = async (req, res) => {
   try {
     const { userId } = req.params;
