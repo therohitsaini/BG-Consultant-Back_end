@@ -112,24 +112,91 @@ const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 //   }
 // };
 
+// const createCartController = async (req, res) => {
+//   try {
+//     const { productId, shopId } = req.body || {};
+
+//     if (!productId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "productId must exist",
+//       });
+//     }
+
+//     if (!shopId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "shopId must exist",
+//       });
+//     }
+
+//     const storeData = await bgStoreDetails.findOne({ _id: shopId }).lean();
+
+//     if (!storeData) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Store not found",
+//       });
+//     }
+
+//     const storeHash = storeData.store_hash;
+//     const checkoutUrl = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=add&product_id=${productId}`;
+//     console.log("checkoutUrl", checkoutUrl);
+
+//     const cartResponse = await axios.post(
+//       `https://api.bigcommerce.com/stores/${storeHash}/v3/carts`,
+//       {
+//         line_items: [
+//           {
+//             product_id: productId,
+//             quantity: 1,
+//           },
+//         ],
+//       },
+//       {
+//         headers: {
+//           "X-Auth-Token": storeData.access_token,
+//           "Content-Type": "application/json",
+//         },
+//       },
+//     );
+
+//     const cartId = cartResponse.data.data.id;
+//     console.log("checkoutUrl_", cartId);
+//     return res.json({
+//       success: true,
+//       checkoutUrl,
+//     });
+//   } catch (err) {
+//     console.error(err.message);
+
+//     res.status(500).json({
+//       success: false,
+//       message: "Something went wrong",
+//     });
+//   }
+// };
+
 const createCartController = async (req, res) => {
   try {
-    const { productId, shopId } = req.body || {};
+    const { productId, shopId, quantity = 1 } = req.body || {};
 
+    // ✅ Validation
     if (!productId) {
       return res.status(400).json({
         success: false,
-        message: "productId must exist",
+        message: "productId is required",
       });
     }
 
     if (!shopId) {
       return res.status(400).json({
         success: false,
-        message: "shopId must exist",
+        message: "shopId is required",
       });
     }
 
+    // ✅ Get store data from DB
     const storeData = await bgStoreDetails.findOne({ _id: shopId }).lean();
 
     if (!storeData) {
@@ -140,40 +207,49 @@ const createCartController = async (req, res) => {
     }
 
     const storeHash = storeData.store_hash;
-    const checkoutUrl = `https://store-${storeHash}.mybigcommerce.com/cart.php?action=add&product_id=${productId}`;
-    console.log("checkoutUrl", checkoutUrl);
+    const accessToken = storeData.access_token;
 
+    // ✅ Create cart using BigCommerce API
     const cartResponse = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/carts`,
       {
         line_items: [
           {
             product_id: productId,
-            quantity: 1,
+            quantity: quantity,
           },
         ],
       },
       {
         headers: {
-          "X-Auth-Token": storeData.access_token,
+          "X-Auth-Token": accessToken,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
       },
     );
 
-    const cartId = cartResponse.data.data.id;
-    console.log("checkoutUrl_", cartId);
-    return res.json({
+    const cartData = cartResponse.data.data;
+
+    // ✅ IMPORTANT: Use redirect URL from API (this fixes empty cart issue)
+    const checkoutUrl = cartData.redirect_urls.checkout_url;
+
+    return res.status(200).json({
       success: true,
+      message: "Cart created successfully",
+      cartId: cartData.id,
       checkoutUrl,
     });
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error("Cart Error:", error?.response?.data || error.message);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Something went wrong",
+      error: error?.response?.data || error.message,
     });
   }
 };
+
+mod;
 module.exports = { createCartController };
