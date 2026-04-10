@@ -251,5 +251,5 @@ const createCartController = async (req, res) => {
   }
 };
 
-mod;
+
 module.exports = { createCartController };
