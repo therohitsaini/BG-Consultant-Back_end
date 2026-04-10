@@ -95,7 +95,7 @@ const recivedBalanceUpdateWebhook = async (req, res) => {
   try {
     console.log("🔥 WEBHOOK HIT");
     console.log(JSON.stringify(req.body, null, 2));
-    const body = body.req;
+    const body = req.body;
     const context = body.producer;
     const storeHash = context.split("/")[1];
     const orderId = body.data.id;
