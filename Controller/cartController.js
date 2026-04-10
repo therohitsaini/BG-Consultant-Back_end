@@ -177,26 +177,92 @@ const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 //   }
 // };
 
+// const createCartController = async (req, res) => {
+//   try {
+//     const { productId, shopId, quantity = 1 } = req.body || {};
+
+//     // ✅ Validation
+//     if (!productId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "productId is required",
+//       });
+//     }
+
+//     if (!shopId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "shopId is required",
+//       });
+//     }
+
+//     // ✅ Get store data from DB
+//     const storeData = await bgStoreDetails.findOne({ _id: shopId }).lean();
+
+//     if (!storeData) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Store not found",
+//       });
+//     }
+
+//     const storeHash = storeData.store_hash;
+//     const accessToken = storeData.access_token;
+
+//     // ✅ Create cart using BigCommerce API
+//     const cartResponse = await axios.post(
+//       `https://api.bigcommerce.com/stores/${storeHash}/v3/carts`,
+//       {
+//         line_items: [
+//           {
+//             product_id: productId,
+//             quantity: quantity,
+//           },
+//         ],
+//       },
+//       {
+//         headers: {
+//           "X-Auth-Token": accessToken,
+//           "Content-Type": "application/json",
+//           Accept: "application/json",
+//         },
+//       },
+//     );
+
+//     const cartData = cartResponse.data.data;
+
+//     // ✅ IMPORTANT: Use redirect URL from API (this fixes empty cart issue)
+//     const checkoutUrl = cartData.redirect_urls.checkout_url;
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Cart created successfully",
+//       cartId: cartData.id,
+//       checkoutUrl,
+//     });
+//   } catch (error) {
+//     console.error("Cart Error:", error?.response?.data || error.message);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Something went wrong",
+//       error: error?.response?.data || error.message,
+//     });
+//   }
+// };
 const createCartController = async (req, res) => {
   try {
-    const { productId, shopId, quantity = 1 } = req.body || {};
+    const { productId, shopId, quantity = 1 } = req.body;
 
     // ✅ Validation
-    if (!productId) {
+    if (!productId || !shopId) {
       return res.status(400).json({
         success: false,
-        message: "productId is required",
+        message: "productId and shopId are required",
       });
     }
 
-    if (!shopId) {
-      return res.status(400).json({
-        success: false,
-        message: "shopId is required",
-      });
-    }
-
-    // ✅ Get store data from DB
+    // ✅ Get store
     const storeData = await bgStoreDetails.findOne({ _id: shopId }).lean();
 
     if (!storeData) {
@@ -207,49 +273,77 @@ const createCartController = async (req, res) => {
     }
 
     const storeHash = storeData.store_hash;
-    const accessToken = storeData.access_token;
+    const token = storeData.access_token;
 
-    // ✅ Create cart using BigCommerce API
-    const cartResponse = await axios.post(
+    // ================================
+    // ✅ STEP 1: CREATE CART
+    // ================================
+    const cartRes = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/carts`,
       {
         line_items: [
           {
             product_id: productId,
-            quantity: quantity,
+            quantity,
           },
         ],
       },
       {
         headers: {
-          "X-Auth-Token": accessToken,
+          "X-Auth-Token": token,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
       },
     );
 
-    const cartData = cartResponse.data.data;
+    const cartData = cartRes.data.data;
 
-    // ✅ IMPORTANT: Use redirect URL from API (this fixes empty cart issue)
-    const checkoutUrl = cartData.redirect_urls.checkout_url;
+    if (!cartData || !cartData.id) {
+      throw new Error("Cart creation failed");
+    }
 
+    const cartId = cartData.id;
+
+    // ================================
+    // ✅ STEP 2: GET REDIRECT URL (IMPORTANT)
+    // ================================
+    const redirectRes = await axios.post(
+      `https://api.bigcommerce.com/stores/${storeHash}/v3/carts/${cartId}/redirect_urls`,
+      {},
+      {
+        headers: {
+          "X-Auth-Token": token,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
+    );
+
+    const redirectData = redirectRes.data.data;
+
+    if (!redirectData || !redirectData.checkout_url) {
+      throw new Error("Checkout URL not generated");
+    }
+
+    // ================================
+    // ✅ SUCCESS RESPONSE
+    // ================================
     return res.status(200).json({
       success: true,
-      message: "Cart created successfully",
-      cartId: cartData.id,
-      checkoutUrl,
+      cartId,
+      checkoutUrl: redirectData.checkout_url,
+      cartUrl: redirectData.cart_url,
     });
   } catch (error) {
     console.error("Cart Error:", error?.response?.data || error.message);
 
     return res.status(500).json({
       success: false,
-      message: "Something went wrong",
+      message: "Cart creation failed",
       error: error?.response?.data || error.message,
     });
   }
 };
-
 
 module.exports = { createCartController };
