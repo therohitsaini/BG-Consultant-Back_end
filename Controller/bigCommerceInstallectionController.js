@@ -322,7 +322,7 @@ const unistalledBgCommerceApp = async (req, res) => {
             },
           );
 
-          console.log(`✅ Page ${pageId} deleted`);
+          console.log(`✅ Page---- ${pageId} deleted`);
         } catch (err) {
           console.error(
             `❌ Failed to delete page ${pageId}`,
