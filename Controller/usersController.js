@@ -94,13 +94,11 @@ const checkedUserBlance = async (req, res) => {
 const recivedBalanceUpdateWebhook = async (req, res) => {
   try {
     console.log("🔥 WEBHOOK HIT");
-    console.log(JSON.stringify(req.body, null, 2));
     const body = req.body;
     const context = body.producer;
     const storeHash = context.split("/")[1];
     const orderId = body.data.id;
     const accessToken = await bgStoreDetails.findOne({ store_hash: storeHash });
-    console.log("accessToken", accessToken);
     const orderRes = await axios.get(
       `https://api.bigcommerce.com/stores/${storeHash}/v2/orders/${orderId}`,
       {

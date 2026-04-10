@@ -303,6 +303,7 @@ const createCartController = async (req, res) => {
       throw new Error("Cart creation failed");
     }
     const cartId = cartData.id;
+    console.log("cartId", cartId);
     const redirectRes = await axios.post(
       `https://api.bigcommerce.com/stores/${storeHash}/v3/carts/${cartId}/redirect_urls`,
       {},
