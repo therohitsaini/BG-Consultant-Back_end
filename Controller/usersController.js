@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { User } = require("../Modal/userSchema");
+const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 
 const usersController = async (req, res) => {
   try {
@@ -90,10 +91,28 @@ const checkedUserBlance = async (req, res) => {
   }
 };
 
-const recivedBalanceUpdateWebhook = (req, res) => {
+const recivedBalanceUpdateWebhook = async (req, res) => {
   try {
     console.log("🔥 WEBHOOK HIT");
     console.log(JSON.stringify(req.body, null, 2));
+    const body = body.req;
+    const context = body.producer;
+    const storeHash = context.split("/")[1];
+    const orderId = body.data.id;
+    const accessToken = await bgStoreDetails.findOne({ store_hash: storeHash });
+    console.log("accessToken", accessToken);
+    const orderRes = await axios.get(
+      `https://api.bigcommerce.com/stores/${storeHash}/v2/orders/${orderId}`,
+      {
+        headers: {
+          "X-Auth-Token": accessToken.access_token,
+          Accept: "application/json",
+        },
+      },
+    );
+
+    const order = orderRes.data;
+    console.log("Full Order:", order);
 
     res.status(200).send("OK");
   } catch (error) {
@@ -101,4 +120,8 @@ const recivedBalanceUpdateWebhook = (req, res) => {
   }
 };
 
-module.exports = { usersController, checkedUserBlance,recivedBalanceUpdateWebhook };
+module.exports = {
+  usersController,
+  checkedUserBlance,
+  recivedBalanceUpdateWebhook,
+};
