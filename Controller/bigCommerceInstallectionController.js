@@ -4,6 +4,7 @@ const { bgStoreDetails } = require("../Modal/bgStoreDetails");
 const jwt = require("jsonwebtoken");
 const { getStoreDetailsFromAPI } = require("../Helper/helper");
 dotenv.config();
+const crypto = require("crypto");
 
 const BIGCOMMERCE_STORE_CLIENT_ID = process.env.BIGCOMMERCE_STORE_CLIENT_ID;
 const BIGCOMMERCE_STORE_CLIENT_SECRET =
@@ -200,11 +201,93 @@ const loadBigCommerce = async (req, res) => {
   }
 };
 
+// const unistalledBgCommerceApp = async (req, res) => {
+//   try {
+//     const { signed_payload } = req.query;
+
+//     const [encodedPayload] = signed_payload.split(".");
+//     const decoded = JSON.parse(
+//       Buffer.from(encodedPayload, "base64").toString("utf8"),
+//     );
+
+//     const store_hash = decoded.store_hash;
+
+//     const store = await bgStoreDetails.findOne({ store_hash });
+
+//     if (!store) {
+//       return res.status(404).json({ message: "Store not found" });
+//     }
+
+//     const email = store?.owner?.email || store?.user?.email;
+
+//     await bgStoreDetails.updateOne(
+//       { store_hash },
+//       {
+//         $set: {
+//           access_token: null,
+//           store_hash: null,
+//           user: {
+//             id: null,
+//             username: null,
+//             email: email,
+//           },
+//           owner: {
+//             id: null,
+//             username: null,
+//             email: email,
+//           },
+//           account_uuid: null,
+//           planName: null,
+//         },
+//       },
+//     );
+//     if (store && store.created_page_ids) {
+//       for (const pageId of store.created_page_ids) {
+//         // await axios.delete(
+//         //   `https://api.bigcommerce.com/stores/${store_hash}/v3/content/pages/${pageId}`,
+//         //   {
+//         //     headers: {
+//         //       "X-Auth-Token": store.access_token,
+//         //       Accept: "application/json",
+//         //     },
+//         //   },
+//         // );
+//         console.log(`Page ${pageId} deleted successfully.`);
+//       }
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       email,
+//       message: "Data cleared except email",
+//     });
+//   } catch (error) {
+//     console.log("error", error);
+//     res.status(500).send("Server error");
+//   }
+// };
+
 const unistalledBgCommerceApp = async (req, res) => {
   try {
     const { signed_payload } = req.query;
 
-    const [encodedPayload] = signed_payload.split(".");
+    if (!signed_payload) {
+      return res.status(400).send("Missing signed payload");
+    }
+
+    const [encodedPayload, signature] = signed_payload.split(".");
+
+    // 🔐 Verify signature
+    const expectedSignature = crypto
+      .createHmac("sha256", BIGCOMMERCE_STORE_CLIENT_SECRET)
+      .update(encodedPayload)
+      .digest("base64")
+      .replace(/=+$/, "");
+
+    if (signature !== expectedSignature) {
+      return res.status(401).send("Invalid signature");
+    }
+
     const decoded = JSON.parse(
       Buffer.from(encodedPayload, "base64").toString("utf8"),
     );
@@ -219,50 +302,70 @@ const unistalledBgCommerceApp = async (req, res) => {
 
     const email = store?.owner?.email || store?.user?.email;
 
+    // ⚡ Respond immediately
+    res.status(200).json({
+      success: true,
+      message: "Uninstall received",
+    });
+
+    // 🧹 Delete pages
+    if (store.created_page_ids?.length) {
+      for (const pageId of store.created_page_ids) {
+        try {
+          await axios.delete(
+            `https://api.bigcommerce.com/stores/${store.store_hash}/v3/content/pages/${pageId}`,
+            {
+              headers: {
+                "X-Auth-Token": store.access_token,
+                Accept: "application/json",
+              },
+            },
+          );
+
+          console.log(`✅ Page ${pageId} deleted`);
+        } catch (err) {
+          console.error(
+            `❌ Failed to delete page ${pageId}`,
+            err.response?.data || err.message,
+          );
+        }
+
+        await new Promise((r) => setTimeout(r, 200));
+      }
+    }
+
+    // 🧹 Update DB (DO NOT REMOVE store_hash)
     await bgStoreDetails.updateOne(
       { store_hash },
       {
         $set: {
           access_token: null,
-          store_hash: null,
+          is_uninstalled: true,
+          appEnabled: false,
+          planStatus: "INACTIVE",
           user: {
             id: null,
             username: null,
-            email: email,
+            email,
           },
           owner: {
             id: null,
             username: null,
-            email: email,
+            email,
           },
           account_uuid: null,
-          planName: null,
+          created_page_ids: [],
         },
       },
     );
-    if (store && store.created_page_ids) {
-      for (const pageId of store.created_page_ids) {
-        // await axios.delete(
-        //   `https://api.bigcommerce.com/stores/${store_hash}/v3/content/pages/${pageId}`,
-        //   {
-        //     headers: {
-        //       "X-Auth-Token": store.access_token,
-        //       Accept: "application/json",
-        //     },
-        //   },
-        // );
-        console.log(`Page ${pageId} deleted successfully.`);
-      }
-    }
 
-    res.status(200).json({
-      success: true,
-      email,
-      message: "Data cleared except email",
-    });
+    console.log(`🧹 Store ${store_hash} cleanup done`);
   } catch (error) {
-    console.log("error", error);
-    res.status(500).send("Server error");
+    console.log("❌ uninstall error", error.message);
+
+    if (!res.headersSent) {
+      res.status(500).send("Server error");
+    }
   }
 };
 
